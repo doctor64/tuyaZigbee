@@ -1,0 +1,36 @@
+https://www.aliexpress.com/item/1005005187204141.html
+model: SRT-082
+temp sensor Sensylink CHT8305
+http://www.lanftek.com/Data/lanftek/upload/file/20180618/201802281014097175.pdf
+module ZTU
+https://developer.tuya.com/en/docs/iot/ztu-module-datasheet?id=Ka45nl4ywgabp
+Pin number 	Symbol 	I/O type 	Function
+1 	D3 	I/O 	Common I/O pin, which corresponds to D3 (Pin 32) of IC
+2 	D7 	I/O 	Common I/O pin, which corresponds to D7 (Pin 2) of IC
+3 	C0 	I/O 	Common I/O pin, which corresponds to C0 (Pin 20) of IC
+4 	SWS 	I/O 	Burning pin, which corresponds to SWS (Pin 5) of IC
+5 	B6 	I/O 	ADC pin, which corresponds to B6 (Pin 16) of IC
+6 	A0 	I/O 	Common I/O pin, which corresponds to A0 (Pin 3) of IC
+7 	A1 	I/O 	Common I/O pin, which corresponds to A1 (Pin 4) of IC
+8 	C2 	I/O 	Support hardware PWM and correspond to C2 (Pin 22) on the internal IC
+9 	C3 	I/O 	Support hardware PWM and correspond to C3 (Pin 23) on the internal IC
+10 	D2 	I/O 	Support hardware PWM and correspond to D2 (Pin 31) on the internal IC
+11 	B4 	I/O 	Support hardware PWM and correspond to B4 (Pin 14) on the internal IC
+12 	B5 	I/O 	Support hardware PWM and correspond to B5 (Pin 15) on the internal IC
+13 	GND 	P 	Power supply reference ground
+14 	VCC 	P 	Power supply pin (3.3V)
+15 	B1 	I/O 	Uart_TXD, which corresponds to B1 (Pin 6) of IC
+16 	B7 	I/O 	Uart_RXD, which corresponds to B7 (Pin 17) of IC
+17 	C4 	I/O 	ADC pin, which corresponds to C4 (Pin 16) of IC
+18 	RST 	I/O 	Reset pin, active low
+19 	C1 	I/O 	Common I/O pin, which corresponds to C1 (Pin 21) of IC
+20 	D4 	I/O 	Common I/O pin, which corresponds to D4 (Pin 1) of IC
+21 	NC 	I/O 	No connection
+
+Board
+Pin 2  - D7 - Alert of temp sensor
+Pin 3  - C0 - button to GND
+Pin 8  - C2 - SDA of temp sensor CHT8305
+Pin 9  - C3 - SCL
+Pin 11 - B4 - LED
+ 

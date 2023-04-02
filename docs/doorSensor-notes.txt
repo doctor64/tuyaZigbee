@@ -1,0 +1,22 @@
+https://www.aliexpress.com/item/1005004988882583.html
+
+Board pins
+
+5 - UART_RX/PB7 (pin17)
+4 - UART_TX_/PB1 (pin6)
+3 - SWS/PA7 (pin5)
+2 - GND
+1 - +3V
+
+chip TLSR8258F1KET32
+
+PB4 (pin14) - to hall sensor out
+PD2 (pin31) - to SW1
+PC2 (pin22) - to light sensor
+PB5 (pin15) - to led
+
+hall sensor MT6131 https://datasheet.lcsc.com/lcsc/2010122036_Magn-Tek-MT6131AT_C879546.pdf
+
+1 Vcc
+2 out
+3 gnd (middle)

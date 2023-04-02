@@ -1,0 +1,44 @@
+Zigbee Model            TS0504B
+Zigbee Manufacturer     _TZ3210_onejz0gt
+Description             Zigbee RGBW light
+IEEE Address            0xa4c138114fc000e9
+module ZT3L == TeLink TLSR8258
+(TLSR8258F1KAT32
+
+Zigbee Model    TS0501B
+Zigbee Manufacturer     _TZ3210_9q49basr
+IEEE Address            0xa4c138504d6375a0
+
+Programmer https://github.com/pvvx/TLSRPGM
+OTA from original firmware "fileVersion":64,"imageType":54179,"manufacturerCode":4417
+version 0x40 image_type 0xD3A3 manufacturer_code 1141
+
+module ZT3L == TeLink TLSR8258
+Pin number 	Symbol 	I/O type 	Function
+1 	RST 	I 	Hardware reset pin; by default, high level, low active
+2 	C4 	I/O 	ADC pin, which corresponds to C4 (Pin 24) on the internal IC
+3 	EN 	I 	The enabling pin and the RST pin are connected together and a pull-up resistor is connected to them inside the module.
+4 	D7 	I/O 	Common I/O pin, which corresponds to D7 (Pin 2) on the internal IC
+5 	D2 	I/O 	Support hardware PWM and correspond to D2 (Pin 31) on the internal IC
+6 	C3 	I/O 	Support hardware PWM and correspond to C3 (Pin 23) on the internal IC
+7 	C2 	I/O 	Support hardware PWM and correspond to C2 (Pin 22) on the internal IC
+8 	3V3 	P 	Power supply pin of the module (The typical power supply voltage: 3.3V
+9 	GND 	P 	Power supply reference ground
+10 	C0 	I/O 	Common I/O pin, which corresponds to C0 (Pin 20) on the internal IC
+11 	D4 	I/O 	Common I/O pin, which corresponds to D4 (Pin 1) on the internal IC
+12 	A0 	I/O 	Common I/O pin, which corresponds to A0 (Pin 3) on the internal IC
+13 	B4 	I/O 	Support hardware PWM and correspond to B4 (Pin 14) on the internal IC
+14 	B5 	I/O 	Support hardware PWM and correspond to B5 (Pin 15) on the internal IC
+15 	RXD 	I/O 	Uart_RXD, which corresponds to B7 (Pin 17) on the internal IC
+16 	TXD 	I/O 	Uart_TXD, which corresponds to B1 (Pin 6) of the IC
+17 	SWS 	I/O 	Burning pin, which corresponds to SWS (Pin 5) on the internal IC
+
+board
+pin 14 - CW, led
+pin 13 - R
+pin 5 - B
+pin 6 - G
+pin 7 - WW
+pin 10 - button
+pin 4 IR in
+ 

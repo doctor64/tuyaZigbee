@@ -44,7 +44,7 @@
 #define APP_RELEASE                          0x10//app release 1.0
 #define APP_BUILD                            0x03//app build 01
 #define STACK_RELEASE                        0x30//stack release 3.0
-#define STACK_BUILD                          0x01//stack build 01
+#define STACK_BUILD                          0x03//zigbee sdk 3.6.8.3
 #define HARDWARE_REV                         0x01
 
 #ifndef ZCL_BASIC_MFG_NAME
@@ -76,7 +76,7 @@
     #endif
 #endif
 
-#ifndef ZCL_BASIC_SW_BUILD_ID
+#ifndef ZCL_BASIC_SW_BUILD_ID //max 16 chars
 #define ZCL_BASIC_SW_BUILD_ID       {8,'v',(APP_RELEASE >> 4) + 0x30,'.',APP_BUILD + 0x30,'s',(STACK_RELEASE >> 4) + 0x30,'.',STACK_BUILD + 0x30}
 #endif
 

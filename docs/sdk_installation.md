@@ -9,13 +9,17 @@ see http://wiki.telink-semi.cn/doc/an/AN_19052900-E_Telink%20Zigbee%20SDK%20Deve
 2. extract Zigbee_SDK somewhere
 3. Start Telink IDE
 4. Import Zigbee SDK project. File -> Import -> General -> Existing Projects into Workspace Select tlsr_tc32 in the tl_zigbee_sdk/build directory -> click “OK” 
-4. Copy project settings - ti_zigbee_sdk - Build Configurations - Manage - New
-5. Enter data: Name (TuyaLight), Description (Router-8258), select Copy settings from Existing configuration sampleLight_8258
-6. Manage Configuration TuyaLight - press Set Active
+5. Copy project settings - ti_zigbee_sdk - Build Configurations - Manage - New
+6. Enter data: Name (TuyaLight), Description (Router-8258), select Copy settings from Existing configuration sampleLight_8258
 7. Change path - project Properties - C/C++ Build - Settings (check TuyaLight is active configuration) -
 Tool Settings
-TC32 CC/Assembler - Paths - change "../../../apps/sampleLight" to path to project "../../../apps/TuyaLight"
-TC32 Compiler - Directories - change "../../../apps/sampleLight" to path to project "../../../apps/TuyaLight"
-8. add sources to Eclipse: in Project Explorer - apps RMB - New - Folder - Name - enter TuyaLight - Advanced - Link to alternative location - enter path to source
-9. Change filter - project Properties - C/C++ General - Path and Symbols (check TuyaLight is active configuration) - Edit Filter - Add - apps/sampleLight
-10. (recomended) Windows->Preferences->C++->Indexer Build configuration for the indexer: Use active build configuration
+TC32 CC/Assembler - Paths - change "../../../apps/sampleLight" to path to project "tuyaZigbee/light"
+TC32 Compiler - Directories - change "../../../apps/sampleLight" to path to project "tuyaZigbee/light"
+8. add sources to Eclipse: in Project Explorer - apps RMB - New - Folder - Name - enter TuyaLight - Advanced - Link to alternative location - enter path to repo, ie tuyaZigbee
+9. remove sample - project Properties - C/C++ General - Paths and Symbols - Source Locations - /tl_zigbee_sdk Edit Filter - Add apps/sampleLight
+10. Manage Configuration TuyaLight - press Set Active
+11. (recomended) Windows->Preferences->C++->Indexer Build configuration for the indexer: Use active build configuration
+12. In tl_zigbee_sdk/apps/common/comm_cfg.h edit line #define BOOT_LOADER_MODE 0 to #define BOOT_LOADER_MODE 1
+
+In case of build problems try to delete tl_zigbee_sdk\build\tlsr_tc32\tuyaLight-0501 and 2-3 times do clean project in Eclipse
+

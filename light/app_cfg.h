@@ -75,7 +75,7 @@ extern "C" {
 	#define FLASH_CAP_SIZE_1M			1
 #endif
 	#define BOARD						BOARD_8258_TUYA_LIGHT //BOARD_8258_DONGLE//BOARD_8258_EVK
-    #warning("Tuya board")
+    //#warning("Tuya board")
 	#define CLOCK_SYS_CLOCK_HZ  		48000000
 #elif defined(MCU_CORE_8278)
 	#define FLASH_CAP_SIZE_1M			1

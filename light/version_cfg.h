@@ -84,9 +84,22 @@
  * During OTA upgrade, the upgraded device will check the rules of the following three fields.
  * Refer to ZCL OTA specification for details.
  */
-#define MANUFACTURER_CODE_DOCTOR64           0x6464
-#define MANUFACTURER_CODE_TELINK             0x1141//Telink ID
-#define    IMAGE_TYPE                        ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT)
+// Note it is not real Telink ID, just to make SDK happy
+#define MANUFACTURER_CODE_TELINK             0x6464 // updated manuf code //0x1141//Telink ID
+#if defined BUILD_TS0501B
+	#define    IMAGE_TYPE                        ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT_0501B)
+#elif defined BUILD_TS0502B
+	#define    IMAGE_TYPE                        ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT_0502B)
+#elif defined BUILD_TS0503B
+	#define    IMAGE_TYPE                        ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT_0501B)
+#elif defined BUILD_TS0504B
+	#define    IMAGE_TYPE                        ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT_0501B)
+#elif defined BUILD_TS0505B
+	#define    IMAGE_TYPE                        ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT_0501B)
+#else
+	#warning "Unknown build variant"
+#endif
+
 //#define    IMAGE_TYPE                        0xD3A3 //for tuya OTA
 #define    FILE_VERSION                      ((APP_RELEASE << 24) | (APP_BUILD << 16) | (STACK_RELEASE << 8) | STACK_BUILD)
 //#define    FILE_VERSION                      0xff //for tuya ota

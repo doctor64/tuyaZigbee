@@ -68,7 +68,7 @@ extern ota_callBack_t tuyaLight_otaCb;
 ota_preamble_t tuyaLight_otaInfo = {
 	.fileVer 			= FILE_VERSION,
 	.imageType 			= IMAGE_TYPE,
-	.manufacturerCode 	= MANUFACTURER_CODE_DOCTOR64,
+	.manufacturerCode 	= MANUFACTURER_CODE_TELINK, // Note it is not real Telink ID, just to make SDK happy
 };
 #endif
 
@@ -150,7 +150,7 @@ void stack_init(void)
  */
 void user_app_init(void)
 {
-	af_nodeDescManuCodeUpdate(MANUFACTURER_CODE_DOCTOR64);
+	af_nodeDescManuCodeUpdate(MANUFACTURER_CODE_TELINK);
 
     /* Initialize ZCL layer */
 	/* Register Incoming ZCL Foundation command/response messages */

@@ -14,7 +14,9 @@ see http://wiki.telink-semi.cn/doc/an/AN_19052900-E_Telink%20Zigbee%20SDK%20Deve
 7. Change path - project Properties - C/C++ Build - Settings (check TuyaLight is active configuration) -
 Tool Settings
 TC32 CC/Assembler - Paths - change "../../../apps/sampleLight" to path to project "tuyaZigbee/light"
+TC32 CC/Assembler - General Other GCC flags add -DBUILD_TS0501B=1
 TC32 Compiler - Directories - change "../../../apps/sampleLight" to path to project "tuyaZigbee/light"
+TC32 Compiler - Define Syms - add BUILD_TS0501B=1
 8. add sources to Eclipse: in Project Explorer - apps RMB - New - Folder - Name - enter TuyaLight - Advanced - Link to alternative location - enter path to repo, ie tuyaZigbee
 9. remove sample - project Properties - C/C++ General - Paths and Symbols - Source Locations - /tl_zigbee_sdk Edit Filter - Add apps/sampleLight
 10. Manage Configuration TuyaLight - press Set Active

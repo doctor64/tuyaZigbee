@@ -1,0 +1,35 @@
+Model ZBWS01A (on case) - 1 button
+TS0041
+Zigbee Manufacturer
+_TZ3000_s0i14ubi
+Description
+Wireless switch with 1 button
+
+double click
+кластер genMultistateInput и там presentValue.
+в FreePad так сделано, как в Aqara
+
+OTA
+{"currentFileVersion":67,"manufacturerId":4417,"imageTypeId":65535}
+"fileVersion":67,"imageType":54179,"manufacturerCode":4417
+pins:
+B5 - SW1 (Net Switch, under case)
+B4 - K4
+A0 - LED4
+
+Resistor config
+K1     - Rs7 - C2
+K1     - Rs1 - B4
+K2, K5 - Rs2 - B4
+K2, K5 - Rs3 - D2  - set on 1 button switch
+K3     - Rs4 - D2
+K3     - Rs5 - C2
+K3     - Rs6 - C3
+
+LED1       - Rs17 - C0
+LED1       - Rs11 - A0
+LED2, LED5 - Rs12 - A0
+LED2, LED5 - Rs13 - D4 - set on 1 button switch
+LED3       - Rs14 - D4
+LED3       - Rs15 - C0
+LED3       - Rs16 - D7

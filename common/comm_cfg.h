@@ -87,3 +87,5 @@
 #define IMAGE_TYPE_LIGHT_0503B              (0x13 | (IMAGE_TYPE_BOOT_FLAG << 7))
 #define IMAGE_TYPE_LIGHT_0504B              (0x14 | (IMAGE_TYPE_BOOT_FLAG << 7))
 #define IMAGE_TYPE_LIGHT_0505B              (0x15 | (IMAGE_TYPE_BOOT_FLAG << 7))
+
+#define IMAGE_TYPE_SWITCH_0041              (0x21 | (IMAGE_TYPE_BOOT_FLAG << 7))

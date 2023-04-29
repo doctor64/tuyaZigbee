@@ -36,8 +36,9 @@ extern "C" {
 #define PB5_FUNC                    AS_GPIO
 #define PB5_OUTPUT_ENABLE           0
 #define PB5_INPUT_ENABLE            1
-#define PULL_WAKEUP_SRC_PB5         PM_PIN_PULLUP_10K
+#define PULL_WAKEUP_SRC_PB5         PM_PIN_PULLDOWN_100K//PM_PIN_UP_DOWN_FLOAT//PM_PIN_PULLUP_10K//PM_PIN_PULLDOWN_100K
 
+//SW2 button
 #define BUTTON2                     GPIO_PD2
 #define PD2_FUNC                    AS_GPIO
 #define PD2_OUTPUT_ENABLE           0
@@ -49,6 +50,12 @@ extern "C" {
 #define PD4_FUNC                    AS_GPIO
 #define PD4_OUTPUT_ENABLE           1
 #define PD4_INPUT_ENABLE            0
+//to disable led blink on wake, led off with 1
+#define PD4_DATA_OUT                1
+//TS0041 have LEDs active low
+#define LED_ON						0//1
+#define LED_OFF						1//0
+
 
 
 #define PM_WAKEUP_LEVEL             PM_WAKEUP_LEVEL_LOW
@@ -60,7 +67,7 @@ extern "C" {
 
 // DEBUG
 #if UART_PRINTF_MODE
-    #define DEBUG_INFO_TX_PIN       GPIO_PC7//print
+    #define DEBUG_INFO_TX_PIN       GPIO_PB1//print
 #endif
 
 
@@ -70,14 +77,15 @@ enum{
 };
 
 #define KB_MAP_NORMAL   {\
-        {VK_SW1,}, \
         {VK_SW2,}, }
+/*        {VK_SW1,}, \
+        {VK_SW2,}, }*/
 
 #define KB_MAP_NUM      KB_MAP_NORMAL
 #define KB_MAP_FN       KB_MAP_NORMAL
 
 #define KB_DRIVE_PINS  {NULL }
-#define KB_SCAN_PINS   {BUTTON1,  BUTTON2}
+#define KB_SCAN_PINS   { BUTTON2}//{BUTTON1,  BUTTON2}
 
 
 /* Disable C linkage for C++ Compilers: */

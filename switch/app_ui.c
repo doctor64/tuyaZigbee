@@ -49,26 +49,31 @@
  */
 void led_on(u32 pin)
 {
+	printf("LED%d on\n", pin);
     drv_gpio_write(pin, LED_ON);
 }
 
 void led_off(u32 pin)
 {
+	printf("LED%d off\n", pin);
     drv_gpio_write(pin, LED_OFF);
 }
 
 void light_on(void)
 {
+	//printf("Light on\n");
     led_on(LED1);
 }
 
 void light_off(void)
 {
+	//printf("Light off\n");
     led_off(LED1);
 }
 
 void light_init(void)
 {
+	//printf("Light Init\n");
     led_off(LED1);
 
 }
@@ -114,7 +119,7 @@ void light_blink_start(u8 times, u16 ledOnTime, u16 ledOffTime)
         }
         g_switchAppCtx.ledOnTime = ledOnTime;
         g_switchAppCtx.ledOffTime = ledOffTime;
-
+        printf("timer4 led blink start \n");
         g_switchAppCtx.timerLedEvt = TL_ZB_TIMER_SCHEDULE(zclLightTimerCb, NULL, interval);
     }
 }
@@ -143,9 +148,13 @@ void light_blink_stop(void)
  */
 void buttonKeepPressed(u8 btNum) {
     if(btNum == VK_SW1) {
+    	printf("Button keep pressed SW1\n");
         g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
         zb_factoryReset();
+        //not really sure it needed
+        zb_resetDevice();
     }else if(btNum == VK_SW2) {
+    	printf("Button keep pressed SW2\n");
         if(zb_isDeviceJoinedNwk()) {
             static u8 lvl = 1;
             static bool dir = 1;
@@ -205,6 +214,7 @@ s32 brc_toggleCb(void *arg)
 void brc_toggle(void)
 {
     if(!brc_toggleEvt){
+	printf("timer3 start \n");
         brc_toggleEvt = TL_ZB_TIMER_SCHEDULE(brc_toggleCb, NULL, 1000);
     }else{
         TL_ZB_TIMER_CANCEL(&brc_toggleEvt);
@@ -213,6 +223,7 @@ void brc_toggle(void)
 
 void buttonShortPressed(u8 btNum){
     if(btNum == VK_SW1){
+    	printf("Button short press SW1\n");
         if(zb_isDeviceJoinedNwk()){
 #if 1
             epInfo_t dstEpInfo;
@@ -232,7 +243,9 @@ void buttonShortPressed(u8 btNum){
 #endif
         }
     }else if(btNum == VK_SW2){
+    	printf("Button short press SW2\n");
         if(zb_isDeviceJoinedNwk()){
+        	light_blink_start(1, 500, 0);
 #if 1
             epInfo_t dstEpInfo;
             TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -249,6 +262,7 @@ void buttonShortPressed(u8 btNum){
 #else
             brc_toggle();
 #endif
+        }
     }
 }
 
@@ -278,8 +292,8 @@ void app_key_handler(void){
             buttonKeepPressed(VK_SW1);
         }
     }
-    if(kb_scan_key(0, 1)){
-        if(kb_event.cnt){
+    if(kb_scan_key(0, 1)){//if 1 keyboard update detected
+        if(kb_event.cnt){ //number of keys currently pressed
             g_switchAppCtx.keyPressed = 1;
             keyScan_keyPressedCB(&kb_event);
             if(kb_event.cnt == 1){
@@ -291,6 +305,42 @@ void app_key_handler(void){
             g_switchAppCtx.keyPressed = 0;
         }
     }
+    if(gpio_read(BUTTON1)) {
+    	if (g_switchAppCtx.btn1State == BUTTON_RELEASED) { //button pressed 1st cycle for debounce
+    		g_switchAppCtx.btn1State = BUTTON_START_DEBOUNCE_PRESS;
+    	}
+    	if (g_switchAppCtx.btn1State == BUTTON_START_DEBOUNCE_RELEASE) { //button release debounce failed
+    		g_switchAppCtx.btn1State = BUTTON_PRESSED;
+    	}
+    	if (g_switchAppCtx.btn1State == BUTTON_START_DEBOUNCE_PRESS) { //button pressed 2nd cycle
+    		g_switchAppCtx.btn1State = BUTTON_PRESSED;
+    		printf("btn1 pressed \n");
+            g_switchAppCtx.keyPressed = 1;
+            kb_event.keycode[0] = VK_SW1;
+            kb_event.cnt = 1;
+            keyScan_keyPressedCB(&kb_event);
+            if(kb_event.cnt == 1){
+                valid_keyCode = kb_event.keycode[0];
+            }
+    	}
+    }
+    else {
+    	if (g_switchAppCtx.btn1State == BUTTON_PRESSED) { //button released 1st cycle for debounce
+    		g_switchAppCtx.btn1State = BUTTON_START_DEBOUNCE_RELEASE;
+    	}
+    	if (g_switchAppCtx.btn1State == BUTTON_START_DEBOUNCE_PRESS) { //button pressed debounce failed
+    		g_switchAppCtx.btn1State = BUTTON_RELEASED;
+    	}
+    	if (g_switchAppCtx.btn1State == BUTTON_START_DEBOUNCE_RELEASE) { //button released 2nd cycle
+    		g_switchAppCtx.btn1State = BUTTON_RELEASED;
+    		printf("btn1 released \n");
+    		kb_event.cnt = 0;
+            keyScan_keyReleasedCB(valid_keyCode);
+            valid_keyCode = 0xff;
+            g_switchAppCtx.keyPressed = 0;
+    	}
+    }
+
 }
 
 #endif  /* __PROJECT_TL_SWITCH__ */

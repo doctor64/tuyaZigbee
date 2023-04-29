@@ -90,7 +90,7 @@ static ev_timer_event_t *identifyTimerEvt = NULL;
  */
 void tuyaSwitch_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg)
 {
-	//printf("tuyaSwitch_zclProcessIncomingMsg\n");
+	printf("tuyaSwitch_zclProcessIncomingMsg\n");
 
 	u16 cluster = pInHdlrMsg->msg->indInfo.cluster_id;
 	switch(pInHdlrMsg->hdr.cmd)
@@ -139,7 +139,7 @@ void tuyaSwitch_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg)
  */
 static void tuyaSwitch_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd)
 {
-    //printf("tuyaSwitch_zclReadRspCmd\n");
+    printf("tuyaSwitch_zclReadRspCmd\n");
 
 }
 #endif	/* ZCL_READ */
@@ -156,7 +156,7 @@ static void tuyaSwitch_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd
  */
 static void tuyaSwitch_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd)
 {
-    //printf("tuyaSwitch_zclWriteRspCmd\n");
+    printf("tuyaSwitch_zclWriteRspCmd\n");
 
 }
 
@@ -199,7 +199,7 @@ static void tuyaSwitch_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd
  */
 static void tuyaSwitch_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd)
 {
-    //printf("tuyaSwitch_zclDfltRspCmd\n");
+    printf("tuyaSwitch_zclDfltRspCmd\n");
 
 }
 
@@ -215,7 +215,7 @@ static void tuyaSwitch_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspC
  */
 static void tuyaSwitch_zclCfgReportCmd(u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd)
 {
-    //printf("tuyaSwitch_zclCfgReportCmd\n");
+    printf("tuyaSwitch_zclCfgReportCmd\n");
 
 }
 
@@ -230,7 +230,7 @@ static void tuyaSwitch_zclCfgReportCmd(u16 clusterId, zclCfgReportCmd_t *pCfgRep
  */
 static void tuyaSwitch_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *pCfgReportRspCmd)
 {
-    //printf("tuyaSwitch_zclCfgReportRspCmd\n");
+    printf("tuyaSwitch_zclCfgReportRspCmd\n");
 
 }
 
@@ -245,7 +245,7 @@ static void tuyaSwitch_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *p
  */
 static void tuyaSwitch_zclReportCmd(u16 clusterId, zclReportCmd_t *pReportCmd)
 {
-    //printf("tuyaSwitch_zclReportCmd\n");
+    printf("tuyaSwitch_zclReportCmd\n");
 
 }
 #endif	/* ZCL_REPORT */
@@ -311,7 +311,9 @@ void tuyaSwitch_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTime
 		light_blink_stop();
 	}else{
 		if(!identifyTimerEvt){
+printf("led_blink1 start \n");
 			light_blink_start(identifyTime, 500, 500);
+printf("timer8 start \n");
 			identifyTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_zclIdentifyTimerCb, NULL, 1000);
 		}
 	}
@@ -680,6 +682,7 @@ void tuyaSwitch_zclCheckInStart(void)
 		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 		if(!zclCheckInTimerEvt){
+printf("timer9 start \n");
 			zclCheckInTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_zclCheckInTimerCb, NULL, pPollCtrlAttr->chkInInterval * POLL_RATE_QUARTERSECONDS);
 			
 			if(pPollCtrlAttr->chkInInterval){
@@ -730,6 +733,7 @@ static status_t tuyaSwitch_zclPollCtrlChkInRspCmdHandler(zcl_chkInRsp_t *pCmd)
 			if(zclFastPollTimeoutTimerEvt){
 				TL_ZB_TIMER_CANCEL(&zclFastPollTimeoutTimerEvt);
 			}
+printf("timer10 start \n");
 			zclFastPollTimeoutTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_zclFastPollTimeoutCb, NULL, fastPollTimeoutCnt * POLL_RATE_QUARTERSECONDS);
 		}
 	}else{

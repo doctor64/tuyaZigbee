@@ -55,6 +55,7 @@ typedef struct{
 	u8  state;
 
 	u8  keyPressed;
+	u8  btn1State;
 
 	app_linkKey_info_t tcLinkKey;
 }app_ctx_t;
@@ -69,8 +70,12 @@ typedef struct{
 	u8	hwVersion;
 	u8	manuName[ZCL_BASIC_MAX_LENGTH];
 	u8	modelId[ZCL_BASIC_MAX_LENGTH];
+	u8  dateCode[ZCL_BASIC_MAX_LENGTH];
 	u8	powerSource;
+	u8  genDevClass;                        //attr 8
+	u8  genDevType;                         //attr 9
 	u8	deviceEnable;
+	u8  swBuildId[ZCL_BASIC_MAX_LENGTH];    //attr 4000
 }zcl_basicAttr_t;
 
 /**

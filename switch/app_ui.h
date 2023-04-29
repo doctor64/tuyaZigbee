@@ -29,9 +29,6 @@
 /**********************************************************************
  * CONSTANT
  */
-#define LED_ON						1
-#define LED_OFF						0
-
 
 /**********************************************************************
  * TYPEDEFS
@@ -41,7 +38,12 @@ enum{
 	APP_FACTORY_NEW_SET_CHECK,
 	APP_FACTORY_NEW_DOING
 };
-
+enum{
+	BUTTON_RELEASED,
+	BUTTON_START_DEBOUNCE_PRESS,
+	BUTTON_START_DEBOUNCE_RELEASE,
+	BUTTON_PRESSED
+};
 
 /**********************************************************************
  * FUNCTIONS

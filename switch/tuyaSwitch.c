@@ -124,12 +124,12 @@ bdb_commissionSetting_t g_bdbCommissionSetting = {
  */
 drv_pm_pinCfg_t g_switchPmCfg[] = {
 	{
-		BUTTON1,
-		PM_WAKEUP_LEVEL
+		BUTTON1,//Net Key
+		PM_WAKEUP_LEVEL_HIGH
 	},
 	{
 		BUTTON2,
-		PM_WAKEUP_LEVEL
+		PM_WAKEUP_LEVEL_LOW
 	}
 };
 #endif
@@ -207,6 +207,11 @@ void app_task(void)
 	if(bdb_isIdle()){
 #if PM_ENABLE
 		if(!g_switchAppCtx.keyPressed){
+			//printf("Enter sleep\n");
+			//ev_timer_event_t *timerEvt = ev_timer_nearestGet();
+				//if(timerEvt){
+					//printf("Timer set for %d, cb %x\n", timerEvt->timeout, timerEvt->cb);
+				//}
 			drv_pm_lowPowerEnter();
 		}
 #endif
@@ -234,8 +239,10 @@ static void tuyaSwitchSysException(void)
  */
 void user_init(bool isRetention)
 {
+	printf("user init(%d)\n", isRetention);
 	/* Initialize LEDs*/
 	led_init();
+
 
 #if PA_ENABLE
 	rf_paInit(PA_TX, PA_RX);

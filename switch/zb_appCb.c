@@ -116,7 +116,7 @@ s32 tuyaSwitch_rejoinBacckoff(void *arg){
  * @return  None
  */
 void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
-//	printf("bdbInitCb: sta = %x, joined = %x\n", status, joinedNetwork);
+	printf("bdbInitCb: sta = %x, joined = %x\n", status, joinedNetwork);
 
 	if(status == BDB_INIT_STATUS_SUCCESS){
 		/*
@@ -131,7 +131,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 			zb_setPollRate(POLL_RATE * 3);
 
 #ifdef ZCL_OTA
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			ota_queryStart(MY_OTA_PERIODIC_QUERY_INTERVAL);
 #endif
 
 #ifdef ZCL_POLL_CTRL
@@ -142,12 +142,14 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 			do{
 				jitter = zb_random() % 0x0fff;
 			}while(jitter == 0);
+			printf("timer1 start \n");
 			TL_ZB_TIMER_SCHEDULE(tuyaSwitch_bdbNetworkSteerStart, NULL, jitter);
 		}
 	}else{
 		if(joinedNetwork){
 //			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 			if(!switchRejoinBackoffTimerEvt){
+				printf("timer2 start \n");
 				switchRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_rejoinBacckoff, NULL, 60 * 1000);
 			}
 		}
@@ -166,7 +168,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
  * @return  None
  */
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
-//	printf("bdbCommCb: sta = %x\n", status);
+	printf("bdbCommCb: sta = %x\n", status);
 
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
@@ -178,11 +180,12 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			tuyaSwitch_zclCheckInStart();
 #endif
 #ifdef ZCL_OTA
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			ota_queryStart(MY_OTA_PERIODIC_QUERY_INTERVAL);
 #endif
 #if FIND_AND_BIND_SUPPORT
 			//start Finding & Binding
 			if(!g_switchAppCtx.bdbFBTimerEvt){
+                                printf("timer5 start \n");
 				g_switchAppCtx.bdbFBTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_bdbFindAndBindStart, NULL, 50);
 			}
 #endif
@@ -202,6 +205,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 				do{
 					jitter = zb_random() % 0x0fff;
 				}while(jitter == 0);
+                                printf("timer6 start \n");
 				TL_ZB_TIMER_SCHEDULE(tuyaSwitch_bdbNetworkSteerStart, NULL, jitter);
 			}
 			break;
@@ -222,6 +226,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
 			if(!switchRejoinBackoffTimerEvt){
+printf("timer7 start \n");
 				switchRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_rejoinBacckoff, NULL, 60 * 1000);
 			}
 			break;
@@ -266,7 +271,7 @@ void zbdemo_bdbFindBindSuccessCb(findBindDst_t *pDstInfo){
 #ifdef ZCL_OTA
 void tuyaSwitch_otaProcessMsgHandler(u8 evt, u8 status)
 {
-	//printf("tuyaSwitch_otaProcessMsgHandler: status = %x\n", status);
+	printf("tuyaSwitch_otaProcessMsgHandler: status = %x\n", status);
 	if(evt == OTA_EVT_START){
 		if(status == ZCL_STA_SUCCESS){
 			zb_setPollRate(QUEUE_POLL_RATE);
@@ -279,7 +284,7 @@ void tuyaSwitch_otaProcessMsgHandler(u8 evt, u8 status)
 		if(status == ZCL_STA_SUCCESS){
 			ota_mcuReboot();
 		}else{
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			ota_queryStart(MY_OTA_PERIODIC_QUERY_INTERVAL);
 		}
 	}
 }
@@ -316,8 +321,8 @@ void tuyaSwitch_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
  */
 void tuyaSwitch_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
 {
-    //printf("tuyaSwitch_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
-    //printfArray(pLeaveInd->device_address, 8);
+    printf("tuyaSwitch_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
+    //printfArray(pLeaveInd->deviceAddr, 8);
 }
 
 

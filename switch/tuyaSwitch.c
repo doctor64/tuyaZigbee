@@ -185,12 +185,16 @@ void user_app_init(void)
 	/* register endPoint */
 	af_endpointRegister(TUYA_SWITCH_ENDPOINT, (af_simple_descriptor_t *)&tuyaSwitch_simpleDesc, zcl_rx_handler, NULL);
 
+	zcl_reportingTabInit();
+
 	/* Register ZCL specific cluster information */
 	zcl_register(TUYA_SWITCH_ENDPOINT, TUYA_SWITCH_CB_CLUSTER_NUM, (zcl_specClusterInfo_t *)g_tuyaSwitchClusterList);
 
 #if ZCL_OTA_SUPPORT
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&tuyaSwitch_simpleDesc, &tuyaSwitch_otaInfo, &tuyaSwitch_otaCb);
 #endif
+    // battery monitor
+    g_switchAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 5000);
 }
 
 
@@ -200,8 +204,26 @@ void led_init(void)
 	light_init();
 }
 
+void report_handler(void)
+{
+	if(zb_isDeviceJoinedNwk()){
+		if(zcl_reportingEntryActiveNumGet()){
+			u16 second = 1;//TODO: fix me
+
+			reportNoMinLimit();
+
+			//start report timer
+			reportAttrTimerStart(second);
+		}else{
+			//stop report timer
+			reportAttrTimerStop();
+		}
+	}
+}
+
 void app_task(void)
 {
+	//get_battVoltage();
 	app_key_handler();
 
 	if(bdb_isIdle()){
@@ -215,6 +237,7 @@ void app_task(void)
 			drv_pm_lowPowerEnter();
 		}
 #endif
+		report_handler();
 	}
 }
 
@@ -279,6 +302,13 @@ void user_init(bool isRetention)
 		}
 
 		bdb_findBindMatchClusterSet(FIND_AND_BIND_CLUSTER_NUM, bdb_findBindClusterList);
+
+		/* Set default reporting configuration */
+	    u8 reportableChange = 0x00;
+	    bdb_defaultReportingCfg(TUYA_SWITCH_ENDPOINT, HA_PROFILE_ID, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE,
+	    						0x0000, 3600, (u8 *)&reportableChange);
+	    bdb_defaultReportingCfg(TUYA_SWITCH_ENDPOINT, HA_PROFILE_ID, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
+	    	    						0x0000, 3600, (u8 *)&reportableChange);
 
 		/* Initialize BDB */
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;

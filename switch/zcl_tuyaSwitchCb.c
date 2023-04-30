@@ -417,6 +417,27 @@ status_t tuyaSwitch_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void 
 }
 #endif	/* ZCL_IDENTIFY */
 
+/*********************************************************************
+ * @fn      tuyaSwitch_powerCfgCb
+ *
+ * @brief   Handler for ZCL Identify command.
+ *
+ * @param   pAddrInfo
+ * @param   cmdId
+ * @param   cmdPayload
+ *
+ * @return  status_t
+ */
+status_t tuyaSwitch_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
+{
+//	if(cmdId == ZCL_CMD_BASIC_RESET_FAC_DEFAULT){
+		//Reset all the attributes of all its clusters to factory defaults
+		//zcl_nv_attr_reset();
+//	}
+
+	return ZCL_STA_SUCCESS;
+}
+
 #ifdef ZCL_GROUP
 /*********************************************************************
  * @fn      tuyaSwitch_zclAddGroupRspCmdHandler

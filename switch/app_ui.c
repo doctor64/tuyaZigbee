@@ -49,13 +49,13 @@
  */
 void led_on(u32 pin)
 {
-	printf("LED%d on\n", pin);
+	//printf("LED%d on\n", pin);
     drv_gpio_write(pin, LED_ON);
 }
 
 void led_off(u32 pin)
 {
-	printf("LED%d off\n", pin);
+	//printf("LED%d off\n", pin);
     drv_gpio_write(pin, LED_OFF);
 }
 
@@ -119,7 +119,7 @@ void light_blink_start(u8 times, u16 ledOnTime, u16 ledOffTime)
         }
         g_switchAppCtx.ledOnTime = ledOnTime;
         g_switchAppCtx.ledOffTime = ledOffTime;
-        printf("timer4 led blink start \n");
+        //printf("timer4 led blink start \n");
         g_switchAppCtx.timerLedEvt = TL_ZB_TIMER_SCHEDULE(zclLightTimerCb, NULL, interval);
     }
 }
@@ -149,6 +149,7 @@ void light_blink_stop(void)
 void buttonKeepPressed(u8 btNum) {
     if(btNum == VK_SW1) {
     	printf("Button keep pressed SW1\n");
+    	light_blink_start(3, 200, 200);
         g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
         zb_factoryReset();
         //not really sure it needed
@@ -190,9 +191,26 @@ void buttonKeepPressed(u8 btNum) {
     }
 }
 
-void set_detect_voltage(s32 v){
+void set_detect_voltage(u8 v){
     g_switchAppCtx.Vbat = v;
 }
+
+s32 battVoltageCb(void *arg) {
+	u16 voltage, percentage;
+	u8 converted_voltage, percentage2;
+	voltage = drv_get_adc_data();
+	printf("voltage %d\n", voltage);
+	converted_voltage = (u8)(voltage/100);
+	percentage = ((voltage - BATTERY_SAFETY_THRESHOLD)/4);
+	if (percentage > 0xc8) percentage=0xc8;
+	percentage2 = (u8)percentage;
+	printf("converted voltage %d diff %d", converted_voltage, (voltage - BATTERY_SAFETY_THRESHOLD));
+	printf(" , percentage2 %d\n", percentage2);
+	zcl_setAttrVal(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE, &converted_voltage);
+	zcl_setAttrVal(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING, &percentage2);
+	return 0;
+}
+
 
 ev_timer_event_t *brc_toggleEvt = NULL;
 
@@ -225,6 +243,7 @@ void buttonShortPressed(u8 btNum){
     if(btNum == VK_SW1){
     	printf("Button short press SW1\n");
         if(zb_isDeviceJoinedNwk()){
+        	light_blink_start(5, 500, 500);
 #if 1
             epInfo_t dstEpInfo;
             TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -237,7 +256,15 @@ void buttonShortPressed(u8 btNum){
             dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
             dstEpInfo.dstAddr.shortAddr = 0xfffc;
 #endif
-            zcl_onOff_toggleCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE);
+            //zcl_onOff_toggleCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE);
+        	zclAttrInfo_t *pAttrEntry;
+        	pAttrEntry = zcl_findAttribute(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE);
+        	zcl_sendReportCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+        			ZCL_CLUSTER_GEN_POWER_CFG, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
+        	pAttrEntry = zcl_findAttribute(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING);
+			zcl_sendReportCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+					ZCL_CLUSTER_GEN_POWER_CFG, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
+
 #else
             brc_toggle();
 #endif
@@ -283,6 +310,7 @@ void keyScan_keyPressedCB(kb_data_t *kbEvt){
 
 void keyScan_keyReleasedCB(u8 keyCode){
     g_switchAppCtx.state = APP_STATE_NORMAL;
+    //light_blink_stop();
 }
 
 void app_key_handler(void){

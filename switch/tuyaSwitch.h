@@ -44,7 +44,8 @@ typedef struct{
 typedef struct{
 	ev_timer_event_t *bdbFBTimerEvt;
 	ev_timer_event_t *timerLedEvt;
-    s32 Vbat;		//current voltage
+	ev_timer_event_t *timerBattEvt;
+    u16 Vbat;		//current voltage
 	u32 keyPressedTime;
 
 	u16 ledOnTime;
@@ -86,6 +87,19 @@ typedef struct{
 }zcl_identifyAttr_t;
 
 /**
+ *  @brief Defined for power configuration cluster attributes
+ */
+typedef struct{
+#ifdef POWER_MAINS
+	u16 mainsVoltage;
+	u8  mainsFrequency;
+#endif
+	u8  batteryVoltage;      //0x20
+	u8  batteryPercentage;   //0x21
+}zcl_powerAttr_t;
+
+
+/**
  *  @brief  Defined for poll control cluster attributes
  */
 typedef struct{
@@ -124,6 +138,7 @@ void tuyaSwitch_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg);
 
 status_t tuyaSwitch_basicCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t tuyaSwitch_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
+status_t tuyaSwitch_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t tuyaSwitch_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t tuyaSwitch_sceneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t tuyaSwitch_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);

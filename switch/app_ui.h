@@ -59,5 +59,6 @@ void led_on(u32 pin);
 void led_off(u32 pin);
 
 void app_key_handler(void);
+s32 battVoltageCb(void *arg);
 
 #endif	/* _APP_UI_H_ */

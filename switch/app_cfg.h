@@ -130,7 +130,7 @@ extern "C" {
  * we need to configure the detection IO port, and the IO must be connected to the target under test,
  * such as VCC.
  */
-#define VOLTAGE_DETECT_ENABLE						0
+#define VOLTAGE_DETECT_ENABLE						1
 
 #if defined(MCU_CORE_826x)
 	#define VOLTAGE_DETECT_ADC_PIN					0
@@ -159,10 +159,11 @@ extern "C" {
 #define ZCL_LIGHT_COLOR_CONTROL_SUPPORT				1
 #define ZCL_GROUP_SUPPORT							1
 #define ZCL_OTA_SUPPORT								1
+#define ZCL_POWER_CFG_SUPPORT                       1
 #if TOUCHLINK_SUPPORT
 #define ZCL_ZLL_COMMISSIONING_SUPPORT				1
 #endif
-#define MY_OTA_PERIODIC_QUERY_INTERVAL (24*60*60U) //seconds
+#define MY_OTA_PERIODIC_QUERY_INTERVAL (12*60*60U) //seconds
 
 /**********************************************************************
  * Stack configuration

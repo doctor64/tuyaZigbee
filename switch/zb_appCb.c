@@ -185,7 +185,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #if FIND_AND_BIND_SUPPORT
 			//start Finding & Binding
 			if(!g_switchAppCtx.bdbFBTimerEvt){
-                                printf("timer5 start \n");
+                                //printf("timer5 start \n");
 				g_switchAppCtx.bdbFBTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_bdbFindAndBindStart, NULL, 50);
 			}
 #endif
@@ -205,7 +205,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 				do{
 					jitter = zb_random() % 0x0fff;
 				}while(jitter == 0);
-                                printf("timer6 start \n");
+                                //printf("timer6 start \n");
 				TL_ZB_TIMER_SCHEDULE(tuyaSwitch_bdbNetworkSteerStart, NULL, jitter);
 			}
 			break;
@@ -321,7 +321,7 @@ void tuyaSwitch_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
  */
 void tuyaSwitch_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
 {
-    printf("tuyaSwitch_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
+    //printf("tuyaSwitch_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
     //printfArray(pLeaveInd->deviceAddr, 8);
 }
 

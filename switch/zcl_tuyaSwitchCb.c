@@ -139,7 +139,7 @@ void tuyaSwitch_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg)
  */
 static void tuyaSwitch_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd)
 {
-    printf("tuyaSwitch_zclReadRspCmd\n");
+    //printf("tuyaSwitch_zclReadRspCmd\n");
 
 }
 #endif	/* ZCL_READ */
@@ -156,7 +156,7 @@ static void tuyaSwitch_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd
  */
 static void tuyaSwitch_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd)
 {
-    printf("tuyaSwitch_zclWriteRspCmd\n");
+    //printf("tuyaSwitch_zclWriteRspCmd\n");
 
 }
 
@@ -199,7 +199,7 @@ static void tuyaSwitch_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd
  */
 static void tuyaSwitch_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd)
 {
-    printf("tuyaSwitch_zclDfltRspCmd\n");
+    //printf("tuyaSwitch_zclDfltRspCmd\n");
 
 }
 
@@ -215,7 +215,7 @@ static void tuyaSwitch_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspC
  */
 static void tuyaSwitch_zclCfgReportCmd(u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd)
 {
-    printf("tuyaSwitch_zclCfgReportCmd\n");
+    //printf("tuyaSwitch_zclCfgReportCmd\n");
 
 }
 
@@ -230,7 +230,7 @@ static void tuyaSwitch_zclCfgReportCmd(u16 clusterId, zclCfgReportCmd_t *pCfgRep
  */
 static void tuyaSwitch_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *pCfgReportRspCmd)
 {
-    printf("tuyaSwitch_zclCfgReportRspCmd\n");
+    //printf("tuyaSwitch_zclCfgReportRspCmd\n");
 
 }
 
@@ -245,7 +245,7 @@ static void tuyaSwitch_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *p
  */
 static void tuyaSwitch_zclReportCmd(u16 clusterId, zclReportCmd_t *pReportCmd)
 {
-    printf("tuyaSwitch_zclReportCmd\n");
+    //printf("tuyaSwitch_zclReportCmd\n");
 
 }
 #endif	/* ZCL_REPORT */

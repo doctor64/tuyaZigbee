@@ -140,7 +140,7 @@ void light_blink_stop(void)
 
 void cmdSendReport()
 {
-	printf("cmdSendReport\n");
+	//printf("cmdSendReport\n");
     if(zb_isDeviceJoinedNwk()){
     	//light_blink_start(5, 500, 500);
 #if 1
@@ -171,7 +171,7 @@ void cmdSendReport()
 }
 void cmdToggle(void)
 {
-	printf("cmdToggle\n");
+	//printf("cmdToggle\n");
 	if(zb_isDeviceJoinedNwk())
 	{
 		//light_blink_start(1, 500, 0);
@@ -196,7 +196,7 @@ void cmdToggle(void)
 
 void cmdMoveOnOff(void)
 {
-	printf("cmdMoveOnOff\n");
+	//printf("cmdMoveOnOff\n");
 	if(zb_isDeviceJoinedNwk())
 	{
 		//static u8 lvl = 1;
@@ -241,7 +241,7 @@ void cmdMoveOnOff(void)
 
 void cmdStopWithOnOff(void)
 {
-	printf("cmdStop\n");
+	//printf("cmdStop\n");
     if(zb_isDeviceJoinedNwk())  {
     	epInfo_t dstEpInfo;
         TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -262,13 +262,13 @@ s32 battVoltageCb(void *arg) {
 	u16 voltage, percentage;
 	u8 converted_voltage, percentage2;
 	voltage = drv_get_adc_data();
-	printf("voltage %d\n", voltage);
+	//printf("voltage %d\n", voltage);
 	converted_voltage = (u8)(voltage/100);
 	percentage = ((voltage - BATTERY_SAFETY_THRESHOLD)/4);
 	if (percentage > 0xc8) percentage=0xc8;
 	percentage2 = (u8)percentage;
-	printf("converted voltage %d diff %d", converted_voltage, (voltage - BATTERY_SAFETY_THRESHOLD));
-	printf(" , percentage2 %d\n", percentage2);
+	//printf("converted voltage %d diff %d", converted_voltage, (voltage - BATTERY_SAFETY_THRESHOLD));
+	//printf(" , percentage2 %d\n", percentage2);
 	zcl_setAttrVal(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE, &converted_voltage);
 	zcl_setAttrVal(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING, &percentage2);
 	return 0;
@@ -285,7 +285,7 @@ s32 battVoltageCb(void *arg) {
  */
 void buttonKeepPressed(u8 btNum) {
     if(btNum == VK_SW1) {
-    	printf("Button keep pressed SW1\n");
+    	//printf("Button keep pressed SW1\n");
     	light_blink_stop();
     	light_blink_start(255, 300, 300);
         g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
@@ -293,7 +293,7 @@ void buttonKeepPressed(u8 btNum) {
         //not really sure it needed
         zb_resetDevice();
     }else if(btNum == VK_SW2) {
-    	printf("Button keep pressed SW2\n");
+    	//printf("Button keep pressed SW2\n");
     	light_blink_stop();
     	light_blink_start(255, 200, 200);
     	g_switchAppCtx.state = APP_STATE_HOLD_PROCESSED_SW2;
@@ -321,7 +321,7 @@ s32 brc_toggleCb(void *arg)
 void brc_toggle(void)
 {
     if(!brc_toggleEvt){
-	printf("timer3 start \n");
+	//printf("timer3 start \n");
         brc_toggleEvt = TL_ZB_TIMER_SCHEDULE(brc_toggleCb, NULL, 1000);
     }else{
         TL_ZB_TIMER_CANCEL(&brc_toggleEvt);
@@ -330,11 +330,11 @@ void brc_toggle(void)
 
 void buttonShortPressed(u8 btNum){
     if(btNum == VK_SW1){
-    	printf("Button short press SW1\n");
+    	//printf("Button short press SW1\n");
     	light_blink_start(5,300,700);
     	cmdSendReport();
     }else if(btNum == VK_SW2){
-    	printf("Button short press SW2\n");
+    	//printf("Button short press SW2\n");
     	light_blink_start(1, 3000, 0);
     }
 }
@@ -410,7 +410,7 @@ void app_key_handler(void){
     	}
     	if (g_switchAppCtx.btn1State == BUTTON_START_DEBOUNCE_PRESS) { //button pressed 2nd cycle
     		g_switchAppCtx.btn1State = BUTTON_PRESSED;
-    		printf("btn1 pressed \n");
+    		//printf("btn1 pressed \n");
             g_switchAppCtx.keyPressed = 1;
             kb_event.keycode[0] = VK_SW1;
             kb_event.cnt = 1;
@@ -429,7 +429,7 @@ void app_key_handler(void){
     	}
     	if (g_switchAppCtx.btn1State == BUTTON_START_DEBOUNCE_RELEASE) { //button released 2nd cycle
     		g_switchAppCtx.btn1State = BUTTON_RELEASED;
-    		printf("btn1 released \n");
+    		//printf("btn1 released \n");
     		kb_event.cnt = 0;
             keyScan_keyReleasedCB(valid_keyCode);
             valid_keyCode = 0xff;

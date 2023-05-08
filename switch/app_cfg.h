@@ -40,7 +40,7 @@ extern "C" {
  * Product Information
  */
 /* Debug mode config */
-#define	UART_PRINTF_MODE				1
+#define	UART_PRINTF_MODE				0
 #define USB_PRINTF_MODE         		0
 //#define BAUDRATE 						1000000//1M
 

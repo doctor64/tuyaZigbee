@@ -42,7 +42,7 @@
 #endif
 
 #define APP_RELEASE							0x10//app release 1.0
-#define APP_BUILD							0x01//app build 01
+#define APP_BUILD							0x02//app build 02
 #define STACK_RELEASE						0x30//stack release 3.0
 #define STACK_BUILD							0x01//stack build 01
 #define HARDWARE_REV                        0x01
@@ -54,7 +54,7 @@
 	#define ZCL_BASIC_MODEL_ID          {12,'F','i','x','e','d','_','T','S','0','0','4','1'}
 #endif
 #ifndef ZCL_BASIC_DATE_CODE
-	#define ZCL_BASIC_DATE_CODE    {8,'2','0','2','2','0','4','2','3'}
+	#define ZCL_BASIC_DATE_CODE    {8,'2','0','2','2','0','5','0','8'}
 #endif
 #ifndef ZCL_BASIC_LOC_DESC
 	#define ZCL_BASIC_LOC_DESC     {7,'U','N','K','N','O','W','N'}
@@ -80,8 +80,9 @@
 //#define    IMAGE_TYPE                        0xD3A3 //for tuya OTA
 #define    FILE_VERSION                      ((APP_RELEASE << 24) | (APP_BUILD << 16) | (STACK_RELEASE << 8) | STACK_BUILD)
 //#define    FILE_VERSION                      0xff //for tuya ota
+                                              //0x10023001
 
-#define	IMAGE_TYPE							((CHIP_TYPE << 8) | IMAGE_TYPE_SWITCH_0041)
+#define	IMAGE_TYPE							((CHIP_TYPE << 8) | IMAGE_TYPE_SWITCH_0041) //0x3a1
 
 /* Pre-compiled link configuration. */
 #define IS_BOOT_LOADER_IMAGE				0

@@ -12,6 +12,7 @@ double click
 OTA
 {"currentFileVersion":67,"manufacturerId":4417,"imageTypeId":65535}
 "fileVersion":67,"imageType":54179,"manufacturerCode":4417
+in hex 0x43  D3A3 1141
 pins:
 B5 - SW1 (Net Switch, under case)
 B4 - K4

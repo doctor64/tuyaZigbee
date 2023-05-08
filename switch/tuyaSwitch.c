@@ -227,9 +227,10 @@ void app_task(void)
 	app_key_handler();
 
 	if(bdb_isIdle()){
+		report_handler();
 #if PM_ENABLE
-		if(!g_switchAppCtx.keyPressed){
-			//printf("Enter sleep\n");
+		if((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt)){ //no key pressed and no led blink active
+			printf("Enter sleep\n");
 			//ev_timer_event_t *timerEvt = ev_timer_nearestGet();
 				//if(timerEvt){
 					//printf("Timer set for %d, cb %x\n", timerEvt->timeout, timerEvt->cb);
@@ -237,7 +238,6 @@ void app_task(void)
 			drv_pm_lowPowerEnter();
 		}
 #endif
-		report_handler();
 	}
 }
 
@@ -280,6 +280,7 @@ void user_init(bool isRetention)
 #endif
 
 	if(!isRetention){
+		//light_blink_start(2,500,500);
 		/* Initialize Stack */
 		stack_init();
 

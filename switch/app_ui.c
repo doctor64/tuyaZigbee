@@ -142,7 +142,7 @@ void cmdSendReport()
 {
 	printf("cmdSendReport\n");
     if(zb_isDeviceJoinedNwk()){
-    	light_blink_start(5, 500, 500);
+    	//light_blink_start(5, 500, 500);
 #if 1
         epInfo_t dstEpInfo;
         TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -174,7 +174,7 @@ void cmdToggle(void)
 	printf("cmdToggle\n");
 	if(zb_isDeviceJoinedNwk())
 	{
-		light_blink_start(1, 500, 0);
+		//light_blink_start(1, 500, 0);
 #if 1
 		epInfo_t dstEpInfo;
 		TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -258,34 +258,6 @@ void cmdStopWithOnOff(void)
     }
 }
 
-/*******************************************************************
- * @brief   Button click detect:
- *          SW1. keep press button1 5s === factory reset
- *          SW1. short press button1   === send report
- *          SW2. keep press button2 3s === send move (1st hold - up, 2nd hold - down)
- *          SW2. short press button2   === send toggle (on release)
- *
- */
-void buttonKeepPressed(u8 btNum) {
-    if(btNum == VK_SW1) {
-    	printf("Button keep pressed SW1\n");
-    	light_blink_start(3, 200, 200);
-        g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
-        zb_factoryReset();
-        //not really sure it needed
-        zb_resetDevice();
-    }else if(btNum == VK_SW2) {
-    	printf("Button keep pressed SW2\n");
-    	g_switchAppCtx.state = APP_STATE_HOLD_PROCESSED_SW2;
-    	cmdMoveOnOff();
-    }
-}
-
-
-void set_detect_voltage(u8 v){
-    g_switchAppCtx.Vbat = v;
-}
-
 s32 battVoltageCb(void *arg) {
 	u16 voltage, percentage;
 	u8 converted_voltage, percentage2;
@@ -302,6 +274,32 @@ s32 battVoltageCb(void *arg) {
 	return 0;
 }
 
+
+/*******************************************************************
+ * @brief   Button click detect:
+ *          SW1. keep press button1 5s === factory reset
+ *          SW1. short press button1   === send report
+ *          SW2. keep press button2 3s === send move (1st hold - up, 2nd hold - down)
+ *          SW2. short press button2   === send toggle (on release)
+ *
+ */
+void buttonKeepPressed(u8 btNum) {
+    if(btNum == VK_SW1) {
+    	printf("Button keep pressed SW1\n");
+    	light_blink_stop();
+    	light_blink_start(255, 300, 300);
+        g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
+        zb_factoryReset();
+        //not really sure it needed
+        zb_resetDevice();
+    }else if(btNum == VK_SW2) {
+    	printf("Button keep pressed SW2\n");
+    	light_blink_stop();
+    	light_blink_start(255, 200, 200);
+    	g_switchAppCtx.state = APP_STATE_HOLD_PROCESSED_SW2;
+    	cmdMoveOnOff();
+    }
+}
 
 ev_timer_event_t *brc_toggleEvt = NULL;
 
@@ -333,9 +331,11 @@ void brc_toggle(void)
 void buttonShortPressed(u8 btNum){
     if(btNum == VK_SW1){
     	printf("Button short press SW1\n");
+    	light_blink_start(5,300,700);
     	cmdSendReport();
     }else if(btNum == VK_SW2){
     	printf("Button short press SW2\n");
+    	light_blink_start(1, 3000, 0);
     }
 }
 
@@ -359,19 +359,21 @@ void keyScan_keyPressedCB(kb_data_t *kbEvt){
 
 
 void keyScan_keyReleasedCB(u8 keyCode){
-	if(keyCode == VK_SW1){
-
+	if((keyCode == VK_SW1) && (g_switchAppCtx.state == APP_FACTORY_NEW_SET_CHECK))
+	{
+		light_blink_stop();
 	}
 	if((keyCode == VK_SW2) && (g_switchAppCtx.state == APP_STATE_HOLD_SW2))  {
 		cmdToggle();
+		light_blink_stop();
 	}
 
     if((keyCode == VK_SW2) && (g_switchAppCtx.state == APP_STATE_HOLD_PROCESSED_SW2))  {
     	cmdStopWithOnOff();
+    	light_blink_stop();
     }
 
     g_switchAppCtx.state = APP_STATE_NORMAL;
-    //light_blink_stop();
 }
 
 void app_key_handler(void){

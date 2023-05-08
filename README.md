@@ -19,6 +19,7 @@ TS0501B
 - Have a Power on behavior
 - No more annoying bug with light goes off shortly afetr turn on (I hope)
 - OTA updates
+
 TS0041
 - Short click on button send toggle command (switch binded light on/off)
 - Long press on button send move command, so light brightness a changed. Direction is switched on next press
@@ -26,7 +27,8 @@ TS0041
 
 ## Join
 TS0501B
-Long press on button, connected LEd will blink
+Long press on button, connected LED will blink
+
 TS0041
 Long press on Net Key button
 

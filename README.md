@@ -1,16 +1,16 @@
 # tuyaZigbee
 This project intended to replace firmwares in TuYa devices based on Telink chips
 ## Supported devices
-TS0501B, TS0504B (and possible others) LED controllers.
-TS0041 1 button battery switch
-More to come!
+* TS0501B, TS0504B (and possible others) LED controllers.
+* TS0041 1 button battery switch
+* More to come!
 
 ## Why?
 Because TuYa firmware sucks, that's why :)
 But, seriously, not counting common drawbacks of TuYa devices firmware like manufacturer dependent messages and overall strange approach to zigbee standart, TS050X devices have very annoying bug: sometimes, then device receive On command, it turn on light for few seconds and turned off. I was unable to find exact condition to trigger this bug, but it happens from time to time. TS0041 does not support binding, etc.
-So, this project was born. 
+So, this project was born.
 This project based on sample from TeLink zigbee SDK.
-This is continuation of earlier project TuyaLight
+This is continuation of earlier project [TuyaLight](https://github.com/doctor64/tuyaLight)
 
 ## Improvements over original firmware
 TS0501B

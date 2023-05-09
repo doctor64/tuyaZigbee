@@ -85,8 +85,9 @@ Read Flash from 0x000000 to 0x100000...
  Worked Time: 63.311 sec       
 ```
 ## Write flash
+Please note what actual firmware start from address 0x8000. 
 To write new firmware execute
-`python TlsrPgm.py -w -t 1 -a 20 -s -p/dev/ttyUSB0 we 0 TuyaLight.bin`
+`python TlsrPgm.py -w -t 1 -a 20 -s -p/dev/ttyUSB0 we 0x8000 TuyaLight.bin`
 You should get output
 ```
 =======================================================
@@ -103,8 +104,13 @@ CPU PC=0x00000000
 CPU Stop... ok
 === Process ===========================================
 Inputfile: TuyaLight.bin
-Write Flash data 0x00000000 to 0x0002efe4...
+Write Flash data 0x00008000 to 0x0002efe4...
  Worked Time: 22.769 sec
 ```
 Now you can disconnect programmer, connect LED, power supply and join zigbee network.
+
+To write original firmware backed up earlier execute
+`python TlsrPgm.py -w -t 1 -a 20 -s -p/dev/ttyUSB0 we 0 tuya_1024k_orig.bin`
+
+
 

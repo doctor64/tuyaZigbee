@@ -142,14 +142,14 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 			do{
 				jitter = zb_random() % 0x0fff;
 			}while(jitter == 0);
-			printf("timer1 start \n");
+			//printf("timer1 start \n");
 			TL_ZB_TIMER_SCHEDULE(tuyaSwitch_bdbNetworkSteerStart, NULL, jitter);
 		}
 	}else{
 		if(joinedNetwork){
 //			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 			if(!switchRejoinBackoffTimerEvt){
-				printf("timer2 start \n");
+				//printf("timer2 start \n");
 				switchRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_rejoinBacckoff, NULL, 60 * 1000);
 			}
 		}
@@ -168,7 +168,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
  * @return  None
  */
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
-	printf("bdbCommCb: sta = %x\n", status);
+	//printf("bdbCommCb: sta = %x\n", status);
 
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
@@ -226,7 +226,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
 			if(!switchRejoinBackoffTimerEvt){
-printf("timer7 start \n");
+//printf("timer7 start \n");
 				switchRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_rejoinBacckoff, NULL, 60 * 1000);
 			}
 			break;

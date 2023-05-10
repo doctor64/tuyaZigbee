@@ -127,7 +127,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 			heartInterval = 1000;
 
 #ifdef ZCL_OTA
-			ota_queryStart(6*60*60);//OTA_PERIODIC_QUERY_INTERVAL);
+			ota_queryStart(MY_OTA_PERIODIC_QUERY_INTERVAL);
 #endif
 		}else{
 			heartInterval = 500;

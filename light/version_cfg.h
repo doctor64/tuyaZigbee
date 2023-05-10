@@ -76,6 +76,15 @@
     #endif
 #endif
 
+#ifndef ZCL_BASIC_DATE_CODE
+	#define ZCL_BASIC_DATE_CODE    {8,'2','0','2','2','0','5','1','0'}
+#endif
+
+#ifndef ZCL_BASIC_LOC_DESC
+	#define ZCL_BASIC_LOC_DESC     {7,'U','N','K','N','O','W','N'}
+#endif
+
+
 #ifndef ZCL_BASIC_SW_BUILD_ID //max 16 chars
 #define ZCL_BASIC_SW_BUILD_ID       {8,'v',(APP_RELEASE >> 4) + 0x30,'.',APP_BUILD + 0x30,'s',(STACK_RELEASE >> 4) + 0x30,'.',STACK_BUILD + 0x30}
 #endif

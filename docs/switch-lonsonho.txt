@@ -4,6 +4,7 @@ Zigbee Manufacturer
 _TZ3000_s0i14ubi
 Description
 Wireless switch with 1 button
+https://www.aliexpress.com/item/4001095272467.html
 
 double click
 кластер genMultistateInput и там presentValue.

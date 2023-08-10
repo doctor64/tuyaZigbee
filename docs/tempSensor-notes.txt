@@ -1,5 +1,7 @@
 https://www.aliexpress.com/item/1005005187204141.html
 model: SRT-082
+TS0201
+_TZ3000_0s1izerx
 temp sensor Sensylink CHT8305
 http://www.lanftek.com/Data/lanftek/upload/file/20180618/201802281014097175.pdf
 module ZTU

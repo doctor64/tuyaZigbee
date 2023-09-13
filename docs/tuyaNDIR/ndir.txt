@@ -1,0 +1,27 @@
+https://aliexpress.ru/item/1005004504548518.html
+https://www.aliexpress.com/item/1005003446514631.html ?
+Zigbee Model
+    TS0601
+Zigbee Manufacturer
+    _TZE200_ogkdpgy2
+Description
+    NDIR co2 sensor
+0xa4c138f5a640ce3a
+        Endpoint 1
+            Output clusters
+                genOta
+                genTime
+            Input clusters
+                genGroups
+                genScenes
+                manuSpecificTuya
+                genBasic
+        Endpoint 242
+            Output clusters
+                greenPower
+
+OTA
+"fieldControl":0,"fileVersion":70,"imageType":54179,"manufacturerCode":4417}
+HEX                          0x46           0xD3A3                  0x1141
+
+Original firmware - no reporting control, packets every 2-3 seconds

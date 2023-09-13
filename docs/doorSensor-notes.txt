@@ -23,3 +23,13 @@ hall sensor MT6131 https://datasheet.lcsc.com/lcsc/2010122036_Magn-Tek-MT6131AT_
 1 Vcc
 2 out
 3 gnd (middle)
+Clusters
+    0xa4c138a41fdf0d1d
+        Endpoint 1
+            Output clusters
+                genOta
+                genTime
+            Input clusters
+                genPowerCfg
+                ssIasZone
+                genBasic

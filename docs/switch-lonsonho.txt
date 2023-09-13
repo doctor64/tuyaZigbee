@@ -6,6 +6,45 @@ Description
 Wireless switch with 1 button
 https://www.aliexpress.com/item/4001095272467.html
 
+Model ZBWS02A (on case) - 2 button
+TS0042
+Zigbee Manufacturer
+_TZ3000_v8jvcwsx
+Description
+Wireless switch with 2 button
+    0xa4c138c85417b51e same for 3 button variant
+        Endpoint 1
+            Output clusters
+                genOta
+                genTime
+            Input clusters
+                genPowerCfg
+                genOnOff
+                manuSpecificBosch
+                genBasic
+        Endpoint 2
+            Input clusters
+                genOnOff
+                genPowerCfg
+                genOnOff
+        Endpoint 3
+            Input clusters
+                genOnOff
+                genPowerCfg
+                genOnOff
+        Endpoint 4
+            Input clusters
+                genOnOff
+                genPowerCfg
+                genOnOff
+
+Model ZBWS03A (on case) - 3 button
+TS0043
+Zigbee Manufacturer
+_TZ3000_uyjmm0et
+Description
+Wireless switch with 3 button
+
 
 double click
 кластер genMultistateInput и там presentValue.

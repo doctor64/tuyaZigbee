@@ -45,7 +45,6 @@ _TZ3000_uyjmm0et
 Description
 Wireless switch with 3 button
 
-
 double click
 кластер genMultistateInput и там presentValue.
 в FreePad так сделано, как в Aqara

@@ -13,11 +13,11 @@ Board pins
 
 chip TLSR8258F1KET32
 
-PB4 (pin14) - to hall sensor out
-PD2 (pin31) - to SW1
-PC2 (pin22) - to light sensor
-PB5 (pin15) - to led
-
+PB4 (pin14) - to hall sensor out active low
+PD2 (pin31) - to SW1 active low
+PC2 (pin22) - to light sensor 
+PB5 (pin15) - to led active low
+ 
 hall sensor MT6131 https://datasheet.lcsc.com/lcsc/2010122036_Magn-Tek-MT6131AT_C879546.pdf
 
 1 Vcc

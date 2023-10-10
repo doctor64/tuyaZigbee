@@ -31,7 +31,7 @@
 #include "tl_common.h"
 #include "zb_api.h"
 #include "zcl_include.h"
-#include "sampleSensor.h"
+#include "contactSensor.h"
 #include "app_ui.h"
 
 /**********************************************************************
@@ -143,15 +143,18 @@ void light_blink_stop(void)
  */
 void buttonKeepPressed(u8 btNum){
 	if(btNum == VK_SW1){
+		printf("Button keep pressed SW1\n");
 		g_sensorAppCtx.state = APP_FACTORY_NEW_DOING;
 		zb_factoryReset();
 	}else if(btNum == VK_SW2){
+		printf("Button keep pressed SW2\n");
 
 	}
 }
 
 void buttonShortPressed(u8 btNum){
 	if(btNum == VK_SW1){
+		printf("Button short pressed SW1\n");
 		if(zb_isDeviceJoinedNwk()){
 			epInfo_t dstEpInfo;
 			memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
@@ -171,6 +174,7 @@ void buttonShortPressed(u8 btNum){
 			zcl_iasZone_statusChangeNotificationCmd(SAMPLE_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
 		}
 	}else if(btNum == VK_SW2){
+		printf("Button short pressed SW2\n");
 		if(zb_isDeviceJoinedNwk()){
 
 		}
@@ -182,6 +186,7 @@ void keyScan_keyPressedCB(kb_data_t *kbEvt){
 	//u8 toNormal = 0;
 	u8 keyCode = kbEvt->keycode[0];
 	//static u8 lastKeyCode = 0xff;
+	printf("keyScan_keyPressedCB keycode %d\n", keyCode);
 
 	buttonShortPressed(keyCode);
 
@@ -194,6 +199,7 @@ void keyScan_keyPressedCB(kb_data_t *kbEvt){
 
 void keyScan_keyReleasedCB(u8 keyCode){
 	g_sensorAppCtx.state = APP_STATE_NORMAL;
+	printf("keyScan_keyReleasedCB keycode %d\n", keyCode);
 }
 
 void app_key_handler(void){

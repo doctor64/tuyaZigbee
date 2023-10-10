@@ -33,7 +33,7 @@
 #include "zcl_include.h"
 #include "bdb.h"
 #include "ota.h"
-#include "sampleSensor.h"
+#include "contactSensor.h"
 #include "app_ui.h"
 
 /**********************************************************************
@@ -66,9 +66,9 @@ bdb_appCb_t g_zbDemoBdbCb =
 };
 
 #ifdef ZCL_OTA
-ota_callBack_t sampleSensor_otaCb =
+ota_callBack_t contactSensor_otaCb =
 {
-	sampleSensor_otaProcessMsgHandler,
+	contactSensor_otaProcessMsgHandler,
 };
 #endif
 
@@ -76,7 +76,7 @@ ota_callBack_t sampleSensor_otaCb =
 /**********************************************************************
  * FUNCTIONS
  */
-s32 sampleSensor_bdbNetworkSteerStart(void *arg){
+s32 contactSensor_bdbNetworkSteerStart(void *arg){
 	bdb_networkSteerStart();
 
 	return -1;
@@ -111,14 +111,14 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 #endif
 
 #ifdef ZCL_POLL_CTRL
-			sampleSensor_zclCheckInStart();
+			contactSensor_zclCheckInStart();
 #endif
 		}else{
 			u16 jitter = 0;
 			do{
 				jitter = zb_random() % 0x0fff;
 			}while(jitter == 0);
-			TL_ZB_TIMER_SCHEDULE(sampleSensor_bdbNetworkSteerStart, NULL, jitter);
+			TL_ZB_TIMER_SCHEDULE(contactSensor_bdbNetworkSteerStart, NULL, jitter);
 		}
 	}else{
 		if(joinedNetwork){
@@ -146,7 +146,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			zb_setPollRate(POLL_RATE);
 
 #ifdef ZCL_POLL_CTRL
-			sampleSensor_zclCheckInStart();
+			contactSensor_zclCheckInStart();
 #endif
 #ifdef ZCL_OTA
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
@@ -164,7 +164,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 				do{
 					jitter = zb_random() % 0x0fff;
 				}while(jitter == 0);
-				TL_ZB_TIMER_SCHEDULE(sampleSensor_bdbNetworkSteerStart, NULL, jitter);
+				TL_ZB_TIMER_SCHEDULE(contactSensor_bdbNetworkSteerStart, NULL, jitter);
 			}
 			break;
 		case BDB_COMMISSION_STA_FORMATION_FAILURE:
@@ -189,15 +189,15 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 }
 
 
-extern void sampleSensor_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTime);
+extern void contactSensor_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTime);
 void zbdemo_bdbIdentifyCb(u8 endpoint, u16 srcAddr, u16 identifyTime){
-	sampleSensor_zclIdentifyCmdHandler(endpoint, srcAddr, identifyTime);
+	contactSensor_zclIdentifyCmdHandler(endpoint, srcAddr, identifyTime);
 }
 
 
 
 #ifdef ZCL_OTA
-void sampleSensor_otaProcessMsgHandler(u8 evt, u8 status)
+void contactSensor_otaProcessMsgHandler(u8 evt, u8 status)
 {
 	if(evt == OTA_EVT_START){
 		if(status == ZCL_STA_SUCCESS){
@@ -218,7 +218,7 @@ void sampleSensor_otaProcessMsgHandler(u8 evt, u8 status)
 #endif
 
 /*********************************************************************
- * @fn      sampleSensor_leaveCnfHandler
+ * @fn      contactSensor_leaveCnfHandler
  *
  * @brief   Handler for ZDO Leave Confirm message.
  *
@@ -226,7 +226,7 @@ void sampleSensor_otaProcessMsgHandler(u8 evt, u8 status)
  *
  * @return  None
  */
-void sampleSensor_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
+void contactSensor_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
 {
     if(pLeaveCnf->status == SUCCESS){
     	//SYSTEM_RESET();
@@ -234,7 +234,7 @@ void sampleSensor_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
 }
 
 /*********************************************************************
- * @fn      sampleSensor_leaveIndHandler
+ * @fn      contactSensor_leaveIndHandler
  *
  * @brief   Handler for ZDO leave indication message.
  *
@@ -242,9 +242,9 @@ void sampleSensor_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
  *
  * @return  None
  */
-void sampleSensor_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
+void contactSensor_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
 {
-    //printf("sampleSensor_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
+    printf("contactSensor_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
     //printfArray(pLeaveInd->device_address, 8);
 }
 

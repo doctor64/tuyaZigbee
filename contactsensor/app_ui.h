@@ -29,8 +29,12 @@
 /**********************************************************************
  * CONSTANT
  */
-#define LED_ON						1
-#define LED_OFF						0
+#ifndef LED_ON
+	#define LED_ON						1
+#endif
+#ifndef LED_OFF
+	#define LED_OFF						0
+#endif
 
 
 /**********************************************************************

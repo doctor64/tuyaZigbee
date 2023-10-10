@@ -89,3 +89,5 @@
 #define IMAGE_TYPE_LIGHT_0505B              (0x15 | (IMAGE_TYPE_BOOT_FLAG << 7))
 
 #define IMAGE_TYPE_SWITCH_0041              (0x21 | (IMAGE_TYPE_BOOT_FLAG << 7))
+
+#define IMAGE_TYPE_CONTACT_SENSOR_0601              (0x31 | (IMAGE_TYPE_BOOT_FLAG << 7))

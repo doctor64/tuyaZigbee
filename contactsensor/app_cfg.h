@@ -45,7 +45,7 @@ extern "C" {
 //#define BAUDRATE 						1000000//1M
 
 /* PM */
-#define PM_ENABLE						1
+#define PM_ENABLE						0
 
 /* PA */
 #define PA_ENABLE						0
@@ -115,7 +115,8 @@ extern "C" {
 #elif (BOARD == BOARD_B91_DONGLE)
 	#include "board_b91_dongle.h"
 #elif (BOARD == BOARD_8258_TUYA_ZG_102ZL)
-	#include "board_ZG-102ZL.ZBHCI_USB_HID"
+	#include "board_ZG-102ZL.h"
+	//#warning "tuya board"
 #endif
 
 
@@ -129,7 +130,7 @@ extern "C" {
  * we need to configure the detection IO port, and the IO must be connected to the target under test,
  * such as VCC.
  */
-#define VOLTAGE_DETECT_ENABLE						1
+#define VOLTAGE_DETECT_ENABLE						0
 
 #if defined(MCU_CORE_826x)
 	#define VOLTAGE_DETECT_ADC_PIN					0

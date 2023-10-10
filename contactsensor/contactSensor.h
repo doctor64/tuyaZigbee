@@ -23,14 +23,14 @@
  *
  *******************************************************************************************************/
 
-#ifndef _SAMPLE_CONTACT_SENSOR_H_
-#define _SAMPLE_CONTACT_SENSOR_H_
+#ifndef _CONTACT_CONTACT_SENSOR_H_
+#define _CONTACT_CONTACT_SENSOR_H_
 
 
 /**********************************************************************
  * CONSTANT
  */
-#define SAMPLE_SENSOR_ENDPOINT  0x01
+#define CONTACT_SENSOR_ENDPOINT  0x01
 
 /**********************************************************************
  * TYPEDEFS
@@ -111,7 +111,7 @@ extern bdb_appCb_t g_zbDemoBdbCb;
 
 extern bdb_commissionSetting_t g_bdbCommissionSetting;
 
-extern u8 SAMPLE_SENSOR_CB_CLUSTER_NUM;
+extern u8 CONTACT_SENSOR_CB_CLUSTER_NUM;
 extern const zcl_specClusterInfo_t g_contactSensorClusterList[];
 extern const af_simple_descriptor_t contactSensor_simpleDesc;
 
@@ -140,4 +140,4 @@ void contactSensor_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);
 void contactSensor_otaProcessMsgHandler(u8 evt, u8 status);
 
 
-#endif /* _SAMPLE_CONTACT_SENSOR_H_ */
+#endif /* _CONTACT_CONTACT_SENSOR_H_ */

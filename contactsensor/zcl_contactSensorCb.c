@@ -387,7 +387,7 @@ static void contactSensor_zclIdentifyQueryRspCmdHandler(u8 endpoint, u16 srcAddr
  */
 status_t contactSensor_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
 {
-	if(pAddrInfo->dstEp == SAMPLE_SENSOR_ENDPOINT){
+	if(pAddrInfo->dstEp == CONTACT_SENSOR_ENDPOINT){
 		if(pAddrInfo->dirCluster == ZCL_FRAME_CLIENT_SERVER_DIR){
 			switch(cmdId){
 				case ZCL_CMD_IDENTIFY:
@@ -472,7 +472,7 @@ status_t contactSensor_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 {
 	status_t status = ZCL_STA_SUCCESS;
 
-	if(pAddrInfo->dstEp == SAMPLE_SENSOR_ENDPOINT){
+	if(pAddrInfo->dstEp == CONTACT_SENSOR_ENDPOINT){
 		if(pAddrInfo->dirCluster == ZCL_FRAME_CLIENT_SERVER_DIR){
 			switch(cmdId){
 				case ZCL_CMD_ZONE_ENROLL_RSP:
@@ -505,10 +505,10 @@ void contactSensor_zclCheckInCmdSend(void)
 	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
 	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
-	dstEpInfo.dstEp = SAMPLE_SENSOR_ENDPOINT;
+	dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
 	dstEpInfo.profileId = HA_PROFILE_ID;
 
-	zcl_pollCtrl_checkInCmd(SAMPLE_SENSOR_ENDPOINT, &dstEpInfo, TRUE);
+	zcl_pollCtrl_checkInCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE);
 }
 
 s32 contactSensor_zclCheckInTimerCb(void *arg)
@@ -527,7 +527,7 @@ s32 contactSensor_zclCheckInTimerCb(void *arg)
 
 void contactSensor_zclCheckInStart(void)
 {
-	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, SAMPLE_SENSOR_ENDPOINT)){
+	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, CONTACT_SENSOR_ENDPOINT)){
 		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 		if(!zclCheckInTimerEvt){
@@ -652,7 +652,7 @@ status_t contactSensor_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, vo
 {
 	status_t status = ZCL_STA_SUCCESS;
 
-	if(pAddrInfo->dstEp == SAMPLE_SENSOR_ENDPOINT){
+	if(pAddrInfo->dstEp == CONTACT_SENSOR_ENDPOINT){
 		if(pAddrInfo->dirCluster == ZCL_FRAME_CLIENT_SERVER_DIR){
 			switch(cmdId){
 				case ZCL_CMD_CHK_IN_RSP:

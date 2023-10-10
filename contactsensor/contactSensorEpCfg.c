@@ -79,8 +79,8 @@ const u16 contactSensor_outClusterList[] =
 /**
  *  @brief Definition for Server cluster number and Client cluster number
  */
-#define SAMPLESENSOR_IN_CLUSTER_NUM		(sizeof(contactSensor_inClusterList)/sizeof(contactSensor_inClusterList[0]))
-#define SAMPLESENSOR_OUT_CLUSTER_NUM	(sizeof(contactSensor_outClusterList)/sizeof(contactSensor_outClusterList[0]))
+#define CONTACTSENSOR_IN_CLUSTER_NUM		(sizeof(contactSensor_inClusterList)/sizeof(contactSensor_inClusterList[0]))
+#define CONTACTSENSOR_OUT_CLUSTER_NUM	(sizeof(contactSensor_outClusterList)/sizeof(contactSensor_outClusterList[0]))
 
 /**
  *  @brief Definition for simple description for HA profile
@@ -89,11 +89,11 @@ const af_simple_descriptor_t contactSensor_simpleDesc =
 {
 	HA_PROFILE_ID,                      	/* Application profile identifier */
 	HA_DEV_IAS_ZONE,                	    /* Application device identifier */
-	SAMPLE_SENSOR_ENDPOINT,         		/* Endpoint */
+	CONTACT_SENSOR_ENDPOINT,         		/* Endpoint */
 	0,                                  	/* Application device version */
 	0,										/* Reserved */
-	SAMPLESENSOR_IN_CLUSTER_NUM,           	/* Application input cluster count */
-	SAMPLESENSOR_OUT_CLUSTER_NUM,          	/* Application output cluster count */
+	CONTACTSENSOR_IN_CLUSTER_NUM,           	/* Application input cluster count */
+	CONTACTSENSOR_OUT_CLUSTER_NUM,          	/* Application output cluster count */
 	(u16 *)contactSensor_inClusterList,    	/* Application input cluster list */
 	(u16 *)contactSensor_outClusterList,   	/* Application output cluster list */
 };
@@ -212,7 +212,7 @@ const zcl_specClusterInfo_t g_contactSensorClusterList[] =
 #endif
 };
 
-u8 SAMPLE_SENSOR_CB_CLUSTER_NUM = (sizeof(g_contactSensorClusterList)/sizeof(g_contactSensorClusterList[0]));
+u8 CONTACT_SENSOR_CB_CLUSTER_NUM = (sizeof(g_contactSensorClusterList)/sizeof(g_contactSensorClusterList[0]));
 
 /**********************************************************************
  * FUNCTIONS

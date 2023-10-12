@@ -132,6 +132,37 @@ void light_blink_stop(void)
 		}
 	}
 }
+void cmdSendReport()
+{
+	//printf("cmdSendReport\n");
+    if(zb_isDeviceJoinedNwk()){
+    	//light_blink_start(5, 500, 500);
+#if 1
+        epInfo_t dstEpInfo;
+        TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+        dstEpInfo.profileId = HA_PROFILE_ID;
+#if FIND_AND_BIND_SUPPORT
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+#else
+        dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+        dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
+        dstEpInfo.dstAddr.shortAddr = 0xfffc;
+#endif
+        //zcl_onOff_toggleCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE);
+    	zclAttrInfo_t *pAttrEntry;
+    	pAttrEntry = zcl_findAttribute(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE);
+    	zcl_sendReportCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+    			ZCL_CLUSTER_GEN_POWER_CFG, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
+    	pAttrEntry = zcl_findAttribute(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING);
+		zcl_sendReportCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+				ZCL_CLUSTER_GEN_POWER_CFG, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
+
+#else
+        brc_toggle();
+#endif
+    }
+}
 
 /*******************************************************************
  * @brief	Button click detect:
@@ -157,6 +188,12 @@ void buttonShortPressed(u8 btNum){
 		printf("Button short pressed SW1\n");
     	light_blink_start(5,300,700);
 		if(zb_isDeviceJoinedNwk()){
+			cmdSendReport();
+		}
+	}else if(btNum == VK_SW2){
+		printf("Button short pressed SW2\n");
+    	light_blink_start(1, 3000, 0);
+		if(zb_isDeviceJoinedNwk()){
 			epInfo_t dstEpInfo;
 			memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
 
@@ -173,10 +210,6 @@ void buttonShortPressed(u8 btNum){
 			statusChangeNotification.delay = 0;
 
 			zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
-		}
-	}else if(btNum == VK_SW2){
-		printf("Button short pressed SW2\n");
-		if(zb_isDeviceJoinedNwk()){
 
 		}
 	}
@@ -223,6 +256,22 @@ void app_key_handler(void){
 			g_sensorAppCtx.keyPressed = 0;
 		}
 	}
+}
+
+s32 battVoltageCb(void *arg) {
+	u16 voltage, percentage;
+	u8 converted_voltage, percentage2;
+	voltage = drv_get_adc_data();
+	//printf("voltage %d\n", voltage);
+	converted_voltage = (u8)(voltage/100);
+	percentage = ((voltage - BATTERY_SAFETY_THRESHOLD)/4);
+	if (percentage > 0xc8) percentage=0xc8;
+	percentage2 = (u8)percentage;
+	//printf("converted voltage %d diff %d", converted_voltage, (voltage - BATTERY_SAFETY_THRESHOLD));
+	//printf(" , percentage2 %d\n", percentage2);
+	zcl_setAttrVal(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE, &converted_voltage);
+	zcl_setAttrVal(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING, &percentage2);
+	return 0;
 }
 
 #endif  /* __PROJECT_TL_CONTACT_SENSOR__ */

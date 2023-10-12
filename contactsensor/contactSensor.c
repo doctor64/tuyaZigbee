@@ -177,6 +177,9 @@ void user_app_init(void)
 #if ZCL_OTA_SUPPORT
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&contactSensor_simpleDesc, &contactSensor_otaInfo, &contactSensor_otaCb);
 #endif
+
+    // battery monitor
+    g_sensorAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 5000);
 }
 
 

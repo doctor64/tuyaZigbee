@@ -494,6 +494,28 @@ status_t contactSensor_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 }
 #endif  /* ZCL_IAS_ZONE */
 
+/*********************************************************************
+ * @fn      contactSensor_powerCfgCb
+ *
+ * @brief   Handler for ZCL PowerCfg command.
+ *
+ * @param   pAddrInfo
+ * @param   cmdId
+ * @param   cmdPayload
+ *
+ * @return  status_t
+ */
+status_t contactSensor_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
+{
+//	if(cmdId == ZCL_CMD_BASIC_RESET_FAC_DEFAULT){
+		//Reset all the attributes of all its clusters to factory defaults
+		//zcl_nv_attr_reset();
+//	}
+
+	return ZCL_STA_SUCCESS;
+}
+
+
 #ifdef ZCL_POLL_CTRL
 static ev_timer_event_t *zclFastPollTimeoutTimerEvt = NULL;
 static ev_timer_event_t *zclCheckInTimerEvt = NULL;

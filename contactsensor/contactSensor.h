@@ -43,6 +43,7 @@ typedef struct{
 
 typedef struct{
 	ev_timer_event_t *timerLedEvt;
+	ev_timer_event_t *timerBattEvt;
 	u32 keyPressedTime;
 
 	u16 ledOnTime;
@@ -67,8 +68,10 @@ typedef struct{
 	u8	hwVersion;
 	u8	manuName[ZCL_BASIC_MAX_LENGTH];
 	u8	modelId[ZCL_BASIC_MAX_LENGTH];
+	u8  dateCode[ZCL_BASIC_MAX_LENGTH];
 	u8	powerSource;
 	u8	deviceEnable;
+	u8  swBuildId[ZCL_BASIC_MAX_LENGTH];    //attr 4000
 }zcl_basicAttr_t;
 
 /**
@@ -77,6 +80,18 @@ typedef struct{
 typedef struct{
 	u16	identifyTime;
 }zcl_identifyAttr_t;
+
+/**
+ *  @brief Defined for power configuration cluster attributes
+ */
+typedef struct{
+#ifdef POWER_MAINS
+	u16 mainsVoltage;
+	u8  mainsFrequency;
+#endif
+	u8  batteryVoltage;      //0x20
+	u8  batteryPercentage;   //0x21
+}zcl_powerAttr_t;
 
 /**
  *  @brief Defined for ias zone cluster attributes
@@ -131,6 +146,7 @@ void contactSensor_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg);
 
 status_t contactSensor_basicCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t contactSensor_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
+status_t contactSensor_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t contactSensor_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t contactSensor_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void contactSensor_zclCheckInStart(void);

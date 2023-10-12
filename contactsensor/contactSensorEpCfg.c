@@ -101,13 +101,15 @@ const af_simple_descriptor_t contactSensor_simpleDesc =
 /* Basic */
 zcl_basicAttr_t g_zcl_basicAttrs =
 {
-	.zclVersion 	= 0x03,
-	.appVersion 	= 0x00,
-	.stackVersion 	= 0x02,
-	.hwVersion		= 0x00,
+	.zclVersion 	= 0x03,//ZCL v7
+	.appVersion 	= (APP_RELEASE|APP_BUILD),
+	.stackVersion 	= (STACK_RELEASE|STACK_BUILD),
+	.hwVersion		= HARDWARE_REV,
 	.manuName		= ZCL_BASIC_MFG_NAME,
 	.modelId		= ZCL_BASIC_MODEL_ID,
-	.powerSource	= POWER_SOURCE_MAINS_1_PHASE,
+	.dateCode       = ZCL_BASIC_DATE_CODE,
+	.powerSource	= POWER_SOURCE_BATTERY,
+	.swBuildId		= ZCL_BASIC_SW_BUILD_ID,
 	.deviceEnable	= TRUE,
 };
 
@@ -119,8 +121,10 @@ const zclAttrInfo_t basic_attrTbl[] =
 	{ ZCL_ATTRID_BASIC_HW_VER,       		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.hwVersion},
 	{ ZCL_ATTRID_BASIC_MFR_NAME,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.manuName},
 	{ ZCL_ATTRID_BASIC_MODEL_ID,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.modelId},
+	{ ZCL_ATTRID_BASIC_DATE_CODE,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.dateCode},
 	{ ZCL_ATTRID_BASIC_POWER_SOURCE, 		ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.powerSource},
 	{ ZCL_ATTRID_BASIC_DEV_ENABLED,  		ZCL_DATA_TYPE_BOOLEAN,  ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_basicAttrs.deviceEnable},
+	{ ZCL_ATTRID_BASIC_SW_BUILD_ID,  		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.swBuildId},
 
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
 };
@@ -142,6 +146,23 @@ const zclAttrInfo_t identify_attrTbl[] =
 };
 
 #define ZCL_IDENTIFY_ATTR_NUM			sizeof(identify_attrTbl) / sizeof(zclAttrInfo_t)
+
+/* power */
+zcl_powerAttr_t g_zcl_powerAttrs =
+{
+    .batteryVoltage    = 20, //in 1000 mV units, 0xff - unknown
+    .batteryPercentage = 0x64, //in 0,5% units, 0xff - unknown
+};
+
+const zclAttrInfo_t powerCfg_attrTbl[] =
+{
+	{ ZCL_ATTRID_BATTERY_VOLTAGE,      		   ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,	(u8*)&g_zcl_powerAttrs.batteryVoltage},
+	{ ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING, ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE, (u8*)&g_zcl_powerAttrs.batteryPercentage},
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
+};
+
+#define	ZCL_POWER_CFG_ATTR_NUM		 sizeof(powerCfg_attrTbl) / sizeof(zclAttrInfo_t)
 
 #ifdef ZCL_IAS_ZONE
 /* IAS Zone */
@@ -204,6 +225,7 @@ const zcl_specClusterInfo_t g_contactSensorClusterList[] =
 {
 	{ZCL_CLUSTER_GEN_BASIC,			MANUFACTURER_CODE_NONE, ZCL_BASIC_ATTR_NUM, 	basic_attrTbl,  	zcl_basic_register,		contactSensor_basicCb},
 	{ZCL_CLUSTER_GEN_IDENTIFY,		MANUFACTURER_CODE_NONE, ZCL_IDENTIFY_ATTR_NUM,	identify_attrTbl,	zcl_identify_register,	contactSensor_identifyCb},
+	{ZCL_CLUSTER_GEN_POWER_CFG,		MANUFACTURER_CODE_NONE,	ZCL_POWER_CFG_ATTR_NUM,	powerCfg_attrTbl,	zcl_powerCfg_register,	contactSensor_powerCfgCb},
 #ifdef ZCL_IAS_ZONE
 	{ZCL_CLUSTER_SS_IAS_ZONE,		MANUFACTURER_CODE_NONE, ZCL_IASZONE_ATTR_NUM,	iasZone_attrTbl,	zcl_iasZone_register,	contactSensor_iasZoneCb},
 #endif

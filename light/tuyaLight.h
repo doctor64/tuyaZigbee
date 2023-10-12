@@ -70,7 +70,7 @@ typedef struct{
 	u8	hwVersion;                          //attr 3
 	u8	manuName[ZCL_BASIC_MAX_LENGTH];     //attr 4
 	u8	modelId[ZCL_BASIC_MAX_LENGTH];      //attr 5
-	// u8  dateCode[ZCL_BASIC_MAX_LENGTH];     //attr 6
+	u8  dateCode[ZCL_BASIC_MAX_LENGTH];     //attr 6
 	u8	powerSource;                        //attr 7
 	u8  genDevClass;                        //attr 8
 	u8  genDevType;                         //attr 9

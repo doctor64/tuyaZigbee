@@ -179,6 +179,7 @@ zcl_basicAttr_t g_zcl_basicAttrs =
 	.hwVersion		= HARDWARE_REV,
 	.manuName		= ZCL_BASIC_MFG_NAME,
 	.modelId		= ZCL_BASIC_MODEL_ID,
+	.dateCode       = ZCL_BASIC_DATE_CODE,
 	.powerSource	= POWER_SOURCE_DC,
 	.genDevClass    = 0x00,  //Lightning
 	.genDevType     = 0x07,  //LED Strip

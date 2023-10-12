@@ -164,6 +164,8 @@ extern "C" {
 #define ZCL_ZLL_COMMISSIONING_SUPPORT				1
 #endif
 
+#define MY_OTA_PERIODIC_QUERY_INTERVAL (6*60*60U) //seconds
+
 #define AF_TEST_ENABLE								0
 
 

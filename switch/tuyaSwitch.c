@@ -230,7 +230,7 @@ void app_task(void)
 		report_handler();
 #if PM_ENABLE
 		if((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt)){ //no key pressed and no led blink active
-			printf("Enter sleep\n");
+			//printf("Enter sleep\n");
 			//ev_timer_event_t *timerEvt = ev_timer_nearestGet();
 				//if(timerEvt){
 					//printf("Timer set for %d, cb %x\n", timerEvt->timeout, timerEvt->cb);
@@ -262,7 +262,7 @@ static void tuyaSwitchSysException(void)
  */
 void user_init(bool isRetention)
 {
-	printf("user init(%d)\n", isRetention);
+	//printf("user init(%d)\n", isRetention);
 	/* Initialize LEDs*/
 	led_init();
 

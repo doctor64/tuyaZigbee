@@ -285,7 +285,7 @@ s32 battVoltageCb(void *arg) {
  */
 void buttonKeepPressed(u8 btNum) {
     if(btNum == VK_SW1) {
-    	//printf("Button keep pressed SW1\n");
+    	printf("Button keep pressed SW1\n");
     	light_blink_stop();
     	light_blink_start(255, 300, 300);
         g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
@@ -293,7 +293,7 @@ void buttonKeepPressed(u8 btNum) {
         //not really sure it needed
         zb_resetDevice();
     }else if(btNum == VK_SW2) {
-    	//printf("Button keep pressed SW2\n");
+    	printf("Button keep pressed SW2\n");
     	light_blink_stop();
     	light_blink_start(255, 200, 200);
     	g_switchAppCtx.state = APP_STATE_HOLD_PROCESSED_SW2;
@@ -330,11 +330,11 @@ void brc_toggle(void)
 
 void buttonShortPressed(u8 btNum){
     if(btNum == VK_SW1){
-    	//printf("Button short press SW1\n");
+    	printf("Button short press SW1\n");
     	light_blink_start(5,300,700);
     	cmdSendReport();
     }else if(btNum == VK_SW2){
-    	//printf("Button short press SW2\n");
+    	printf("Button short press SW2\n");
     	light_blink_start(1, 3000, 0);
     }
 }

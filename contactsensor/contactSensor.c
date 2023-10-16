@@ -242,7 +242,7 @@ static void contactSensorSysException(void)
  */
 void user_init(bool isRetention)
 {
-	printf("user init(%d)\n", isRetention);
+//	printf("user init(%d)\n", isRetention);
 	/* Initialize LEDs*/
 	led_init();
 

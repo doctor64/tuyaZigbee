@@ -422,7 +422,13 @@ status_t contactSensor_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, vo
  */
 static void contactSensor_zclIasZoneEnrollRspCmdHandler(zoneEnrollRsp_t *pZoneEnrollRsp)
 {
-
+	printf("zclIasZoneEnrollRspCmdHandler code:%d zone_id:%d\n", pZoneEnrollRsp->code, pZoneEnrollRsp->zoneId);
+	if (pZoneEnrollRsp->zoneId != ZCL_ZONE_ID_INVALID) {
+		u8 zoneState;
+		zoneState = ZONE_STATE_ENROLLED;
+		zcl_setAttrVal(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_SS_IAS_ZONE, ZCL_ATTRID_ZONE_ID, &(pZoneEnrollRsp->zoneId));
+		zcl_setAttrVal(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_SS_IAS_ZONE, ZCL_ATTRID_ZONE_STATE, &zoneState);
+	}
 }
 
 /*********************************************************************
@@ -436,6 +442,7 @@ static void contactSensor_zclIasZoneEnrollRspCmdHandler(zoneEnrollRsp_t *pZoneEn
  */
 static status_t contactSensor_zclIasZoneInitNormalOperationModeCmdHandler(void)
 {
+	printf("zclIasZoneInitNormalOperationModeCmdHandler\n");
 	u8 status = ZCL_STA_FAILURE;
 
 	return status;
@@ -452,6 +459,7 @@ static status_t contactSensor_zclIasZoneInitNormalOperationModeCmdHandler(void)
  */
 static status_t contactSensor_zclIasZoneInitTestModeCmdHandler(zoneInitTestMode_t *pZoneInitTestMode)
 {
+	printf("zclIasZoneInitNormalOperationModeCmdHandler\n");
 	u8 status = ZCL_STA_FAILURE;
 
 	return status;

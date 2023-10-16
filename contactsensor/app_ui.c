@@ -177,6 +177,8 @@ void buttonKeepPressed(u8 btNum){
 		printf("Button keep pressed SW1\n");
 		g_sensorAppCtx.state = APP_FACTORY_NEW_DOING;
 		zb_factoryReset();
+        //not really sure it needed
+        zb_resetDevice();
 	}else if(btNum == VK_SW2){
 		printf("Button keep pressed SW2\n");
 
@@ -189,11 +191,6 @@ void buttonShortPressed(u8 btNum){
     	light_blink_start(5,300,700);
 		if(zb_isDeviceJoinedNwk()){
 			cmdSendReport();
-		}
-	}else if(btNum == VK_SW2){
-		printf("Button short pressed SW2\n");
-    	light_blink_start(1, 3000, 0);
-		if(zb_isDeviceJoinedNwk()){
 			epInfo_t dstEpInfo;
 			memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
 
@@ -211,6 +208,11 @@ void buttonShortPressed(u8 btNum){
 
 			zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
 
+		}
+	}else if(btNum == VK_SW2){
+		printf("Button short pressed SW2\n");
+    	light_blink_start(1, 3000, 0);
+		if(zb_isDeviceJoinedNwk()){
 		}
 	}
 }

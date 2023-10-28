@@ -213,6 +213,7 @@ void app_task(void)
 	if(bdb_isIdle()){
 #if PM_ENABLE
 		if(!g_sensorAppCtx.keyPressed){
+			//printf("Enter sleep\n");
 			drv_pm_lowPowerEnter();
 		}
 #endif

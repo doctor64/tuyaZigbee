@@ -213,6 +213,23 @@ void buttonShortPressed(u8 btNum){
 		printf("Button short pressed SW2\n");
     	light_blink_start(1, 3000, 0);
 		if(zb_isDeviceJoinedNwk()){
+			epInfo_t dstEpInfo;
+			memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
+
+			dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+			dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
+			dstEpInfo.dstAddr.shortAddr = 0x0000;
+			dstEpInfo.profileId = HA_PROFILE_ID;
+
+			zoneStatusChangeNoti_t statusChangeNotification;
+
+			statusChangeNotification.zoneStatus = 0;//ZONE_STATUS_TEST;
+			statusChangeNotification.extStatus = 0;
+			statusChangeNotification.zoneId = ZCL_ZONE_ID_INVALID;
+			statusChangeNotification.delay = 0;
+
+			zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+
 		}
 	}
 }
@@ -236,6 +253,42 @@ void keyScan_keyPressedCB(kb_data_t *kbEvt){
 void keyScan_keyReleasedCB(u8 keyCode){
 	g_sensorAppCtx.state = APP_STATE_NORMAL;
 	printf("keyScan_keyReleasedCB keycode %d\n", keyCode);
+	if(keyCode == VK_SW1) {
+		epInfo_t dstEpInfo;
+		memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
+
+		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+		dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
+		dstEpInfo.dstAddr.shortAddr = 0x0000;
+		dstEpInfo.profileId = HA_PROFILE_ID;
+
+		zoneStatusChangeNoti_t statusChangeNotification;
+
+		statusChangeNotification.zoneStatus = 0;//ZONE_STATUS_TEST;
+		statusChangeNotification.extStatus = 0;
+		statusChangeNotification.zoneId = ZCL_ZONE_ID_INVALID;
+		statusChangeNotification.delay = 0;
+
+		zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+	}
+	if(keyCode == VK_SW2) {
+		epInfo_t dstEpInfo;
+		memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
+
+		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+		dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
+		dstEpInfo.dstAddr.shortAddr = 0x0000;
+		dstEpInfo.profileId = HA_PROFILE_ID;
+
+		zoneStatusChangeNoti_t statusChangeNotification;
+
+		statusChangeNotification.zoneStatus = ZONE_STATUS_BIT_ALARM1;//ZONE_STATUS_TEST;
+		statusChangeNotification.extStatus = 0;
+		statusChangeNotification.zoneId = ZCL_ZONE_ID_INVALID;
+		statusChangeNotification.delay = 0;
+
+		zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+	}
 }
 
 void app_key_handler(void){

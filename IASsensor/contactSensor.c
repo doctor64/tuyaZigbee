@@ -179,7 +179,7 @@ void user_app_init(void)
 #endif
 
     // battery monitor
-    g_sensorAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 5000);
+    g_sensorAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, BATTERY_CHECK_INTERVAL);
 }
 
 

@@ -161,7 +161,8 @@ extern "C" {
 #define ZCL_POWER_CFG_SUPPORT                       1
 
 #define MY_OTA_QUERY_RATE_COEFF                     96 //in 5*60 seconds - 480 minutes, 8 hours
-#define MY_POLL_RATE_COEFF                           7  // in 4quarterseconds = 1 seconds
+#define MY_POLL_RATE_COEFF                           7 // in 4quarterseconds = 1 seconds
+#define BATTERY_CHECK_INTERVAL                   15000 // in milliseconds
 /**********************************************************************
  * Stack configuration
  */

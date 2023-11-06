@@ -145,13 +145,13 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 		case BDB_COMMISSION_STA_SUCCESS:
 			light_blink_start(2, 200, 200);
 
-			zb_setPollRate(POLL_RATE);
+			zb_setPollRate(POLL_RATE*MY_POLL_RATE_COEFF);
 
 #ifdef ZCL_POLL_CTRL
 			contactSensor_zclCheckInStart();
 #endif
 #ifdef ZCL_OTA
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL*MY_OTA_QUERY_RATE_COEFF);
 #endif
 			break;
 		case BDB_COMMISSION_STA_IN_PROGRESS:
@@ -208,12 +208,12 @@ void contactSensor_otaProcessMsgHandler(u8 evt, u8 status)
 
 		}
 	}else if(evt == OTA_EVT_COMPLETE){
-		zb_setPollRate(POLL_RATE);
+		zb_setPollRate(POLL_RATE*MY_POLL_RATE_COEFF);
 
 		if(status == ZCL_STA_SUCCESS){
 			ota_mcuReboot();
 		}else{
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL*MY_OTA_QUERY_RATE_COEFF);
 		}
 	}
 }

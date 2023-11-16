@@ -1,0 +1,7 @@
+cmake_timestamp license.
+
+Copyright 2018 Kalle Raiskila
+
+You may use and distribute this software freely.
+You may not hold the author liable if using or
+distributing this software causes anyone any harm.

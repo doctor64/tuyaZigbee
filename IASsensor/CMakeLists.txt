@@ -10,7 +10,7 @@ ELSE()
     SET(TARGET ${TARGET}_heiman)
 ENDIF()
 
-# add_subdirectory(../cmake_timestamp timestamp)
+add_subdirectory(../cmake_timestamp timestamp)
 
 ADD_DEFINITIONS(
     -DEND_DEVICE=1
@@ -198,7 +198,7 @@ TARGET_LINK_LIBRARIES(${TARGET}
 
 	zb_ed
 	drivers_${TELINK_PLATFORM}
-	# timestamp
+	timestamp
 
         -Wl,--end-group
 )

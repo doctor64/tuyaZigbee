@@ -15,8 +15,12 @@ chip TLSR8258F1KET32
 
 PB4 (pin14) - to hall sensor out active low
 PD2 (pin31) - to SW1 active low
-PC2 (pin22) - to light sensor 
+PC2 (pin22) - to light sensor - logical 1 to enable
+PC4 (pin24) - to light sensor - light level
 PB5 (pin15) - to led active low
+
+PC2 - light sensor -+- resistor 51k - ground
+                    |- PC4
  
 hall sensor MT6131 https://datasheet.lcsc.com/lcsc/2010122036_Magn-Tek-MT6131AT_C879546.pdf
 

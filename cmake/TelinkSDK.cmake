@@ -40,6 +40,7 @@ FUNCTION(ADD_BIN_TARGET TARGET TOOLS_PATH)
     ENDIF()
     ADD_CUSTOM_TARGET("${TARGET}.bin"
         DEPENDS ${TARGET}
+	COMMAND ${TOOLCHAIN_BIN_DIR}/tc32-elf-objdump -x -D -l -S ${FILENAME} >${FILENAME}.lst
 	COMMAND ${TOOLCHAIN_BIN_DIR}/tc32-elf-size -t ${FILENAME}
         COMMAND ${CMAKE_OBJCOPY} -Obinary ${FILENAME} ${FILENAME}.bin
         COMMAND python3 ${TOOLS_PATH}/tl_check_fw.py ${FILENAME}.bin

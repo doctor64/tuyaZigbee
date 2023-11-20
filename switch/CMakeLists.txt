@@ -2,7 +2,7 @@
 # Common settings
 cmake_minimum_required(VERSION 3.27)
 
-SET(TARGET IASsensor)
+SET(TARGET switch)
 
 IF(NOT MIMIC_HEIMAN)
     SET(MIMIC_HEIMAN 0)
@@ -14,7 +14,7 @@ ADD_DEFINITIONS(
     -DEND_DEVICE=1
     -DMCU_CORE_${TELINK_PLATFORM}=1
     -DMCU_STARTUP_${TELINK_PLATFORM}=1
-    -D__PROJECT_TL_CONTACT_SENSOR__=1
+    -D__PROJECT_TL_SWITCH__=1
     -DMIMIC_HEIMAN=${MIMIC_HEIMAN}
 )
 
@@ -173,7 +173,7 @@ INCLUDE_DIRECTORIES(
 
     # Zigbee sources reference zcl_options.h
 #    ${PROJECT_SOURCE_DIR}/src
-    ${PROJECT_SOURCE_DIR}/IASsensor
+    ${PROJECT_SOURCE_DIR}/switch
 #    ${PROJECT_SOURCE_DIR}/src/custom_zcl
 )
 

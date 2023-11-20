@@ -3,7 +3,9 @@ get IDE from http://wiki.telink-semi.cn/wiki/IDE-and-Tools/IDE-for-TLSR8-Chips/
 get SDK from http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/#software-development-kit
 All-in-1 Zigbee SDK for TLSR9 and TLSR8
 
-see http://wiki.telink-semi.cn/doc/an/AN_19052900-E_Telink%20Zigbee%20SDK%20Developer%20Manual.pdf
+direct link to SDK http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
+see http://wiki.telink-semi.cn/doc/an/AN-19052900-E_Telink%20Zigbee%20SDK%20Developer%20Manual.pdf
+
 
 1. run TelinkSDKv1.3.1.exe and install
 2. extract Zigbee_SDK somewhere

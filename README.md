@@ -5,6 +5,12 @@ This project intended to replace firmwares in TuYa devices based on Telink chips
 * TS0041 1 button battery switch
 * More to come!
 
+## Is my device supported?
+Theoretically speaking, any device based on Telink zigbee chips can be supported. Practically, I worked only on TLSR8258 based devices.
+You can check ior device by opening it and look on board. 
+If you see chip named TLSR8258 or tuya modules named ZT3L, ZTLC5, ZTU-IPEX, ZTU, ZT5, ZT2S, ZTC - this device theoretically can be supported.
+Or look at device in zigbee2mqtt interface. If device IEEE (MAC) address begins with 0xa4c138 - this is Telink based device. 
+
 ## Why?
 Because TuYa firmware sucks, that's why :)
 But, seriously, not counting common drawbacks of TuYa devices firmware like manufacturer dependent messages and overall strange approach to zigbee standart, TS050X devices have very annoying bug: sometimes, then device receive On command, it turn on light for few seconds and turned off. I was unable to find exact condition to trigger this bug, but it happens from time to time. TS0041 does not support binding, etc.
@@ -43,6 +49,12 @@ See [docs/ota_tuya.md](docs/ota_tuya.md)
 
 # OTA
 See [docs/ota.md](docs/ota.md)
+
+# Support & help
+If you need assistance you can check [opened issues](https://github.com/doctor64/tuyaZigbee/issues). Feel free to help with Pull Requests when you were able to fix things or add new devices or just share the love on social media.
+Check Diskord channels 
+[#general](https://discord.gg/xSRjUS7Vpy)
+[#development](https://discord.gg/GThy6Ednx7)
 
 # TODO
 

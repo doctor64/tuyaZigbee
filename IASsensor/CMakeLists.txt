@@ -180,6 +180,7 @@ INCLUDE_DIRECTORIES(
 LINK_DIRECTORIES(
 	${SDK_PREFIX}/zigbee/lib/tc32
 	${SDK_PREFIX}/platform/lib
+#    ${SDK_PREFIX}/platform/tc32
 )
 
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T${SDK_PREFIX}/platform/boot/${TELINK_PLATFORM}/boot_${TELINK_PLATFORM}.link")
@@ -197,6 +198,7 @@ TARGET_LINK_LIBRARIES(${TARGET}
 	zb_ed
 	drivers_${TELINK_PLATFORM}
 	timestamp
+    #soft-fp
 
         -Wl,--end-group
 )

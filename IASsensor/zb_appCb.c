@@ -94,7 +94,7 @@ s32 contactSensor_bdbNetworkSteerStart(void *arg){
  * @return  None
  */
 void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
-	printf("zbdemo_bdbCommissioningCb, status = %d, joinedNetwork = %d\n", status, joinedNetwork);	
+	printf("zbdemo_bdbCInitCb, status = %d, joinedNetwork = %d\n", status, joinedNetwork);	
 	if(status == BDB_INIT_STATUS_SUCCESS){
 		/*
 		 * for non-factory-new device:
@@ -105,6 +105,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 		 *
 		 */
 		if(joinedNetwork){
+			printf("zbdemo_bdbInitCb, set pollRate %d\n", POLL_RATE*MY_POLL_RATE_COEFF);
 			zb_setPollRate(POLL_RATE*MY_POLL_RATE_COEFF);
 
 #ifdef ZCL_OTA
@@ -145,6 +146,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 		case BDB_COMMISSION_STA_SUCCESS:
 			light_blink_start(2, 200, 200);
 
+			printf("zbdemo_bdbCommissioningCb, set pollRate %d\n", POLL_RATE*MY_POLL_RATE_COEFF);
 			zb_setPollRate(POLL_RATE*MY_POLL_RATE_COEFF);
 
 #ifdef ZCL_POLL_CTRL
@@ -203,11 +205,13 @@ void contactSensor_otaProcessMsgHandler(u8 evt, u8 status)
 {
 	if(evt == OTA_EVT_START){
 		if(status == ZCL_STA_SUCCESS){
+			printf("contactSensor_otaProcessMsgHandler OTA_EVT_START, set pollRate %d\n", QUEUE_POLL_RATE);
 			zb_setPollRate(QUEUE_POLL_RATE);
 		}else{
 
 		}
 	}else if(evt == OTA_EVT_COMPLETE){
+		printf("contactSensor_otaProcessMsgHandler OTA_EVT_COMPLETE, set pollRate %d\n", POLL_RATE*MY_POLL_RATE_COEFF);
 		zb_setPollRate(POLL_RATE*MY_POLL_RATE_COEFF);
 
 		if(status == ZCL_STA_SUCCESS){

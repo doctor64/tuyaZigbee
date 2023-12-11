@@ -25,6 +25,7 @@
 
 #ifndef _APP_UI_H_
 #define _APP_UI_H_
+#include "types.h"
 
 /**********************************************************************
  * CONSTANT
@@ -40,12 +41,11 @@
 /**********************************************************************
  * TYPEDEFS
  */
-enum{
+enum {
 	APP_STATE_NORMAL,
 	APP_FACTORY_NEW_SET_CHECK,
 	APP_FACTORY_NEW_DOING
 };
-
 
 /**********************************************************************
  * FUNCTIONS
@@ -63,5 +63,6 @@ void led_off(u32 pin);
 void app_key_handler(void);
 
 s32 battVoltageCb(void *arg);
+s32 lightLevelCb(void *arg);
 
 #endif	/* _APP_UI_H_ */

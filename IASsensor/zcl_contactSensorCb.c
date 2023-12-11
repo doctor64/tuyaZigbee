@@ -33,6 +33,7 @@
 #include "zcl_include.h"
 #include "contactSensor.h"
 #include "app_ui.h"
+#include "os/ev_timer.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -546,6 +547,7 @@ s32 contactSensor_zclCheckInTimerCb(void *arg)
 {
 	printf("contactSensor_zclCheckInTimerCb()\n");
 	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
+	printf("zclCheckInTimerCb time %d\n", pPollCtrlAttr->chkInInterval * POLL_RATE_QUARTERSECONDS);
 
 	if(!pPollCtrlAttr->chkInInterval){
 		zclCheckInTimerEvt = NULL;
@@ -559,11 +561,19 @@ s32 contactSensor_zclCheckInTimerCb(void *arg)
 
 void contactSensor_zclCheckInStart(void)
 {
-	printf("contactSensor_zclCheckInStart()\n");
+	printf("zclCheckInStart1\n");
 	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, CONTACT_SENSOR_ENDPOINT)){
 		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
+		// if checkin timer already running, stop it
+		if (zclCheckInTimerEvt){
+			printf("Cancel timer\n");
+			TL_ZB_TIMER_CANCEL(&zclCheckInTimerEvt);
+		}
+
+
 		if(!zclCheckInTimerEvt){
+			printf("zclCheckInStart2 time 0x%x %x 1/4 s\n", (u16)((pPollCtrlAttr->chkInInterval&0xff00)>>16), (u16)(pPollCtrlAttr->chkInInterval&0x00ff));
 			zclCheckInTimerEvt = TL_ZB_TIMER_SCHEDULE(contactSensor_zclCheckInTimerCb, NULL, pPollCtrlAttr->chkInInterval * POLL_RATE_QUARTERSECONDS);
 
 			if(pPollCtrlAttr->chkInInterval){
@@ -581,6 +591,7 @@ void contactSensor_zclSetFastPollMode(bool fastPollMode)
 	isFastPollMode = fastPollMode;
 	u32 pollRate = fastPollMode ? pPollCtrlAttr->shortPollInterval : pPollCtrlAttr->longPollInterval;
 
+	printf("contactSensor_zclSetFastPollMode(), pollRate %d\n", pollRate * POLL_RATE_QUARTERSECONDS);
 	zb_setPollRate(pollRate * POLL_RATE_QUARTERSECONDS);
 }
 
@@ -648,6 +659,7 @@ static status_t contactSensor_zclPollCtrlSetLongPollIntervalCmdHandler(zcl_setLo
 	if((pCmd->newLongPollInterval >= 0x04) && (pCmd->newLongPollInterval <= 0x6E0000)
 		&& (pCmd->newLongPollInterval <= pPollCtrlAttr->chkInInterval) && (pCmd->newLongPollInterval >= pPollCtrlAttr->shortPollInterval)){
 		pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
+	    printf("contactSensor_zclPollCtrlSetLongPollIntervalCmdHandler, set pollRate %d\n", pCmd->newLongPollInterval * POLL_RATE_QUARTERSECONDS);
 		zb_setPollRate(pCmd->newLongPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{
 		return ZCL_STA_INVALID_VALUE;
@@ -663,6 +675,7 @@ static status_t contactSensor_zclPollCtrlSetShortPollIntervalCmdHandler(zcl_setS
 	if((pCmd->newShortPollInterval >= 0x01) && (pCmd->newShortPollInterval <= 0xff)
 		&& (pCmd->newShortPollInterval <= pPollCtrlAttr->longPollInterval)){
 		pPollCtrlAttr->shortPollInterval = pCmd->newShortPollInterval;
+		printf("contactSensor_zclPollCtrlSetShortPollIntervalCmdHandler, set pollRate %d\n", pCmd->newShortPollInterval * POLL_RATE_QUARTERSECONDS);
 		zb_setPollRate(pCmd->newShortPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{
 		return ZCL_STA_INVALID_VALUE;
@@ -711,5 +724,27 @@ status_t contactSensor_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, vo
 }
 #endif	/* ZCL_POLL_CTRL */
 
+#ifdef HAVE_LIGHT_SENSOR
+/*********************************************************************
+ * @fn      contactSensor_illuminanceCb
+ *
+ * @brief   Handler for ZCL Illuminance command.
+ *
+ * @param   pAddrInfo
+ * @param   cmdId
+ * @param   cmdPayload
+ *
+ * @return  status_t
+ */
+status_t contactSensor_illuminanceCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
+{
+//	if(cmdId == ZCL_CMD_BASIC_RESET_FAC_DEFAULT){
+		//Reset all the attributes of all its clusters to factory defaults
+		//zcl_nv_attr_reset();
+//	}
+
+	return ZCL_STA_SUCCESS;
+}
+#endif //HAVE_LIGHT_SENSOR
 
 #endif  /* __PROJECT_TL_CONTACT_SENSOR__ */

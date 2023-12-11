@@ -155,14 +155,21 @@ extern "C" {
  * ZCL cluster support setting
  */
 #define ZCL_IAS_ZONE_SUPPORT						1
-/* disable poll control - not supported in z2m */
-// #define ZCL_POLL_CTRL_SUPPORT						1
+#define ZCL_POLL_CTRL_SUPPORT						1
 #define ZCL_OTA_SUPPORT								1
 #define ZCL_POWER_CFG_SUPPORT                       1
 
+#define ZCL_ILLUMINANCE_MEASUREMENT_SUPPORT         1 
+
 #define MY_OTA_QUERY_RATE_COEFF                     96 //in 5*60 seconds - 480 minutes, 8 hours
 #define MY_POLL_RATE_COEFF                           7 // in 4quarterseconds = 1 seconds
-#define BATTERY_CHECK_INTERVAL                   15000 // in milliseconds
+#define BATTERY_CHECK_INTERVAL                    5000 // in milliseconds
+/**********************************************************************
+ * ZCL defaults setting
+ */
+#define ZCL_REPORTING_DEFAULT_MIN_INTERVAL		0
+#define ZCL_REPORTING_DEFAULT_MAX_INTERVAL		3600 //60 minutes
+#define ZCL_REPORTING_DEFAULT_REP_CHANGE		0
 /**********************************************************************
  * Stack configuration
  */

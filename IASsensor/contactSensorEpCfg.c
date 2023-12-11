@@ -23,6 +23,8 @@
  *
  *******************************************************************************************************/
 
+#include "types.h"
+#include "zcl_const.h"
 #if (__PROJECT_TL_CONTACT_SENSOR__)
 
 /**********************************************************************
@@ -188,7 +190,7 @@ const zclAttrInfo_t iasZone_attrTbl[] =
 };
 
 #define	ZCL_IASZONE_ATTR_NUM		 sizeof(iasZone_attrTbl) / sizeof(zclAttrInfo_t)
-#endif
+#endif //ZCL_IAS_ZONE
 
 #ifdef ZCL_POLL_CTRL
 /* Poll Control */
@@ -217,7 +219,32 @@ const zclAttrInfo_t pollCtrl_attrTbl[] =
 };
 
 #define	ZCL_POLLCTRL_ATTR_NUM		 sizeof(pollCtrl_attrTbl) / sizeof(zclAttrInfo_t)
-#endif
+#endif //ZCL_POLL_CTRL
+
+#ifdef HAVE_LIGHT_SENSOR
+/* illuminance measurement */
+zcl_illuminanceAttr_t g_zcl_illuminanceMSAttrs =
+{
+	.measuredValue 		= 0x0,
+	.minMeasuredValue 	= 0x1,
+	.maxMeasuredValue 	= 0xfffe,
+	.tolerance 			= 0x1,
+	.lightSensorType    = 0x40, // not defined in ZCL - photoresistor
+};
+
+const zclAttrInfo_t illuminance_ms_attrTbl[] =
+{
+	{ ZCL_ATTRID_MEASURED_VALUE,      ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,  (u8*)&g_zcl_illuminanceMSAttrs.measuredValue },
+	{ ZCL_ATTRID_MIN_MEASURED_VALUE,  ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.minMeasuredValue },
+	{ ZCL_ATTRID_MAX_MEASURED_VALUE,  ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.maxMeasuredValue },
+	{ ZCL_ATTRID_TOLERANCE,           ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.tolerance },
+	{ ZCL_ATTRID_LIGHT_SENSOR_TYPE,   ZCL_DATA_TYPE_ENUM8,  ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.lightSensorType },
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  (u8*)&zcl_attr_global_clusterRevision},
+};
+
+#define	ZCL_ILLUMINANCE_MS_ATTR_NUM		 sizeof(illuminance_ms_attrTbl) / sizeof(zclAttrInfo_t)
+#endif //HAVE_LIGHT_SENSOR
 
 /**
  *  @brief Definition for simple contact sensor ZCL specific cluster
@@ -233,6 +260,9 @@ const zcl_specClusterInfo_t g_contactSensorClusterList[] =
 #ifdef ZCL_POLL_CTRL
 	{ZCL_CLUSTER_GEN_POLL_CONTROL,  MANUFACTURER_CODE_NONE, ZCL_POLLCTRL_ATTR_NUM, 	pollCtrl_attrTbl,   zcl_pollCtrl_register,	contactSensor_pollCtrlCb},
 #endif
+#ifdef HAVE_LIGHT_SENSOR
+	{ZCL_CLUSTER_MS_ILLUMINANCE_MEASUREMENT, MANUFACTURER_CODE_NONE, ZCL_ILLUMINANCE_MS_ATTR_NUM, illuminance_ms_attrTbl, zcl_illuminanceMeasure_register, contactSensor_illuminanceCb},
+#endif	
 };
 
 u8 CONTACT_SENSOR_CB_CLUSTER_NUM = (sizeof(g_contactSensorClusterList)/sizeof(g_contactSensorClusterList[0]));

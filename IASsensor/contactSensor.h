@@ -30,6 +30,7 @@
 /**********************************************************************
  * CONSTANT
  */
+#include "general/zcl_basic.h"
 #define CONTACT_SENSOR_ENDPOINT  0x01
 
 /**********************************************************************
@@ -44,6 +45,7 @@ typedef struct{
 typedef struct{
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerBattEvt;
+	ev_timer_event_t *timerLightLevelEvt;
 	u32 keyPressedTime;
 
 	u16 ledOnTime;
@@ -117,6 +119,17 @@ typedef struct{
 	u16	fastPollTimeoutMax;
 }zcl_pollCtrlAttr_t;
 
+/**
+ *  @brief  Defined for illuminance measurement cluster attributes
+ */
+typedef struct{
+	u16	measuredValue;
+	u16	minMeasuredValue;
+	u16	maxMeasuredValue;
+	u16	tolerance;
+	u8	lightSensorType;
+}zcl_illuminanceAttr_t;
+
 /**********************************************************************
  * GLOBAL VARIABLES
  */
@@ -149,6 +162,7 @@ status_t contactSensor_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, vo
 status_t contactSensor_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t contactSensor_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t contactSensor_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
+status_t contactSensor_illuminanceCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void contactSensor_zclCheckInStart(void);
 
 void contactSensor_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);

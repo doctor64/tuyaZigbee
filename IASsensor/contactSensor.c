@@ -164,22 +164,25 @@ void user_app_init(void)
 	af_powerDescPowerModeUpdate(POWER_MODE_RECEIVER_COMES_WHEN_STIMULATED);
 #endif
 
-    /* Initialize ZCL layer */
+	/* Initialize ZCL layer */
 	/* Register Incoming ZCL Foundation command/response messages */
 	zcl_init(contactSensor_zclProcessIncomingMsg);
 
 	/* Register endPoint */
 	af_endpointRegister(CONTACT_SENSOR_ENDPOINT, (af_simple_descriptor_t *)&contactSensor_simpleDesc, zcl_rx_handler, NULL);
 
+	zcl_reportingTabInit();
+
 	/* Register ZCL specific cluster information */
 	zcl_register(CONTACT_SENSOR_ENDPOINT, CONTACT_SENSOR_CB_CLUSTER_NUM, (zcl_specClusterInfo_t *)g_contactSensorClusterList);
 
 #if ZCL_OTA_SUPPORT
-    ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&contactSensor_simpleDesc, &contactSensor_otaInfo, &contactSensor_otaCb);
+	ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&contactSensor_simpleDesc, &contactSensor_otaInfo, &contactSensor_otaCb);
 #endif
 
-    // battery monitor
-    g_sensorAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, BATTERY_CHECK_INTERVAL);
+	// battery monitor
+	//g_sensorAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 500);//BATTERY_CHECK_INTERVAL);
+	g_sensorAppCtx.timerLightLevelEvt = TL_ZB_TIMER_SCHEDULE(lightLevelCb, NULL, 20000);
 }
 
 
@@ -213,7 +216,7 @@ void app_task(void)
 	if(bdb_isIdle()){
 #if PM_ENABLE
 		if(!g_sensorAppCtx.keyPressed){
-			//printf("Enter sleep\n");
+			//printf("Sleep\n");
 			drv_pm_lowPowerEnter();
 		}
 #endif
@@ -280,6 +283,17 @@ void user_init(bool isRetention)
 			g_bdbCommissionSetting.linkKey.tcLinkKey.keyType = g_sensorAppCtx.tcLinkKey.keyType;
 			g_bdbCommissionSetting.linkKey.tcLinkKey.key = g_sensorAppCtx.tcLinkKey.key;
 		}
+
+		/* Set default reporting configuration */
+		u16 reportableChange = ZCL_REPORTING_DEFAULT_REP_CHANGE;
+		bdb_defaultReportingCfg(CONTACT_SENSOR_ENDPOINT, HA_PROFILE_ID, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE,
+								ZCL_REPORTING_DEFAULT_MIN_INTERVAL, ZCL_REPORTING_DEFAULT_MAX_INTERVAL, (u8 *)&reportableChange);
+		bdb_defaultReportingCfg(CONTACT_SENSOR_ENDPOINT, HA_PROFILE_ID, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
+								ZCL_REPORTING_DEFAULT_MIN_INTERVAL, ZCL_REPORTING_DEFAULT_MAX_INTERVAL, (u8 *)&reportableChange);
+		reportableChange = 500;
+		bdb_defaultReportingCfg(CONTACT_SENSOR_ENDPOINT, HA_PROFILE_ID, ZCL_CLUSTER_MS_ILLUMINANCE_MEASUREMENT, ZCL_ATTRID_MEASURED_VALUE,
+								ZCL_REPORTING_DEFAULT_MIN_INTERVAL, ZCL_REPORTING_DEFAULT_MAX_INTERVAL, (u8 *)&reportableChange);
+
 
 		/* Initialize BDB */
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;

@@ -52,12 +52,35 @@ extern "C" {
 #define PB5_INPUT_ENABLE			0
 //to disable led blink on wake, led off with 1
 #define PB5_DATA_OUT                1
+
 //have LEDs active low
 #define LED_ON						0//1
 #define LED_OFF						1//0
 
-
 #define	PM_WAKEUP_LEVEL		  		PM_WAKEUP_LEVEL_LOW
+
+#define LIGHT_SENSOR_DRIVER			GPIO_PC2
+#define PC2_FUNC					AS_GPIO
+#define PC2_OUTPUT_ENABLE			1
+#define PC2_INPUT_ENABLE			0
+#define PC2_DATA_OUT                1
+
+#define HAVE_LIGHT_SENSOR           1
+#define LIGHT_SENSOR_SENSE			GPIO_PC4
+#define PC4_FUNC					AS_GPIO
+#define PC4_OUTPUT_ENABLE			0
+#define PC4_INPUT_ENABLE			0
+#define PC4_DATA_OUT                0
+
+// #define PC3_FUNC					AS_GPIO
+// #define PC3_OUTPUT_ENABLE			1
+// #define PC3_INPUT_ENABLE			0
+// #define PC3_DATA_OUT                1
+// #define PC1_FUNC					AS_GPIO
+// #define PC1_OUTPUT_ENABLE			1
+// #define PC1_INPUT_ENABLE			0
+// #define PC1_DATA_OUT                1
+
 
 // UART
 #if ZBHCI_UART

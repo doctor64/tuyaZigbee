@@ -182,7 +182,9 @@ void user_app_init(void)
 
 	// battery monitor
 	//g_sensorAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 500);//BATTERY_CHECK_INTERVAL);
-	g_sensorAppCtx.timerLightLevelEvt = TL_ZB_TIMER_SCHEDULE(lightLevelCb, NULL, 20000);
+	g_sensorAppCtx.timerLightLevelEvt = NULL;
+	contactSensor_zclLightSensorRate();
+	//TL_ZB_TIMER_SCHEDULE(lightLevelCb, NULL, 20000);
 }
 
 

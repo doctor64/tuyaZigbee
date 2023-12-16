@@ -23,16 +23,19 @@
  *
  *******************************************************************************************************/
 
-#include "types.h"
-#include "zcl_const.h"
+#include "app_cfg.h"
 #if (__PROJECT_TL_CONTACT_SENSOR__)
 
 /**********************************************************************
  * INCLUDES
  */
+#include "types.h"
+#include "zcl_const.h"
 #include "tl_common.h"
 #include "zcl_include.h"
+//#include "security_safety/zcl_ias_zone.h"
 #include "contactSensor.h"
+#include "zcl_sensorControl.h"
 #include "timestamp.h"
 
 /**********************************************************************
@@ -67,6 +70,9 @@ const u16 contactSensor_inClusterList[] =
 #ifdef ZCL_POLL_CTRL
 	ZCL_CLUSTER_GEN_POLL_CONTROL,
 #endif
+#ifdef ZCL_DOCLAB_SENSOR_CONTROL
+	ZCL_CLUSTER_DOCLAB_SENSOR_CONTROL,
+#endif	
 };
 
 /**
@@ -112,8 +118,8 @@ zcl_basicAttr_t g_zcl_basicAttrs =
 	.modelId		= ZCL_BASIC_MODEL_ID,
 	.dateCode       = ZCL_BASIC_DATE_CODE,
 	.powerSource	= POWER_SOURCE_BATTERY,
-	.swBuildId		= ZCL_BASIC_SW_BUILD_ID,
 	.deviceEnable	= TRUE,
+	.swBuildId		= ZCL_BASIC_SW_BUILD_ID,
 };
 
 const zclAttrInfo_t basic_attrTbl[] =
@@ -173,7 +179,7 @@ zcl_iasZoneAttr_t g_zcl_iasZoneAttrs =
 {
 	.zoneState		= ZONE_STATE_NOT_ENROLLED,
 	.zoneType		= ZONE_TYPE_CONTACT_SWITCH,
-	.zoneStatus		= 0x00,
+	.zoneStatus		= ZONE_STATUS_BIT_RESTORE_NOTIFY, //device will automaticaly send reports about alarm cleared
 	.iasCieAddr		= {0x00},
 	.zoneId 		= ZCL_ZONE_ID_INVALID,
 };
@@ -203,6 +209,9 @@ zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs =
 	.chkInIntervalMin		= 0x00,
 	.longPollIntervalMin	= 0x00,
 	.fastPollTimeoutMax		= 0x00,
+
+	.chkBattInterval        = 0x00,
+	.chkLightInterval       = BATTERY_CHECK_INTERVAL,
 };
 
 const zclAttrInfo_t pollCtrl_attrTbl[] =
@@ -214,6 +223,8 @@ const zclAttrInfo_t pollCtrl_attrTbl[] =
 	{ ZCL_ATTRID_CHK_IN_INTERVAL_MIN, 	ZCL_DATA_TYPE_UINT32, ACCESS_CONTROL_READ, 						  (u8*)&g_zcl_pollCtrlAttrs.chkInIntervalMin},
 	{ ZCL_ATTRID_LONG_POLL_INTERVAL_MIN,ZCL_DATA_TYPE_UINT32, ACCESS_CONTROL_READ, 						  (u8*)&g_zcl_pollCtrlAttrs.longPollIntervalMin },
 	{ ZCL_ATTRID_FAST_POLL_TIMEOUT_MAX, ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ, 						  (u8*)&g_zcl_pollCtrlAttrs.fastPollTimeoutMax},
+
+    { ZCL_ATTRID_SC_LIGHT_SENSOR_RATE,  ZCL_DATA_TYPE_UINT32, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_pollCtrlAttrs.chkLightInterval},
 
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  					  (u8*)&zcl_attr_global_clusterRevision},
 };
@@ -246,6 +257,29 @@ const zclAttrInfo_t illuminance_ms_attrTbl[] =
 #define	ZCL_ILLUMINANCE_MS_ATTR_NUM		 sizeof(illuminance_ms_attrTbl) / sizeof(zclAttrInfo_t)
 #endif //HAVE_LIGHT_SENSOR
 
+#ifdef ZCL_DOCLAB_SENSOR_CONTROL
+/* Sensor poll rate control */
+zcl_sensorCtrlAttr_t g_zcl_sensorCtrlAttrs =
+{
+	.measuredValue 		= 0x0,
+	.minMeasuredValue 	= 0x1,
+	.maxMeasuredValue 	= 0xfffe,
+	.tolerance 			= 0x1,
+	.lightSensorType    = 0x40, // not defined in ZCL - photoresistor
+};
+
+const zclAttrInfo_t sensor_control_attrTbl[] =
+{
+	{ ZCL_ATTRID_MEASURED_VALUE,      ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,  (u8*)&g_zcl_illuminanceMSAttrs.measuredValue },
+	{ ZCL_ATTRID_MIN_MEASURED_VALUE,  ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.minMeasuredValue },
+	{ ZCL_ATTRID_MAX_MEASURED_VALUE,  ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.maxMeasuredValue },
+	{ ZCL_ATTRID_TOLERANCE,           ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.tolerance },
+	{ ZCL_ATTRID_LIGHT_SENSOR_TYPE,   ZCL_DATA_TYPE_ENUM8,  ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.lightSensorType },
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  (u8*)&zcl_attr_global_clusterRevision},
+};
+
+#endif //ZCL_DOCLAB_SENSOR_CONTROL
 /**
  *  @brief Definition for simple contact sensor ZCL specific cluster
  */

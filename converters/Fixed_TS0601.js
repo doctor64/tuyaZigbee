@@ -23,6 +23,7 @@ const DataType = {
 const manufacturerOptions = {
     doclab : {manufacturerCode: 0x6464}
 };
+const zcl_attr_sensor_check_rate = '25601';
 
 const fzlocal = {
 //    ias_contact_alarm_1: 
@@ -76,6 +77,9 @@ const fromZigbee_Rates = {
         if(msg.data.hasOwnProperty('longPollInterval')) {
             result['long_poll_rate'] = msg.data['longPollInterval'];
         }
+        if(msg.data.hasOwnProperty(zcl_attr_sensor_check_rate)) {
+            result['sensor_check_rate'] = msg.data[zcl_attr_sensor_check_rate];
+        }
 
         return result;
        }
@@ -93,7 +97,11 @@ const toZigbee_Rates = {
         case 'long_poll_rate':
             entity.read('genPollCtrl',['longPollInterval']);
             break;
+        case 'sensor_check_rate ':
+            entity.read('genPollCtrl',[zcl_attr_sensor_check_rate]);
+            break;
         }
+
    },
     convertSet: async (entity, key, value, meta) => {
         let payload = {};
@@ -110,6 +118,11 @@ const toZigbee_Rates = {
                 break;
             case 'long_poll_rate':
                 await entity.command('genPollCtrl', 'setLongPollInterval', {'newLongPollInterval': (value)}); 
+                break;
+            case 'sensor_check_rate':
+                payload = {25601: {'value': value, 'type': DataType.uint32}};
+                //await entity.write('genPollCtrl', {'checkinInterval': (value)});
+                await entity.write('genPollCtrl', payload);//, manufacturerOptions.doclab);
                 break;
 
         }

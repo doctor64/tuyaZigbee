@@ -34,6 +34,7 @@
 #include "contactSensor.h"
 #include "app_ui.h"
 #include "os/ev_timer.h"
+#include "zcl_sensorControl.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -177,6 +178,11 @@ static void contactSensor_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReq
 				contactSensor_zclCheckInStart();
 				return;
 			}
+			if(attr[i].attrID == ZCL_ATTRID_SC_LIGHT_SENSOR_RATE){
+				contactSensor_zclLightSensorRate();
+				return;
+			}
+
 		}
 	}
 #endif
@@ -747,4 +753,25 @@ status_t contactSensor_illuminanceCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId,
 }
 #endif //HAVE_LIGHT_SENSOR
 
+
+void contactSensor_zclLightSensorRate(void)
+{
+	printf("contactSensor_zclLightSensorRate\n");
+	//if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, CONTACT_SENSOR_ENDPOINT)){
+		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
+
+		// if checkin timer already running, stop it
+		if (g_sensorAppCtx.timerLightLevelEvt){
+			printf("Cancel light sensor timer\n");
+			TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerLightLevelEvt);
+		}
+
+
+		if(!g_sensorAppCtx.timerLightLevelEvt){
+			printf("contactSensor_zclLightSensorRate time 0x%x %x 1/4 s\n", (u16)((pPollCtrlAttr->chkLightInterval &0xffff0000)>>16), (u16)(pPollCtrlAttr->chkLightInterval&0xffff));
+			g_sensorAppCtx.timerLightLevelEvt = TL_ZB_TIMER_SCHEDULE(lightLevelCb, NULL, pPollCtrlAttr->chkLightInterval);
+
+		}
+//	}
+}
 #endif  /* __PROJECT_TL_CONTACT_SENSOR__ */

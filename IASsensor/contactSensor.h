@@ -117,6 +117,9 @@ typedef struct{
 	u16	shortPollInterval;
 	u16	fastPollTimeout;
 	u16	fastPollTimeoutMax;
+
+	u32 chkBattInterval;
+	u32 chkLightInterval;
 }zcl_pollCtrlAttr_t;
 
 /**
@@ -164,6 +167,7 @@ status_t contactSensor_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 status_t contactSensor_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t contactSensor_illuminanceCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void contactSensor_zclCheckInStart(void);
+void contactSensor_zclLightSensorRate(void);
 
 void contactSensor_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void contactSensor_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);

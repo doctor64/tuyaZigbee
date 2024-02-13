@@ -139,7 +139,7 @@ void light_blink_stop(void)
 		}
 	}
 }
-void cmdSendReport()
+void cmdSendReport(void)
 {
 	//printf("cmdSendReport\n");
     if(zb_isDeviceJoinedNwk()){
@@ -167,6 +167,22 @@ void cmdSendReport()
 				ZCL_CLUSTER_MS_ILLUMINANCE_MEASUREMENT, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
 #endif //HAVE_LIGHT_SENSOR
     }
+}
+void cmdSendOnOff(void)
+{
+	//light_blink_start(1, 500, 0);
+	epInfo_t dstEpInfo;
+	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+	dstEpInfo.profileId = HA_PROFILE_ID;
+#if FIND_AND_BIND_SUPPORT
+	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+#else
+	dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+	dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
+	dstEpInfo.dstAddr.shortAddr = 0xfffc;
+#endif
+	zcl_onOff_toggleCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);
 }
 
 /*******************************************************************
@@ -249,6 +265,9 @@ void buttonShortPressed(u8 btNum){
 			statusChangeNotification.delay = 0;
 
 			zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+#ifdef HAVE_ONOFF_SEND
+			cmdSendOnOff();
+#endif			
 		}
 	}
 }

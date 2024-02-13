@@ -72,6 +72,9 @@ extern "C" {
 #define PC4_INPUT_ENABLE			0
 #define PC4_DATA_OUT                0
 
+// Send OnOf commands on sensor actions
+#define HAVE_ONOFF_SEND				1
+
 // #define PC3_FUNC					AS_GPIO
 // #define PC3_OUTPUT_ENABLE			1
 // #define PC3_INPUT_ENABLE			0

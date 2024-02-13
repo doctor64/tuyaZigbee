@@ -159,17 +159,24 @@ extern "C" {
 #define ZCL_OTA_SUPPORT								1
 #define ZCL_POWER_CFG_SUPPORT                       1
 
+#ifdef HAVE_LIGHT_SENSOR
 #define ZCL_ILLUMINANCE_MEASUREMENT_SUPPORT         1 
+#endif
 
-#define MY_OTA_QUERY_RATE_COEFF                     96 //in 5*60 seconds - 480 minutes, 8 hours
-#define MY_POLL_RATE_COEFF                           7 // in 4quarterseconds = 1 seconds
-#define BATTERY_CHECK_INTERVAL                    5000 // in milliseconds
+#ifdef HAVE_ONOFF_SEND
+#define ZCL_ON_OFF_SUPPORT							1
+#endif
 /**********************************************************************
  * ZCL defaults setting
  */
 #define ZCL_REPORTING_DEFAULT_MIN_INTERVAL		0
 #define ZCL_REPORTING_DEFAULT_MAX_INTERVAL		3600 //60 minutes
 #define ZCL_REPORTING_DEFAULT_REP_CHANGE		0
+
+#define MY_OTA_QUERY_RATE_COEFF                 96   //in 5*60 seconds - 480 minutes, 8 hours
+#define MY_POLL_RATE_COEFF                      7    // in 4quarterseconds = 1 seconds
+#define BATTERY_CHECK_INTERVAL                  5000 // in milliseconds
+#define SENSOR_CHECK_INTERVAL                   5000 // in milliseconds
 /**********************************************************************
  * Stack configuration
  */

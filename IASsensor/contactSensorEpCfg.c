@@ -70,9 +70,6 @@ const u16 contactSensor_inClusterList[] =
 #ifdef ZCL_POLL_CTRL
 	ZCL_CLUSTER_GEN_POLL_CONTROL,
 #endif
-#ifdef ZCL_DOCLAB_SENSOR_CONTROL
-	ZCL_CLUSTER_DOCLAB_SENSOR_CONTROL,
-#endif	
 };
 
 /**
@@ -80,8 +77,11 @@ const u16 contactSensor_inClusterList[] =
  */
 const u16 contactSensor_outClusterList[] =
 {
+#ifdef ZCL_ON_OFF
+ZCL_CLUSTER_GEN_ON_OFF,
+#endif
 #ifdef ZCL_OTA
-    ZCL_CLUSTER_OTA,
+ZCL_CLUSTER_OTA,
 #endif
 };
 

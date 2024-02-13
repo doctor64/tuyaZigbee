@@ -134,7 +134,7 @@ const definition = {
     model: 'Fixed TS0601',
     vendor: 'DocLab, ex TuYa',
     description: 'Tuya door sensor',
-    fromZigbee: [fz.battery, fz.ias_enroll, fzlocal, fz.illuminance, fromZigbee_Rates],//, fz.checkin_presence],
+    fromZigbee: [fz.battery, fz.ias_enroll, fzlocal, fz.illuminance, fromZigbee_Rates, fz.command_toggle],//, fz.checkin_presence],
     toZigbee: [toZigbee_Rates],
     configure: async (device, coordinatorEndpoint, logger) => {
         const endpoint = device.getEndpoint(1);
@@ -155,7 +155,8 @@ const definition = {
               exposes.numeric('short_poll_rate', ea.ALL).withDescription('Fast poll rate in 1/4 s'),
               exposes.numeric('long_poll_rate', ea.ALL).withDescription('Long poll rate in 1/4 s'), 
               exposes.numeric('sensor_check_rate', ea.ALL).withDescription('Delay between battery/light sensor checks, in ms'),
-              e.battery(), e.battery_voltage()],
+              e.battery(), e.battery_voltage(),
+              e.action(['toggle','on', 'off'])],
     //options: [exposes.options.measurement_poll_interval().withDescription('Only the energy value is polled for this device.')],
     //onEvent: async (type, data, device, options) => {
 //            await readInitialBatteryState(type, data, device);

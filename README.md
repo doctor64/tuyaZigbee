@@ -1,4 +1,6 @@
 # tuyaZigbee
+[![Build](https://github.com/doctor64/tuyaZigbee/actions/workflows/build.yml/badge.svg)](https://github.com/doctor64/tuyaZigbee/actions/workflows/build.yml)
+
 This project intended to replace firmwares in TuYa devices based on Telink chips
 ## Supported devices
 * TS0501B, TS0504B (and possible others) LED controllers.
@@ -39,7 +41,8 @@ TS0041
 Long press on Net Key button
 
 # Compilation
-See [docs/sdk_installation.md](docs/sdk_installation.md)
++ For Windows see: [docs/sdk_installation.md](docs/sdk_installation.md)
++ For Linux see: [docs/linux_build.md](docs/linux_build.md)
 
 # Flashing
 See [docs/flash.md](docs/flash.md)

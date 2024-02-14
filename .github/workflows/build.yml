@@ -1,0 +1,82 @@
+name: Build
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Cache SDK and Toolchain
+      uses: actions/cache@v4
+      with:
+        path: |
+          build/app
+          build/innoextract.exe
+          build/tc32
+          build/tl_zigbee_sdk
+        key: |
+          toolchain-${{ matrix.os }}-${{ hashFiles('build/tc32') }}
+        restore-keys: |
+          toolchain-${{ matrix.os }}
+        save-always: true
+
+    - name: Install SDK and Toolchain (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        mkdir build -ErrorAction SilentlyContinue
+        cd build
+        cmake -P ../cmake/TelinkSDK_Win.cmake
+        choco install ninja
+
+    - name: Install SDK and Toolchain (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        mkdir -p build
+        cd build
+        cmake -P ../cmake/TelinkSDK_Linux.cmake
+
+    - name: Add Toolchain Path (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        "${PWD}\build\app\opt\tc32\bin;${PWD}\build\app\bin\" | Out-File -File $env:GITHUB_PATH -Append
+
+    - name: Build (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        cmake . -G "Ninja" -B build
+        cmake --build build
+
+    - name: Build (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        cmake . -B build
+        cmake --build build
+
+    - name: Archive switch files
+      uses: actions/upload-artifact@v4
+      with:
+        name: switch-${{matrix.os}}
+        path: |
+          build/switch/switch*
+          build/switch/*switch.zigbee
+          !build/**/*.lst
+
+    - name: Archive light files
+      uses: actions/upload-artifact@v4
+      with:
+        name: light-${{matrix.os}}
+        path: |
+          build/light/light*
+          build/light/*light.zigbee
+          !build/**/*.lst

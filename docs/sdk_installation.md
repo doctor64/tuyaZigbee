@@ -1,11 +1,15 @@
-SDK installation
-get IDE from http://wiki.telink-semi.cn/wiki/IDE-and-Tools/IDE-for-TLSR8-Chips/
-get SDK from http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/#software-development-kit
+# SDK installation
+
+## Download SDK and IDE (Toolchain)
+
++ get IDE from http://wiki.telink-semi.cn/wiki/IDE-and-Tools/IDE-for-TLSR8-Chips/
++ get SDK from http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/#software-development-kit
 All-in-1 Zigbee SDK for TLSR9 and TLSR8
 
-direct link to SDK http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
+> direct link to SDK http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
 see http://wiki.telink-semi.cn/doc/an/AN-19052900-E_Telink%20Zigbee%20SDK%20Developer%20Manual.pdf
 
+## Installation
 
 1. run TelinkSDKv1.3.1.exe and install
 2. extract Zigbee_SDK somewhere
@@ -25,5 +29,10 @@ TC32 Compiler - Define Syms - add BUILD_TS0501B=1
 11. (recomended) Windows->Preferences->C++->Indexer Build configuration for the indexer: Use active build configuration
 12. In tl_zigbee_sdk/apps/common/comm_cfg.h edit line #define BOOT_LOADER_MODE 0 to #define BOOT_LOADER_MODE 1
 
-In case of build problems try to delete tl_zigbee_sdk\build\tlsr_tc32\tuyaLight-0501 and 2-3 times do clean project in Eclipse
+> In case of build problems try to delete tl_zigbee_sdk\build\tlsr_tc32\tuyaLight-0501 and 2-3 times do clean project in Eclipse
 
+## Automatic Installation
+
+```powershell
+mkdir build; cd build; cmake -P ../cmake/TelinkSDK_Win.cmake
+```

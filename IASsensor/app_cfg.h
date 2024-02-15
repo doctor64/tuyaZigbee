@@ -165,6 +165,7 @@ extern "C" {
 
 #ifdef HAVE_ONOFF_SEND
 #define ZCL_ON_OFF_SUPPORT							1
+#define ZCL_ON_OFF_SWITCH_CFG_SUPPORT				1
 #endif
 /**********************************************************************
  * ZCL defaults setting

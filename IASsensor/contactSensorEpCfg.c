@@ -33,6 +33,7 @@
 #include "zcl_const.h"
 #include "tl_common.h"
 #include "zcl_include.h"
+#include "zcl_onoffSwitchCfg.h"
 //#include "security_safety/zcl_ias_zone.h"
 #include "contactSensor.h"
 #include "zcl_sensorControl.h"
@@ -69,6 +70,9 @@ const u16 contactSensor_inClusterList[] =
 #endif
 #ifdef ZCL_POLL_CTRL
 	ZCL_CLUSTER_GEN_POLL_CONTROL,
+#endif
+#ifdef ZCL_ON_OFF_SWITCH_CFG
+	ZCL_CLUSTER_GEN_ON_OFF_SWITCH_CONFIG,
 #endif
 };
 
@@ -257,31 +261,26 @@ const zclAttrInfo_t illuminance_ms_attrTbl[] =
 #define	ZCL_ILLUMINANCE_MS_ATTR_NUM		 sizeof(illuminance_ms_attrTbl) / sizeof(zclAttrInfo_t)
 #endif //HAVE_LIGHT_SENSOR
 
-#ifdef ZCL_DOCLAB_SENSOR_CONTROL
-/* Sensor poll rate control */
-zcl_sensorCtrlAttr_t g_zcl_sensorCtrlAttrs =
+#ifdef ZCL_ON_OFF_SWITCH_CFG
+/* On/Off Config */
+zcl_onOffSwitchCfg g_zcl_onOffSwitchCfgAttrs =
 {
-	.measuredValue 		= 0x0,
-	.minMeasuredValue 	= 0x1,
-	.maxMeasuredValue 	= 0xfffe,
-	.tolerance 			= 0x1,
-	.lightSensorType    = 0x40, // not defined in ZCL - photoresistor
+	.switchType			= ZCL_SWITCH_TYPE_TOGGLE, //Toggle
+	.switchActions	 	= ZCL_SWITCH_ACTION_TOGGLE, 
 };
 
-const zclAttrInfo_t sensor_control_attrTbl[] =
+const zclAttrInfo_t on_off_switch_config_attrTbl[] =
 {
-	{ ZCL_ATTRID_MEASURED_VALUE,      ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,  (u8*)&g_zcl_illuminanceMSAttrs.measuredValue },
-	{ ZCL_ATTRID_MIN_MEASURED_VALUE,  ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.minMeasuredValue },
-	{ ZCL_ATTRID_MAX_MEASURED_VALUE,  ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.maxMeasuredValue },
-	{ ZCL_ATTRID_TOLERANCE,           ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.tolerance },
-	{ ZCL_ATTRID_LIGHT_SENSOR_TYPE,   ZCL_DATA_TYPE_ENUM8,  ACCESS_CONTROL_READ,  (u8*)&g_zcl_illuminanceMSAttrs.lightSensorType },
+	{ ZCL_ATTRID_SWITCH_TYPE,      ZCL_DATA_TYPE_ENUM8, ACCESS_CONTROL_READ,  (u8*)&g_zcl_onOffSwitchCfgAttrs.switchType },
+	{ ZCL_ATTRID_SWITCH_ACTION,  ZCL_DATA_TYPE_ENUM8, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&g_zcl_onOffSwitchCfgAttrs.switchActions },
 
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  (u8*)&zcl_attr_global_clusterRevision},
 };
 
-#endif //ZCL_DOCLAB_SENSOR_CONTROL
+#define	ZCL_ON_OFF_SWITCH_CFG_ATTR_NUM		 sizeof(on_off_switch_config_attrTbl) / sizeof(zclAttrInfo_t)
+#endif //ZCL_ON_OFF_SWITCH_CFG
 /**
- *  @brief Definition for simple contact sensor ZCL specific cluster
+ *  @brief Definition for IAS sensor ZCL specific cluster
  */
 const zcl_specClusterInfo_t g_contactSensorClusterList[] =
 {
@@ -296,6 +295,9 @@ const zcl_specClusterInfo_t g_contactSensorClusterList[] =
 #endif
 #ifdef HAVE_LIGHT_SENSOR
 	{ZCL_CLUSTER_MS_ILLUMINANCE_MEASUREMENT, MANUFACTURER_CODE_NONE, ZCL_ILLUMINANCE_MS_ATTR_NUM, illuminance_ms_attrTbl, zcl_illuminanceMeasure_register, contactSensor_illuminanceCb},
+#endif	
+#ifdef ZCL_ON_OFF_SWITCH_CFG
+	{ZCL_CLUSTER_GEN_ON_OFF_SWITCH_CONFIG, MANUFACTURER_CODE_NONE, ZCL_ON_OFF_SWITCH_CFG_ATTR_NUM, on_off_switch_config_attrTbl, zcl_onOffSwitchCfg_register, NULL},
 #endif	
 };
 

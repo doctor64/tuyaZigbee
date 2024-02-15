@@ -46,6 +46,10 @@ enum {
 	APP_FACTORY_NEW_SET_CHECK,
 	APP_FACTORY_NEW_DOING
 };
+enum {
+	APP_SENSOR_OPENED,
+	APP_SENSOR_CLOSED
+};
 
 /**********************************************************************
  * FUNCTIONS

@@ -152,6 +152,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/os/ev_timer.c
 
     ${SDK_PREFIX}/apps/common/main.c
+
+    ${PROJECT_SOURCE_DIR}/common/zcl_onoffSwitchCfg.c
 )
 
 
@@ -173,6 +175,7 @@ INCLUDE_DIRECTORIES(
 
     # Zigbee sources reference zcl_options.h
 #    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/common/
     ${PROJECT_SOURCE_DIR}/IASsensor
 #    ${PROJECT_SOURCE_DIR}/src/custom_zcl
 )
@@ -185,7 +188,8 @@ LINK_DIRECTORIES(
 
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T${SDK_PREFIX}/platform/boot/${TELINK_PLATFORM}/boot_${TELINK_PLATFORM}.link")
 
-file( GLOB SOURCES1 *.c *.cpp *.h *.S common/*.c common/*.h custom_zcl/*.c custom_zcl/*.h )
+file( GLOB SOURCES1 *.c *.cpp *.h *.S ) 
+#../common/*.c ../common/*.h custom_zcl/*.c custom_zcl/*.h )
 
 SET (SOURCES  ${SOURCES1} ${ZIGBEE_SRC})
 

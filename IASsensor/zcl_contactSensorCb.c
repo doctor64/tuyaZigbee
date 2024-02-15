@@ -774,4 +774,5 @@ void contactSensor_zclLightSensorRate(void)
 		}
 //	}
 }
+
 #endif  /* __PROJECT_TL_CONTACT_SENSOR__ */

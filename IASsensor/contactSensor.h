@@ -133,6 +133,11 @@ typedef struct{
 	u8	lightSensorType;
 }zcl_illuminanceAttr_t;
 
+typedef struct{
+	u8 switchType;
+	u8 switchActions;
+}zcl_onOffSwitchCfg;
+
 /**********************************************************************
  * GLOBAL VARIABLES
  */

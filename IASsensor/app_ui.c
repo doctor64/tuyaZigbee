@@ -37,6 +37,7 @@
 #include "app_ui.h"
 #include "zcl.h"
 #include "security_safety/zcl_ias_zone.h"
+#include "zcl_onoffSwitchCfg.h"
 // #include "zb_af.h"
 
 extern drv_pm_pinCfg_t g_sensorPmCfg[];
@@ -168,8 +169,10 @@ void cmdSendReport(void)
 #endif //HAVE_LIGHT_SENSOR
     }
 }
-void cmdSendOnOff(void)
+void cmdSendOnOff(u8 sensor_state)
 {
+	u16 len;
+	u8 switch_action;
 	//light_blink_start(1, 500, 0);
 	epInfo_t dstEpInfo;
 	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -182,7 +185,25 @@ void cmdSendOnOff(void)
 	dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
 	dstEpInfo.dstAddr.shortAddr = 0xfffc;
 #endif
-	zcl_onOff_toggleCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);
+	zcl_getAttrVal(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_ON_OFF_SWITCH_CONFIG, ZCL_ATTRID_SWITCH_ACTION, &len, (u8*)&switch_action);
+	printf("sw config %d action %d \n", switch_action, sensor_state);
+	switch (switch_action) {
+		case ZCL_SWITCH_ACTION_ON_OFF:
+			if (sensor_state == APP_SENSOR_CLOSED)
+				zcl_onOff_onCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);
+			if (sensor_state == APP_SENSOR_OPENED)
+				zcl_onOff_offCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);
+			break;
+		case ZCL_SWITCH_ACTION_OFF_ON:
+			if (sensor_state == APP_SENSOR_CLOSED)
+				zcl_onOff_offCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);
+			if (sensor_state == APP_SENSOR_OPENED)
+				zcl_onOff_onCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);			
+			break;
+		case ZCL_SWITCH_ACTION_TOGGLE:
+			zcl_onOff_toggleCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, FALSE);
+		};
+	
 }
 
 /*******************************************************************
@@ -266,8 +287,8 @@ void buttonShortPressed(u8 btNum){
 
 			zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
 #ifdef HAVE_ONOFF_SEND
-			cmdSendOnOff();
-#endif			
+			cmdSendOnOff(APP_SENSOR_CLOSED);
+#endif
 		}
 	}
 }
@@ -290,7 +311,6 @@ void keyScan_keyPressedCB(kb_data_t *kbEvt){
 		g_sensorAppCtx.keyPressed = 0;
 		drv_pm_wakeupPinLevelChange(g_sensorPmCfg, 2);
 	}
-
 }
 
 void keyScan_keyReleasedCB(u8 keyCode){
@@ -337,6 +357,9 @@ void keyScan_keyReleasedCB(u8 keyCode){
 			statusChangeNotification.delay = 0;
 
 			zcl_iasZone_statusChangeNotificationCmd(CONTACT_SENSOR_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+#ifdef HAVE_ONOFF_SEND
+			cmdSendOnOff(APP_SENSOR_OPENED);
+#endif
 		}
 	}
 }

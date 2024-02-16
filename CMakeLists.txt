@@ -6,6 +6,6 @@ PROJECT(tuyaZigbee LANGUAGES C ASM)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ADD_SUBDIRECTORY(cmake_timestamp timestamp)
-# ADD_SUBDIRECTORY(IASsensor) # zcl_sensorControl.h: No such file or directory
+ADD_SUBDIRECTORY(IASsensor)
 ADD_SUBDIRECTORY(switch)
 ADD_SUBDIRECTORY(light)

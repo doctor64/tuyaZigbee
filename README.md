@@ -41,7 +41,7 @@ TS0041
 Long press on Net Key button
 
 # Compilation
-+ For Windows see: [docs/sdk_installation.md](docs/sdk_installation.md)
++ For Windows see: [docs/windows_build.md](docs/windows_build.md)
 + For Linux see: [docs/linux_build.md](docs/linux_build.md)
 
 # Flashing

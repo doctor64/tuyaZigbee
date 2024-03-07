@@ -1,16 +1,9 @@
-# We will always be building Release in order to enable all needed optimizations
-# Debug symbols will be still present in the ELF file
-SET(CMAKE_BUILD_TYPE Release)
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/Toolchain.cmake")
 
-# Prepare the toolchain for Telink 8251/8258 microcontroller
-include(cmake/TelinkSDK.cmake)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
+PROJECT(tuyaZigbee LANGUAGES C ASM)
 
-# Main project settings
-
-CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
-PROJECT(tuyaZigbee C)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-ENABLE_LANGUAGE(ASM)
 
 ADD_SUBDIRECTORY(cmake_timestamp timestamp)
 ADD_SUBDIRECTORY(IASsensor)

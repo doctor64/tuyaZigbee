@@ -12,9 +12,9 @@ Also, be warned what Tuya names are completely unreliable. Tuya name, reported a
 From hardware point of view, all controllers (Single color/RGB/RGBW/RGBCW) the same, at least Single color (Tuya name TS0501B) and RGBW (Tuya name TS0504B), and differs only by firmware and external connector to LED strip. All controllers share same populated PCB and based on Tuya ZT3L module, which is based on Z2 chip - actually it is TeLink TLSR8258 (TLSR8258F1KAT32).
 
 ### Schematics
-TS050X
-Actually, part of it. I was lazy enough to trace 3.3 voltage converter :) 
-![Controller schematics](docs/Schematic_TuYa_led_driver.png)
+Light strip controllers TS050XB. Actually, part of schematics. I was lazy enough to trace 3.3 voltage converter :) 
+
+![Controller schematics](Schematic_TuYa_led_driver.png)
 
 ### How to join
 Long press on button, connected LED will blink

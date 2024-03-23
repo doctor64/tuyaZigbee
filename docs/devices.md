@@ -42,6 +42,13 @@ Long press on button, connected LED will blink
 | Lonsonho 2 gang switch | ZBWS02A (on case) | | TS0042 | \_TZ3000\_v8jvcwsx | WIP | [Aliexpress](https://www.aliexpress.com/item/4001095272467.html) white, 2-gang |
 | Lonsonho 3 gang switch | ZBWS03A (on case) | | TS0043 | \_TZ3000\_uyjmm0et | WIP | [Aliexpress](https://www.aliexpress.com/item/4001095272467.html) white, 3-gang |
 
+### Notes
+All models use same PCB, different only populated components and mapping of keys and leds to GPIO pins. Some [notes about devices](switch-lonsonho.txt).
+
+### Schematics
+
+![ZBWS01A](SCH_lonsonho-switch-1.png)
+
 ### How to join
 Long press on Net Key button
 
@@ -49,7 +56,7 @@ Long press on Net Key button
 - Binding
 - Short press on button send toggle command (switch binded light on/off)
 - Long press on button send move command, so light brightness a changed. Direction is switched on next press
-- Short click on Net Key button send report with battery status
+- Short press on Net Key button send report with battery status
 - OTA updates
 - OTA update from Tuya firmware
 

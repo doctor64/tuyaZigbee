@@ -143,7 +143,6 @@ void cmdSendReport()
 	//printf("cmdSendReport\n");
     if(zb_isDeviceJoinedNwk()){
     	//light_blink_start(5, 500, 500);
-#if 1
         epInfo_t dstEpInfo;
         TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
@@ -151,31 +150,27 @@ void cmdSendReport()
 #if FIND_AND_BIND_SUPPORT
         dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
 #else
+        /* fix for issue #21 - send report to coordinator only */
         dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
         dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
-        dstEpInfo.dstAddr.shortAddr = 0xfffc;
+        dstEpInfo.dstAddr.shortAddr = 0x0; //send to coordinator
 #endif
-        //zcl_onOff_toggleCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE);
+        //printf("Send Report\n");
     	zclAttrInfo_t *pAttrEntry;
     	pAttrEntry = zcl_findAttribute(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE);
     	zcl_sendReportCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
     			ZCL_CLUSTER_GEN_POWER_CFG, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
     	pAttrEntry = zcl_findAttribute(TUYA_SWITCH_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING);
-		zcl_sendReportCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+        zcl_sendReportCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
 				ZCL_CLUSTER_GEN_POWER_CFG, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
-
-#else
-        brc_toggle();
-#endif
     }
 }
 void cmdToggle(void)
 {
-	//printf("cmdToggle\n");
+	// printf("cmdToggle\n");
 	if(zb_isDeviceJoinedNwk())
 	{
 		//light_blink_start(1, 500, 0);
-#if 1
 		epInfo_t dstEpInfo;
 		TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
@@ -183,14 +178,11 @@ void cmdToggle(void)
 #if FIND_AND_BIND_SUPPORT
 		dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
 #else
-		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
-		dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
-		dstEpInfo.dstAddr.shortAddr = 0xfffc;
+        //printf("cmdToggle fill addr \n");
+        /* fix for issue #21 - send report to binded only */
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT; /* send using data from binded table */
 #endif
 		zcl_onOff_toggleCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE);
-#else
-		brc_toggle();
-#endif
 	}
 }
 
@@ -205,9 +197,9 @@ void cmdMoveOnOff(void)
 		epInfo_t dstEpInfo;
 		TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
-		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
-		dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
-		dstEpInfo.dstAddr.shortAddr = 0xfffc;
+        //printf("cmdMoveOnOff fill addr\n");
+        /* fix for issue #21 - send report to binded only */
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT; /* send using data from binded table */
 		dstEpInfo.profileId = HA_PROFILE_ID;
 
 		//moveToLvl_t move2Level;
@@ -246,9 +238,8 @@ void cmdStopWithOnOff(void)
     	epInfo_t dstEpInfo;
         TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
-        dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
-        dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
-        dstEpInfo.dstAddr.shortAddr = 0xfffc;
+        /* fix for issue #21 - send report to binded only */
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT; /* send using data from binded table */
         dstEpInfo.profileId = HA_PROFILE_ID;
 
         stop_t stop;
@@ -274,7 +265,6 @@ s32 battVoltageCb(void *arg) {
 	return 0;
 }
 
-
 /*******************************************************************
  * @brief   Button click detect:
  *          SW1. keep press button1 5s === factory reset
@@ -298,33 +288,6 @@ void buttonKeepPressed(u8 btNum) {
     	light_blink_start(255, 200, 200);
     	g_switchAppCtx.state = APP_STATE_HOLD_PROCESSED_SW2;
     	cmdMoveOnOff();
-    }
-}
-
-ev_timer_event_t *brc_toggleEvt = NULL;
-
-s32 brc_toggleCb(void *arg)
-{
-    epInfo_t dstEpInfo;
-    TL_SETSTRUCTCONTENT(dstEpInfo, 0);
-
-    dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
-    dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
-    dstEpInfo.dstAddr.shortAddr = 0xfffc;
-    dstEpInfo.profileId = HA_PROFILE_ID;
-
-    zcl_onOff_toggleCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE);
-
-    return 0;
-}
-
-void brc_toggle(void)
-{
-    if(!brc_toggleEvt){
-	//printf("timer3 start \n");
-        brc_toggleEvt = TL_ZB_TIMER_SCHEDULE(brc_toggleCb, NULL, 1000);
-    }else{
-        TL_ZB_TIMER_CANCEL(&brc_toggleEvt);
     }
 }
 

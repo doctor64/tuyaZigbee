@@ -153,7 +153,7 @@ void cmdSendReport(void)
 #else
         dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
         dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
-        dstEpInfo.dstAddr.shortAddr = 0xfffc;
+        dstEpInfo.dstAddr.shortAddr = 0x0;
 #endif //FIND_AND_BIND_SUPPORT
     	zclAttrInfo_t *pAttrEntry;
     	pAttrEntry = zcl_findAttribute(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_POWER_CFG, ZCL_ATTRID_BATTERY_VOLTAGE);
@@ -181,9 +181,8 @@ void cmdSendOnOff(u8 sensor_state)
 #if FIND_AND_BIND_SUPPORT
 	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
 #else
-	dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
-	dstEpInfo.dstEp = CONTACT_SENSOR_ENDPOINT;
-	dstEpInfo.dstAddr.shortAddr = 0xfffc;
+        /* fix for issue #21 - send report to binded only */
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT; /* send using data from binded table */
 #endif
 	zcl_getAttrVal(CONTACT_SENSOR_ENDPOINT, ZCL_CLUSTER_GEN_ON_OFF_SWITCH_CONFIG, ZCL_ATTRID_SWITCH_ACTION, &len, (u8*)&switch_action);
 	printf("sw config %d action %d \n", switch_action, sensor_state);

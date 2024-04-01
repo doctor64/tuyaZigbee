@@ -19,8 +19,7 @@ const definition = {
     toZigbee: [tz.factory_reset],
         configure: async (device, coordinatorEndpoint, logger) => {
             const firstEndpoint = device.getEndpoint(1);
-            await reporting.bind(firstEndpoint, coordinatorEndpoint, [
-                'genPowerCfg' ]);
+            await reporting.bind(firstEndpoint, coordinatorEndpoint, ['genOnOff', 'genLevelCtrl', 'genPowerCfg']);
             const overides = {min: 0, max: 3600, change: 0};
             await reporting.batteryVoltage(firstEndpoint, overides);
             await reporting.batteryPercentageRemaining(firstEndpoint, overides);

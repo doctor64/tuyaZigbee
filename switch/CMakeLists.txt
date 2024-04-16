@@ -173,6 +173,7 @@ INCLUDE_DIRECTORIES(
 
     # Zigbee sources reference zcl_options.h
 #    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/common/
     ${PROJECT_SOURCE_DIR}/switch
 #    ${PROJECT_SOURCE_DIR}/src/custom_zcl
 )

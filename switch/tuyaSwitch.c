@@ -194,7 +194,9 @@ void user_app_init(void)
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&tuyaSwitch_simpleDesc, &tuyaSwitch_otaInfo, &tuyaSwitch_otaCb);
 #endif
     // battery monitor
-    g_switchAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 5000);
+    g_switchAppCtx.timerBattEvt = NULL;
+	tuyaSwitch_zclBatterySensorRate();
+    //TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, 5000);
 }
 
 

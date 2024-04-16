@@ -32,6 +32,9 @@
 #include "zcl_include.h"
 #include "tuyaSwitch.h"
 
+#include "zcl_sensorControl.h"
+#include "timestamp.h"
+
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -117,7 +120,7 @@ zcl_basicAttr_t g_zcl_basicAttrs =
 	.hwVersion		= HARDWARE_REV,
 	.manuName		= ZCL_BASIC_MFG_NAME,
 	.modelId		= ZCL_BASIC_MODEL_ID,
-	.dateCode       = ZCL_BASIC_DATE_CODE,
+	//.dateCode       = ZCL_BASIC_DATE_CODE,
 	.powerSource	= POWER_SOURCE_BATTERY,
 	.genDevClass    = 0x00,  //Lightning
 	.genDevType     = 0xe1,  //Wall Switch
@@ -133,7 +136,7 @@ const zclAttrInfo_t basic_attrTbl[] =
 	{ ZCL_ATTRID_BASIC_HW_VER,       		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.hwVersion},
 	{ ZCL_ATTRID_BASIC_MFR_NAME,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.manuName},
 	{ ZCL_ATTRID_BASIC_MODEL_ID,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.modelId},
-	{ ZCL_ATTRID_BASIC_DATE_CODE,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.dateCode},
+	{ ZCL_ATTRID_BASIC_DATE_CODE,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)&build_time_str},//g_zcl_basicAttrs.dateCode},
 	{ ZCL_ATTRID_BASIC_POWER_SOURCE, 		ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.powerSource},
 	{ ZCL_ATTRID_BASIC_GENERIC_DEVICE_CLASS,ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,                        (u8*)&g_zcl_basicAttrs.genDevClass},
 	{ ZCL_ATTRID_BASIC_GENERIC_DEVICE_TYPE, ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,                        (u8*)&g_zcl_basicAttrs.genDevType},
@@ -183,13 +186,16 @@ const zclAttrInfo_t powerCfg_attrTbl[] =
 /* Poll Control */
 zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs =
 {
-	.chkInInterval			= 0x3840,
-	.longPollInterval		= 0x14,
-	.shortPollInterval		= 0x02,
-	.fastPollTimeout		= 0x28,
+	// default values from ZCL 7
+	.chkInInterval			= POLL_CTL_DEFAULT_CHECKIN_INTERVAL,       // 1 hour
+	.longPollInterval		= POLL_CTL_DEFAULT_LONG_POLL_INTERVAL,     // 5 sec
+	.shortPollInterval		= POLL_CTL_DEFAULT_SHORT_POLL_INTERVAL,    // 2 qs = 0.5 sec
+	.fastPollTimeout		= POLL_CTL_DEFAULT_FAST_POLL_INTERVAL,     // 10 sec
 	.chkInIntervalMin		= 0x00,
 	.longPollIntervalMin	= 0x00,
 	.fastPollTimeoutMax		= 0x00,
+
+	.chkBattInterval        = POLL_CTL_DEFAULT_BATTERY_CHECK_INTERVAL, // 5000 ms
 };
 
 const zclAttrInfo_t pollCtrl_attrTbl[] =
@@ -201,6 +207,8 @@ const zclAttrInfo_t pollCtrl_attrTbl[] =
 	{ ZCL_ATTRID_CHK_IN_INTERVAL_MIN, 	ZCL_DATA_TYPE_UINT32, ACCESS_CONTROL_READ, 						  (u8*)&g_zcl_pollCtrlAttrs.chkInIntervalMin},
 	{ ZCL_ATTRID_LONG_POLL_INTERVAL_MIN,ZCL_DATA_TYPE_UINT32, ACCESS_CONTROL_READ, 						  (u8*)&g_zcl_pollCtrlAttrs.longPollIntervalMin },
 	{ ZCL_ATTRID_FAST_POLL_TIMEOUT_MAX, ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ, 						  (u8*)&g_zcl_pollCtrlAttrs.fastPollTimeoutMax},
+
+    { ZCL_ATTRID_SC_BATTERY_VOLTAGE_RATE, ZCL_DATA_TYPE_UINT32, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_pollCtrlAttrs.chkBattInterval},
 
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  					  (u8*)&zcl_attr_global_clusterRevision},
 };

@@ -42,7 +42,7 @@
 #endif
 
 #define APP_RELEASE							0x10//app release 1.0
-#define APP_BUILD							0x02//app build 02
+#define APP_BUILD							0x03//app build 03
 #define STACK_RELEASE						0x30//stack release 3.0
 #define STACK_BUILD							0x01//stack build 01
 #define HARDWARE_REV                        0x01
@@ -51,11 +51,11 @@
 	#define ZCL_BASIC_MFG_NAME          {6,'D','o','c','L','a','b'}
 #endif
 #ifndef ZCL_BASIC_MODEL_ID
-	#define ZCL_BASIC_MODEL_ID          {12,'F','i','x','e','d','_','T','S','0','0','4','1'}
+	#define ZCL_BASIC_MODEL_ID          {20,'F','i','x','e','d','_','Z','B','W','S','0','1','A','_','T','S','0','0','4','1'}
 #endif
-#ifndef ZCL_BASIC_DATE_CODE
-	#define ZCL_BASIC_DATE_CODE    {8,'2','0','2','2','0','5','0','8'}
-#endif
+//#ifndef ZCL_BASIC_DATE_CODE
+//	#define ZCL_BASIC_DATE_CODE    {8,'2','0','2','2','0','5','0','8'}
+//#endif
 #ifndef ZCL_BASIC_LOC_DESC
 	#define ZCL_BASIC_LOC_DESC     {7,'U','N','K','N','O','W','N'}
 #endif

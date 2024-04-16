@@ -160,11 +160,25 @@ extern "C" {
 #define ZCL_GROUP_SUPPORT							1
 #define ZCL_OTA_SUPPORT								1
 #define ZCL_POWER_CFG_SUPPORT                       1
+#define ZCL_POLL_CTRL_SUPPORT						1
+
 #if TOUCHLINK_SUPPORT
 #define ZCL_ZLL_COMMISSIONING_SUPPORT				1
 #endif
 #define MY_OTA_PERIODIC_QUERY_INTERVAL (12*60*60U) //seconds
 
+/**********************************************************************
+ * ZCL defaults setting
+ */
+
+/* POLL CONTROL defaults */
+/* default values from ZCL 7 */
+#define POLL_CTL_DEFAULT_CHECKIN_INTERVAL           0x3840  // 1 hour
+#define POLL_CTL_DEFAULT_LONG_POLL_INTERVAL         0x14    // 5 sec
+#define POLL_CTL_DEFAULT_SHORT_POLL_INTERVAL        0x02    // 2 qs = 0.5 sec
+#define POLL_CTL_DEFAULT_FAST_POLL_INTERVAL         0x28    // 10 sec
+
+#define POLL_CTL_DEFAULT_BATTERY_CHECK_INTERVAL     5000    // 5s, in milliseconds
 /**********************************************************************
  * Stack configuration
  */

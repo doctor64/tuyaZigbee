@@ -34,6 +34,7 @@
 #include "tuyaSwitch.h"
 #include "app_ui.h"
 
+#include "zcl_sensorControl.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -181,6 +182,10 @@ static void tuyaSwitch_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd
 				tuyaSwitch_zclCheckInStart();
 				return;
 			}
+			if(attr[i].attrID == ZCL_ATTRID_SC_BATTERY_VOLTAGE_RATE){
+				tuyaSwitch_zclBatterySensorRate();
+				return;
+			}			
 		}
 	}
 #endif
@@ -699,11 +704,12 @@ s32 tuyaSwitch_zclCheckInTimerCb(void *arg)
 
 void tuyaSwitch_zclCheckInStart(void)
 {
+	printf("zclCheckInStart1\n");
 	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, TUYA_SWITCH_ENDPOINT)){
 		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 		if(!zclCheckInTimerEvt){
-printf("timer9 start \n");
+//printf("timer9 start \n");
 			zclCheckInTimerEvt = TL_ZB_TIMER_SCHEDULE(tuyaSwitch_zclCheckInTimerCb, NULL, pPollCtrlAttr->chkInInterval * POLL_RATE_QUARTERSECONDS);
 			
 			if(pPollCtrlAttr->chkInInterval){
@@ -848,5 +854,25 @@ status_t tuyaSwitch_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void 
 }
 #endif	/* ZCL_POLL_CTRL */
 
+void tuyaSwitch_zclBatterySensorRate(void)
+{
+	printf("tuyaSwitch_zclLightBatteryRate\n");
+	//if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, CONTACT_SENSOR_ENDPOINT)){
+		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
+
+		// if battery check timer already running, stop it
+		if (g_switchAppCtx.timerBattEvt){
+			printf("Cancel light sensor timer\n");
+			TL_ZB_TIMER_CANCEL(&g_switchAppCtx.timerBattEvt);
+		}
+
+
+		if(!g_switchAppCtx.timerBattEvt){
+			printf("tuyaSwitch_zclLightBatteryRate time 0x%x %x 1/4 s\n", (u16)((pPollCtrlAttr->chkBattInterval &0xffff0000)>>16), (u16)(pPollCtrlAttr->chkBattInterval&0xffff));
+			g_switchAppCtx.timerBattEvt = TL_ZB_TIMER_SCHEDULE(battVoltageCb, NULL, pPollCtrlAttr->chkBattInterval);
+
+		}
+//	}
+}
 
 #endif  /* __PROJECT_TL_SWITCH__ */

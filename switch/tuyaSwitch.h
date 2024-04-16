@@ -71,7 +71,7 @@ typedef struct{
 	u8	hwVersion;
 	u8	manuName[ZCL_BASIC_MAX_LENGTH];
 	u8	modelId[ZCL_BASIC_MAX_LENGTH];
-	u8  dateCode[ZCL_BASIC_MAX_LENGTH];
+	//u8  dateCode[ZCL_BASIC_MAX_LENGTH];
 	u8	powerSource;
 	u8  genDevClass;                        //attr 8
 	u8  genDevType;                         //attr 9
@@ -110,6 +110,8 @@ typedef struct{
 	u16	shortPollInterval;
 	u16	fastPollTimeout;
 	u16	fastPollTimeoutMax;
+
+	u32 chkBattInterval;
 }zcl_pollCtrlAttr_t;
 
 /**********************************************************************
@@ -142,6 +144,8 @@ status_t tuyaSwitch_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void 
 status_t tuyaSwitch_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t tuyaSwitch_sceneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t tuyaSwitch_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
+void tuyaSwitch_zclCheckInStart(void);
+void tuyaSwitch_zclBatterySensorRate(void);
 
 void tuyaSwitch_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void tuyaSwitch_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);

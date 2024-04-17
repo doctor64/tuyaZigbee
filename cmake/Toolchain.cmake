@@ -80,6 +80,18 @@ function(add_ota_target TARGET TOOLS_PATH)
     )
 endfunction()
 
+function(add_tuya_ota_target TARGET TOOLS_PATH CODE TYPE VERSION)
+    if(EXECUTABLE_OUTPUT_PATH)
+      set(FILENAME "${EXECUTABLE_OUTPUT_PATH}/${TARGET}")
+    else()
+      set(FILENAME "${TARGET}")
+    endif()
+    add_custom_target("${TARGET}.tuya.zigbee" ALL
+        DEPENDS ${TARGET}.bin
+        COMMAND ${Python3_EXECUTABLE} ${TOOLS_PATH}/make_ota.py -c ${CODE} -t ${TYPE} -v ${VERSION} ${FILENAME}.bin
+    )
+endfunction()
+
 function(print_size_of_targets TARGET)
     if(EXECUTABLE_OUTPUT_PATH)
       set(FILENAME "${EXECUTABLE_OUTPUT_PATH}/${TARGET}")

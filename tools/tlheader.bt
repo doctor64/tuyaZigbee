@@ -1,0 +1,26 @@
+//------------------------------------------------
+//--- 010 Editor v14.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct TL_HEADER {
+    uint16 reset;
+    uint32 file_version;
+    uint16 unk1;
+    char magic[4];
+    uint32 addr_bin_code;
+    uint16 irq;     // 0x10
+    uint16 manuf_code; //0x12
+    uint16 image_type;
+    uint16 dummy1;
+    uint32 bin_size;
+    uint32 dummy2;
+    } tl_header;
+    

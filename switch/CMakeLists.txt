@@ -15,6 +15,7 @@ ADD_DEFINITIONS(
     -DMCU_CORE_${TELINK_PLATFORM}=1
     -DMCU_STARTUP_${TELINK_PLATFORM}=1
     -D__PROJECT_TL_SWITCH__=1
+    -DBUILD_ZBWS01A=1
     -DMIMIC_HEIMAN=${MIMIC_HEIMAN}
 )
 
@@ -152,6 +153,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/os/ev_timer.c
 
     ${SDK_PREFIX}/apps/common/main.c
+
+    ${SDK_PREFIX}/zigbee/common/zb_version.c
 )
 
 

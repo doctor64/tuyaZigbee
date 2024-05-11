@@ -28,6 +28,8 @@
 /**********************************************************************
  * INCLUDES
  */
+#include "../common/comm_cfg.h"
+
 #include "tl_common.h"
 #include "zb_api.h"
 #include "zcl_include.h"

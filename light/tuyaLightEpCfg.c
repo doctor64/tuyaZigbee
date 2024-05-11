@@ -31,6 +31,7 @@
 #include "tl_common.h"
 #include "zcl_include.h"
 #include "tuyaLight.h"
+#include "timestamp.h"
 
 
 /**********************************************************************
@@ -179,7 +180,7 @@ zcl_basicAttr_t g_zcl_basicAttrs =
 	.hwVersion		= HARDWARE_REV,
 	.manuName		= ZCL_BASIC_MFG_NAME,
 	.modelId		= ZCL_BASIC_MODEL_ID,
-	.dateCode       = ZCL_BASIC_DATE_CODE,
+//	.dateCode       = ZCL_BASIC_DATE_CODE,
 	.powerSource	= POWER_SOURCE_DC,
 	.genDevClass    = 0x00,  //Lightning
 	.genDevType     = 0x07,  //LED Strip
@@ -195,6 +196,7 @@ const zclAttrInfo_t basic_attrTbl[] =
 	{ ZCL_ATTRID_BASIC_HW_VER,       		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.hwVersion},
 	{ ZCL_ATTRID_BASIC_MFR_NAME,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.manuName},
 	{ ZCL_ATTRID_BASIC_MODEL_ID,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.modelId},
+	{ ZCL_ATTRID_BASIC_DATE_CODE,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)&build_time_str},//g_zcl_basicAttrs.dateCode},
 	{ ZCL_ATTRID_BASIC_POWER_SOURCE, 		ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.powerSource},
 	{ ZCL_ATTRID_BASIC_GENEIC_DEVICE_CLASS, ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,                        (u8*)&g_zcl_basicAttrs.genDevClass},
 	{ ZCL_ATTRID_BASIC_GENEIC_DEVICE_TYPE,  ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,                        (u8*)&g_zcl_basicAttrs.genDevType},

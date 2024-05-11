@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file    board_ZG-102ZL.h
  *
- * @brief   This is the header file for board_ZG-102ZL contact sensor with light
+ * @brief   This is the header file for board_ZG-102ZL contact sensor with light sensor
  *
  * @author  Zigbee Group
  * @date    2021
@@ -30,6 +30,23 @@
 extern "C" {
 #endif
 
+/* Debug mode config */
+#define	UART_PRINTF_MODE				1
+#define USB_PRINTF_MODE         		0
+//#define BAUDRATE 						1000000//1M
+
+//zigbee model id
+#define ZCL_BASIC_MODEL_ID          {14,'F','i','x','e','d','_','Z','G','-','1','0','2','Z','L'}
+
+#define HARDWARE_REV                        0x01
+
+//OTA image type, define device type
+#ifdef BUILD_BOOTLOADER
+#define IMAGE_TYPE                          ((CHIP_TYPE << 8) | IMAGE_TYPE_BOOTLOADER) //0x03FF
+#else
+#define IMAGE_TYPE                          ((CHIP_TYPE << 8) | IMAGE_TYPE_IASZONE_SENSOR_ZG102ZL) //0x03B1
+#endif
+
 // BUTTON
 // Net Key button
 #define	BUTTON1 					GPIO_PD2
@@ -37,6 +54,8 @@ extern "C" {
 #define PD2_OUTPUT_ENABLE			0
 #define PD2_INPUT_ENABLE			1
 #define	PULL_WAKEUP_SRC_PD2			PM_PIN_PULLUP_10K
+#define PM_WAKEUP_LEVEL_BUTTON1     PM_WAKEUP_LEVEL_LOW
+#define HAVE_NET_BUTTON             1
 
 // contact sensor
 #define	BUTTON2 					GPIO_PB4
@@ -44,6 +63,7 @@ extern "C" {
 #define PB4_OUTPUT_ENABLE			0
 #define PB4_INPUT_ENABLE			1
 #define	PULL_WAKEUP_SRC_PB4			PM_PIN_PULLUP_10K
+#define PM_WAKEUP_LEVEL_BUTTON2     PM_WAKEUP_LEVEL_LOW
 
 //LED
 #define LED1						GPIO_PB5
@@ -52,12 +72,11 @@ extern "C" {
 #define PB5_INPUT_ENABLE			0
 //to disable led blink on wake, led off with 1
 #define PB5_DATA_OUT                1
-
 //have LEDs active low
 #define LED_ON						0//1
 #define LED_OFF						1//0
-
-#define	PM_WAKEUP_LEVEL		  		PM_WAKEUP_LEVEL_LOW
+#define HAVE_1_LED                  1
+#define LED_POWER                   LED1
 
 #define LIGHT_SENSOR_DRIVER			GPIO_PC2
 #define PC2_FUNC					AS_GPIO
@@ -75,16 +94,6 @@ extern "C" {
 // Send OnOf commands on sensor actions
 #define HAVE_ONOFF_SEND				1
 
-// #define PC3_FUNC					AS_GPIO
-// #define PC3_OUTPUT_ENABLE			1
-// #define PC3_INPUT_ENABLE			0
-// #define PC3_DATA_OUT                1
-// #define PC1_FUNC					AS_GPIO
-// #define PC1_OUTPUT_ENABLE			1
-// #define PC1_INPUT_ENABLE			0
-// #define PC1_DATA_OUT                1
-
-
 // UART
 #if ZBHCI_UART
 	#error please configurate uart PIN!!!!!!
@@ -95,10 +104,8 @@ extern "C" {
 	#define	DEBUG_INFO_TX_PIN	    GPIO_PB1 //print
 #endif
 
-enum{
-	VK_SW1 = 0x01,
-	VK_SW2 = 0x02
-};
+#define  VK_SW1  0x01
+#define  VK_SW2  0x02
 
 #define	KB_MAP_NORMAL	{\
 		{VK_SW1,}, \
@@ -109,7 +116,6 @@ enum{
 
 #define KB_DRIVE_PINS  {NULL }
 #define KB_SCAN_PINS   {BUTTON1,  BUTTON2}
-
 
 /* Disable C linkage for C++ Compilers: */
 #if defined(__cplusplus)

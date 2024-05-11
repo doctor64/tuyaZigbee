@@ -15,6 +15,7 @@ ADD_DEFINITIONS(
     -DMCU_CORE_${TELINK_PLATFORM}=1
     -DMCU_STARTUP_${TELINK_PLATFORM}=1
     -D__PROJECT_TL_CONTACT_SENSOR__=1
+    -DBUILD_ZG102ZL=1
     -DMIMIC_HEIMAN=${MIMIC_HEIMAN}
 )
 
@@ -154,6 +155,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/apps/common/main.c
 
     ${PROJECT_SOURCE_DIR}/common/zcl_onoffSwitchCfg.c
+
+    ${SDK_PREFIX}/zigbee/common/zb_version.c
 )
 
 

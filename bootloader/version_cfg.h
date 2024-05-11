@@ -25,25 +25,23 @@
 
 #pragma once
 
-#include "../common/comm_cfg.h"
+
 #include "../common/version.h"
+#include "../common/comm_cfg.h"
 
 /*********************************************************************************************
  * During OTA upgrade, the upgraded device will check the rules of the following three fields.
  * Refer to ZCL OTA specification for details.
  */
-
-// Note it is not real Telink ID, just to make SDK happy
-//#define MANUFACTURER_CODE_TELINK             0x6464 // updated manuf code //0x1141//Telink ID
-
-//#define    IMAGE_TYPE                        0xD3A3 //for tuya OTA
-//#define    FILE_VERSION                      ((APP_RELEASE << 24) | (APP_BUILD << 16) | (STACK_RELEASE << 8) | STACK_BUILD)
-//#define    FILE_VERSION                      0xff //for tuya ota
-                                              //0x10023001
-
-//#define	IMAGE_TYPE							((CHIP_TYPE << 8) | IMAGE_TYPE_SWITCH_0041) //0x3a1
+//#define MANUFACTURER_CODE_TELINK           	0x1141//Telink ID
+//#define	IMAGE_TYPE							((CHIP_TYPE << 8) | IMAGE_TYPE_BOOTLOADER)
+//#define	FILE_VERSION					  	((APP_RELEASE << 24) | (APP_BUILD << 16) | (STACK_RELEASE << 8) | STACK_BUILD)
 
 /* Pre-compiled link configuration. */
-#define IS_BOOT_LOADER_IMAGE				0
-#define RESV_FOR_APP_RAM_CODE_SIZE			0
-#define IMAGE_OFFSET						APP_IMAGE_ADDR
+#define IS_BOOT_LOADER_IMAGE				1
+#define RESV_FOR_APP_RAM_CODE_SIZE			0x2000
+#define IMAGE_OFFSET						BOOT_LOADER_IMAGE_ADDR
+
+#if !defined(BOOT_LOADER_MODE) || (BOOT_LOADER_MODE == 0)
+	#error "Please define BOOT_LOADER_MODE = 1"
+#endif

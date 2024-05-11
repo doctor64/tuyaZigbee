@@ -1,7 +1,7 @@
 /********************************************************************************************************
- * @file    version_cfg.h
+ * @file    bootloader.h
  *
- * @brief   This is the header file for version_cfg
+ * @brief   This is the header file for bootloader
  *
  * @author  Zigbee Group
  * @date    2021
@@ -23,20 +23,11 @@
  *
  *******************************************************************************************************/
 
-#pragma once
+#ifndef _BOOTLOADER_H_
+#define _BOOTLOADER_H_
 
-#include "../common/comm_cfg.h"
-#include "../common/version.h"
 
-/*********************************************************************************************
- * During OTA upgrade, the upgraded device will check the rules of the following three fields.
- * Refer to ZCL OTA specification for details.
- */
-//#define MANUFACTURER_CODE_TELINK           	0x1141//Telink ID
-//#define	IMAGE_TYPE							((CHIP_TYPE << 8) | IMAGE_TYPE_CONTACT_SENSOR_0601)
-//#define	FILE_VERSION					  	((APP_RELEASE << 24) | (APP_BUILD << 16) | (STACK_RELEASE << 8) | STACK_BUILD)
+void bootloader_init(bool isBoot);
+void bootloader_loop(void);
 
-/* Pre-compiled link configuration. */
-#define IS_BOOT_LOADER_IMAGE				0
-#define RESV_FOR_APP_RAM_CODE_SIZE			0
-#define IMAGE_OFFSET						APP_IMAGE_ADDR
+#endif	/* _BOOTLOADER_H_ */

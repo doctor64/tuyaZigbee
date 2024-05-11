@@ -55,7 +55,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         cmake . -G "Ninja" -B build
-        cmake --build build
+        cmake --build build -j 1
 
     - name: Build (Linux)
       if: matrix.os == 'ubuntu-latest'

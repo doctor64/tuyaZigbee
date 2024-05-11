@@ -109,7 +109,7 @@
 
 #define IMAGE_TYPE_SWITCH_ZBWS01A           (0x21 | (IMAGE_TYPE_BOOT_FLAG << 7))
 
-#define IMAGE_TYPE_CONTACT_SENSOR_0601      (0x31 | (IMAGE_TYPE_BOOT_FLAG << 7))
+#define IMAGE_TYPE_IASZONE_SENSOR_ZG102ZL   (0x31 | (IMAGE_TYPE_BOOT_FLAG << 7))
 
 /* Board ID */
 #define BOARD_826x_EVK                       0
@@ -198,7 +198,7 @@
 #elif (BOARD == BOARD_8258_TUYA_LIGHT_STRIP_TS0501B)
     #include "../device_config/light_ts0501b.h"
 #elif (BOARD == BOARD_8258_TUYA_DOOR_SENSOR_ZG102ZL)
-    #include "../device_config/sensor_zg102zl.h"
+    #include "../device_config/iaszone_zg102zl.h"
 
 #else
     #error "Board is undefined"

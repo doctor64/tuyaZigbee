@@ -39,9 +39,6 @@ extern "C" {
 /**********************************************************************
  * Product Information
  */
-/* Debug mode config */
-#define	UART_PRINTF_MODE				0
-#define USB_PRINTF_MODE         		0
 
 /* HCI interface */
 #define	ZBHCI_UART						0
@@ -53,65 +50,6 @@ extern "C" {
 /* BDB */
 #define TOUCHLINK_SUPPORT				1
 #define FIND_AND_BIND_SUPPORT			0
-
-/* Board ID */
-#define BOARD_826x_EVK					0
-#define BOARD_826x_DONGLE				1
-#define BOARD_8258_EVK					2
-#define BOARD_8258_EVK_V1P2				3//C1T139A30_V1.2
-#define BOARD_8258_DONGLE				4
-#define BOARD_8278_EVK					5
-#define BOARD_8278_DONGLE				6
-#define BOARD_B91_EVK					7
-#define BOARD_B91_DONGLE				8
-#define BOARD_8258_TUYA_LIGHT           9
-
-/* Board define */
-#if defined(MCU_CORE_826x)
-	#define BOARD						BOARD_826x_DONGLE
-	#define CLOCK_SYS_CLOCK_HZ  		32000000
-#elif defined(MCU_CORE_8258)
-#if (CHIP_TYPE == TLSR_8258_1M)
-	#define FLASH_CAP_SIZE_1M			1
-#endif
-	#define BOARD						BOARD_8258_TUYA_LIGHT //BOARD_8258_DONGLE//BOARD_8258_EVK
-    //#warning("Tuya board")
-	#define CLOCK_SYS_CLOCK_HZ  		48000000
-#elif defined(MCU_CORE_8278)
-	#define FLASH_CAP_SIZE_1M			1
-	#define BOARD						BOARD_8278_DONGLE//BOARD_8278_EVK
-	#define CLOCK_SYS_CLOCK_HZ  		48000000
-#elif defined(MCU_CORE_B91)
-	#define FLASH_CAP_SIZE_1M			1
-	#define BOARD						BOARD_B91_DONGLE//BOARD_B91_EVK
-	#define CLOCK_SYS_CLOCK_HZ  		48000000
-#else
-	#error "MCU is undefined!"
-#endif
-
-/* Board include */
-#if (BOARD == BOARD_826x_EVK)
-	#include "board_826x_evk.h"
-#elif(BOARD == BOARD_826x_DONGLE)
-	#include "board_826x_dongle.h"
-#elif(BOARD == BOARD_8258_DONGLE)
-	#include "board_8258_dongle.h"
-#elif(BOARD == BOARD_8258_EVK)
-	#include "board_8258_evk.h"
-#elif (BOARD == BOARD_8258_EVK_V1P2)
-	#include "board_8258_evk_v1p2.h"
-#elif(BOARD == BOARD_8278_EVK)
-	#include "board_8278_evk.h"
-#elif(BOARD == BOARD_8278_DONGLE)
-	#include "board_8278_dongle.h"
-#elif (BOARD == BOARD_B91_EVK)
-	#include "board_b91_evk.h"
-#elif (BOARD == BOARD_B91_DONGLE)
-	#include "board_b91_dongle.h"
-#elif(BOARD == BOARD_8258_TUYA_LIGHT)
-	#include "board_tuya_W.h"
-
-#endif
 
 
 /* Voltage detect module */

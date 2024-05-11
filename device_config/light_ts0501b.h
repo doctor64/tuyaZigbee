@@ -1,8 +1,8 @@
 /********************************************************************************************************
- * @file    board_tuya_W.h
+ * @file    light_ts0501B.h
  * TyYa TS0501B _TZ3210_9q49basr
  *
- * @brief   This is the header file for board_8258_evk
+ * @brief   This is the header file for light_ts0501B
  *
  * @author  Zigbee Group
  * @date    2021
@@ -31,6 +31,21 @@
 extern "C" {
 #endif
 
+/* Debug mode config */
+#define	UART_PRINTF_MODE				1
+#define USB_PRINTF_MODE         		0
+//#define BAUDRATE 						1000000//1M
+
+#define ZCL_BASIC_MODEL_ID          {13,'F','i','x','e','d','_','T','S','0','5','0','1','B'} //TS0501B - CW
+
+#define HARDWARE_REV                0x01
+
+//OTA image type, define device type
+#ifdef BUILD_BOOTLOADER
+#define IMAGE_TYPE                          ((CHIP_TYPE << 8) | IMAGE_TYPE_BOOTLOADER) //0x03FF
+#else
+#define IMAGE_TYPE                          ((CHIP_TYPE << 8) | IMAGE_TYPE_LIGHT_0501B ) //0x0391
+#endif
 
 // BUTTON
 #define BUTTON1               GPIO_PC0
@@ -38,6 +53,7 @@ extern "C" {
 #define PC0_OUTPUT_ENABLE	  0
 #define PC0_INPUT_ENABLE	  1
 #define	PULL_WAKEUP_SRC_PC0	  PM_PIN_PULLUP_10K
+#define HAVE_NET_BUTTON             1
 
 #define BUTTON2               GPIO_PD4
 #define PD4_FUNC			  AS_GPIO
@@ -114,7 +130,8 @@ extern "C" {
 #define PD2_OUTPUT_ENABLE			1
 #define PD2_INPUT_ENABLE			0*/
 
-#define LED_POWER					NULL
+#define LED_POWER                   LED_CW
+//#define LED_POWER					NULL
 #define LED_PERMIT					NULL
 
 
@@ -128,11 +145,8 @@ extern "C" {
 	#define	DEBUG_INFO_TX_PIN	    GPIO_PC7//print
 #endif
 
-
-enum{
-	VK_SW1 = 0x01,
-	VK_SW2 = 0x02
-};
+#define  VK_SW1  0x01
+#define  VK_SW2  0x02
 
 #define	KB_MAP_NORMAL	{\
 		{VK_SW1,}, \

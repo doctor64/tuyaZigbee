@@ -155,6 +155,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/os/ev_timer.c
 
     ${SDK_PREFIX}/apps/common/main.c
+
+    ${SDK_PREFIX}/zigbee/common/zb_version.c
 )
 
 

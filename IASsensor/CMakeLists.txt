@@ -154,6 +154,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/apps/common/main.c
 
     ${PROJECT_SOURCE_DIR}/common/zcl_onoffSwitchCfg.c
+
+    ${SDK_PREFIX}/zigbee/common/zb_version.c
 )
 
 

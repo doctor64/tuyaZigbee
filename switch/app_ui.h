@@ -26,6 +26,8 @@
 #ifndef _APP_UI_H_
 #define _APP_UI_H_
 
+#include "../common/comm_cfg.h"
+
 /**********************************************************************
  * CONSTANT
  */

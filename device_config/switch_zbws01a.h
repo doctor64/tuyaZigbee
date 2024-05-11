@@ -1,10 +1,10 @@
 /********************************************************************************************************
- * @file    board_ts_0041.h
+ * @file    switch_zbws01a.h
  *
- * @brief   This is the header file for board TS0041 - Lonsonho switch Model ZBWS01A
+ * @brief   Board definition for tuya TS0041 - Lonsonho switch Model ZBWS01A
  *
- * @author  Zigbee Group
- * @date    2021
+ * @author  doctor64
+ * @date    2024
  *
  * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
@@ -29,14 +29,36 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
+//#include "app_cfg.h"
 
-// BUTTON
+/* Debug mode config */
+#define	UART_PRINTF_MODE				1
+#define USB_PRINTF_MODE         		0
+//#define BAUDRATE 						1000000//1M
+
+
+//zigbee model id
+#define ZCL_BASIC_MODEL_ID          {20,'F','i','x','e','d','_','Z','B','W','S','0','1','A','_','T','S','0','0','4','1'}
+
+//
+#define HARDWARE_REV                0x01
+
+//OTA image type, define device type
+#ifdef BUILD_BOOTLOADER
+#define IMAGE_TYPE                          ((CHIP_TYPE << 8) | IMAGE_TYPE_BOOTLOADER) //0x03FF
+#else
+#define IMAGE_TYPE                          ((CHIP_TYPE << 8) | IMAGE_TYPE_SWITCH_ZBWS01A) //0x03B1
+#endif
+
+// BUTTONS definition
 // Net Key button
 #define BUTTON1                     GPIO_PB5
 #define PB5_FUNC                    AS_GPIO
 #define PB5_OUTPUT_ENABLE           0
 #define PB5_INPUT_ENABLE            1
 #define PULL_WAKEUP_SRC_PB5         PM_PIN_PULLDOWN_100K//PM_PIN_UP_DOWN_FLOAT//PM_PIN_PULLUP_10K//PM_PIN_PULLDOWN_100K
+#define PM_WAKEUP_LEVEL_BUTTON1     PM_WAKEUP_LEVEL_HIGH
+#define HAVE_NET_BUTTON             1
 
 //SW2 button
 #define BUTTON2                     GPIO_PD2
@@ -44,21 +66,22 @@ extern "C" {
 #define PD2_OUTPUT_ENABLE           0
 #define PD2_INPUT_ENABLE            1
 #define PULL_WAKEUP_SRC_PD2         PM_PIN_PULLUP_10K
+#define PM_WAKEUP_LEVEL_BUTTON2     PM_WAKEUP_LEVEL_LOW
+#define HAVE_1_BUTTON               1
 
-// LED
+// LEDS definition
 #define LED1                        GPIO_PD4
 #define PD4_FUNC                    AS_GPIO
 #define PD4_OUTPUT_ENABLE           1
 #define PD4_INPUT_ENABLE            0
 //to disable led blink on wake, led off with 1
 #define PD4_DATA_OUT                1
-//TS0041 have LEDs active low
+//ZBWS01A TS0041 have LEDs active low
 #define LED_ON						0//1
 #define LED_OFF						1//0
+#define HAVE_1_LED                  1
+#define LED_POWER                   LED1
 
-
-
-#define PM_WAKEUP_LEVEL             PM_WAKEUP_LEVEL_LOW
 
 // UART
 #if ZBHCI_UART
@@ -70,11 +93,12 @@ extern "C" {
     #define DEBUG_INFO_TX_PIN       GPIO_PB1//print
 #endif
 
-
-enum{
-    VK_SW1 = 0x01,
-    VK_SW2 = 0x02
-};
+//enum{
+//    VK_SW1 = 0x01,
+//    VK_SW2 = 0x02
+//};
+#define  VK_SW1  0x01
+#define  VK_SW2  0x02
 
 #define KB_MAP_NORMAL   {\
         {VK_SW2,}, }

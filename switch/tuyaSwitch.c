@@ -28,6 +28,7 @@
 /**********************************************************************
  * INCLUDES
  */
+#include "../common/comm_cfg.h"
 #include "tl_common.h"
 #include "zb_api.h"
 #include "zcl_include.h"
@@ -125,11 +126,11 @@ bdb_commissionSetting_t g_bdbCommissionSetting = {
 drv_pm_pinCfg_t g_switchPmCfg[] = {
 	{
 		BUTTON1,//Net Key
-		PM_WAKEUP_LEVEL_HIGH
+		PM_WAKEUP_LEVEL_BUTTON1
 	},
 	{
 		BUTTON2,
-		PM_WAKEUP_LEVEL_LOW
+		PM_WAKEUP_LEVEL_BUTTON2
 	}
 };
 #endif

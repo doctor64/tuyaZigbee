@@ -127,11 +127,13 @@ static bool is_valid_fw_bootloader(u32 addr_fw){
 }
 
 void bootloader_with_ota_check(u32 addr_load, u32 new_image_addr){
+	printf("bootloader_with_ota_check addr_load:0x%x new_image_addr:0x%x \n", addr_load, new_image_addr);
 	drv_disable_irq();
 
 	if(new_image_addr != addr_load){
 		if(is_valid_fw_bootloader(new_image_addr)){
 			bool isNewImageValid = FALSE;
+			printf("Have new image at:0x%x\n", new_image_addr);
 
 			u32 bufCache[256/4];  //align-4
 			u8 *buf = (u8 *)bufCache;
@@ -143,6 +145,7 @@ void bootloader_with_ota_check(u32 addr_load, u32 new_image_addr){
 				s32 totalLen = fw_size - 4;
 				u32 wLen = 0;
 				u32 sAddr = new_image_addr;
+				printf("New image size 0x%x, maxsize 0x%x\n", fw_size, FLASH_OTA_IMAGE_MAX_SIZE);
 
 				u32 crcVal = 0;
 				flash_read(new_image_addr + fw_size - 4, 4, (u8 *)&crcVal);
@@ -161,10 +164,12 @@ void bootloader_with_ota_check(u32 addr_load, u32 new_image_addr){
 				if(curCRC == crcVal){
 					isNewImageValid = TRUE;
 				}
+				printf("CRC valid:%d, crc: 0x%x, expected crc: 0x%x\n", isNewImageValid, curCRC, crcVal);
 			}
 
 			if(isNewImageValid){
 				u8 readBuf[256];
+				printf("Copy updated image:");
 
 				for(int i = 0; i < fw_size; i += 256){
 					if((i & 0xfff) == 0){
@@ -176,17 +181,25 @@ void bootloader_with_ota_check(u32 addr_load, u32 new_image_addr){
 
 					flash_read(addr_load + i, 256, readBuf);
 					if(memcmp(readBuf, buf, 256)){
+						printf("\nFlasing error!\n");
+						WaitMs(1000);
 						SYSTEM_RESET();
 					}
 
+#if defined(HAVE_2_LED)
 					gpio_toggle(LED_PERMIT);
+#elif defined(HAVE_1_LED)
+					gpio_toggle(LED_POWER);
+#endif
 				}
 			}
 
 			buf[0] = 0;
+			printf("Clear OTA flag\n");
 			flash_write(new_image_addr + FLASH_TLNK_FLAG_OFFSET, 1, buf);   //clear OTA flag
 
 			//erase the new firmware
+			printf("Erase new firmware\n");
 			for(int i = 0; i < ((fw_size + 4095)/4096); i++) {
 				flash_erase(new_image_addr + i*4096);
 			}
@@ -199,6 +212,7 @@ void bootloader_with_ota_check(u32 addr_load, u32 new_image_addr){
         flash_read(addr_load + 0x0c, 2, (u8 *)&ramcode_size);
         ramcode_size *= 16;
 
+        printf("RAM code size:0x%x, max ram code size:0x%x\n", ramcode_size, FW_RAMCODE_SIZE_MAX);
         if(ramcode_size > FW_RAMCODE_SIZE_MAX){
             ramcode_size = FW_RAMCODE_SIZE_MAX; // error, should not run here
         }
@@ -545,9 +559,14 @@ void bootloader_keyPressProc(void){
 
 
 void bootloader_init(bool isBoot){
+	printf("bootloader_init isBoot:%d \n", isBoot);
 	if(isBoot){
-		drv_gpio_write(LED_POWER, 1);
-		drv_gpio_write(LED_PERMIT, 1);
+#ifdef HAVE_1_LED
+		drv_gpio_write(LED_POWER, LED_ON);
+#endif
+#ifdef HAVE_2_LED
+		drv_gpio_write(LED_PERMIT, LED_ON);
+#endif
 
 #if UART_ENABLE
 		drv_enable_irq();
@@ -573,9 +592,14 @@ void bootloader_init(bool isBoot){
 }
 
 void bootloader_loop(void){
+	//printf("bootloader_loop\n");
 	if(noAppFlg){
+#ifdef HAVE_1_LED
 		gpio_toggle(LED_POWER);
+#endif
+#ifdef HAVE_2_LED
 		gpio_toggle(LED_PERMIT);
+#endif
 		WaitMs(100);
 	}
 }

@@ -60,17 +60,17 @@ A0 - LED4
 
 Resistor config
 K1     - Rs7 - C2
-K1     - Rs1 - B4
+K1     - Rs1 - B4  - set on 2 and 3 button switch
 K2, K5 - Rs2 - B4
-K2, K5 - Rs3 - D2  - set on 1 button switch
+K2, K5 - Rs3 - D2  - set on 1 and 3 button switch
 K3     - Rs4 - D2
-K3     - Rs5 - C2
+K3     - Rs5 - C2  - set on 2 and 3 button switch
 K3     - Rs6 - C3
 
 LED1       - Rs17 - C0
-LED1       - Rs11 - A0
+LED1       - Rs11 - A0 - set on 2 and 3 button switch
 LED2, LED5 - Rs12 - A0
-LED2, LED5 - Rs13 - D4 - set on 1 button switch
+LED2, LED5 - Rs13 - D4 - set on 1 and 3 button switch
 LED3       - Rs14 - D4
-LED3       - Rs15 - C0
+LED3       - Rs15 - C0 - set on 2 and 3 button switch
 LED3       - Rs16 - D7

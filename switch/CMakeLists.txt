@@ -138,7 +138,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/drivers/drv_gpio.c
     ${SDK_PREFIX}/proj/drivers/drv_hw.c
     ${SDK_PREFIX}/proj/drivers/drv_i2c.c
-    ${SDK_PREFIX}/proj/drivers/drv_keyboard.c
+    #use enhanced keyboard driver
+    #${SDK_PREFIX}/proj/drivers/drv_keyboard.c
     ${SDK_PREFIX}/proj/drivers/drv_nv.c
     ${SDK_PREFIX}/proj/drivers/drv_pm.c
     ${SDK_PREFIX}/proj/drivers/drv_putchar.c
@@ -188,7 +189,7 @@ LINK_DIRECTORIES(
 
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T${SDK_PREFIX}/platform/boot/${TELINK_PLATFORM}/boot_${TELINK_PLATFORM}.link")
 
-file( GLOB SOURCES1 *.c *.cpp *.h *.S common/*.c common/*.h custom_zcl/*.c custom_zcl/*.h )
+file( GLOB SOURCES1 *.c *.cpp *.h *.S ../common/*.c common/*.h custom_zcl/*.c custom_zcl/*.h )
 
 SET (SOURCES  ${SOURCES1} ${ZIGBEE_SRC})
 

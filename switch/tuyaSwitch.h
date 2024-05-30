@@ -26,6 +26,9 @@
 #ifndef _TUYA_SWITCH_H_
 #define _TUYA_SWITCH_H_
 
+#include "buttons.h"
+#include "types.h"
+#include "os/ev_timer.h"
 
 /**********************************************************************
  * CONSTANT
@@ -46,7 +49,7 @@ typedef struct{
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerBattEvt;
     u16 Vbat;		//current voltage
-	u32 keyPressedTime;
+	//u32 keyPressedTime;
 
 	u16 ledOnTime;
 	u16 ledOffTime;
@@ -56,7 +59,8 @@ typedef struct{
 	u8  state;
 
 	u8  keyPressed;
-	u8  btn1State;
+	//u8  btn1State;
+	button_t buttons[TOTAL_BUTTONS_NUM];
 
 	app_linkKey_info_t tcLinkKey;
 }app_ctx_t;

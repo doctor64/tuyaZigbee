@@ -69,6 +69,8 @@ extern "C" {
 #define PM_WAKEUP_LEVEL_BUTTON2     PM_WAKEUP_LEVEL_LOW
 #define HAVE_1_BUTTON               1
 
+#define TOTAL_BUTTONS_NUM           2
+
 // LEDS definition
 #define LED1                        GPIO_PD4
 #define PD4_FUNC                    AS_GPIO
@@ -93,23 +95,22 @@ extern "C" {
     #define DEBUG_INFO_TX_PIN       GPIO_PB1//print
 #endif
 
-//enum{
-//    VK_SW1 = 0x01,
-//    VK_SW2 = 0x02
-//};
+// Button codes starts from 0 and incremental
+#define  VK_NET  0x00
 #define  VK_SW1  0x01
-#define  VK_SW2  0x02
+
 
 #define KB_MAP_NORMAL   {\
-        {VK_SW2,}, }
-/*        {VK_SW1,}, \
-        {VK_SW2,}, }*/
+        {VK_NET,}, \
+        {VK_SW1,}, }
+
 
 #define KB_MAP_NUM      KB_MAP_NORMAL
 #define KB_MAP_FN       KB_MAP_NORMAL
 
 #define KB_DRIVE_PINS  {NULL }
-#define KB_SCAN_PINS   { BUTTON2}//{BUTTON1,  BUTTON2}
+#define KB_SCAN_PINS   { BUTTON1,  BUTTON2}
+#define KB_SCAN_LEVEL  {       1,        0}
 
 
 /* Disable C linkage for C++ Compilers: */

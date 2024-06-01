@@ -142,7 +142,7 @@ void light_blink_stop(void)
 
 void cmdSendReport()
 {
-	//printf("cmdSendReport\n");
+	printf("cmdSendReport\n");
     if(zb_isDeviceJoinedNwk()){
     	//light_blink_start(5, 500, 500);
         epInfo_t dstEpInfo;
@@ -169,7 +169,7 @@ void cmdSendReport()
 }
 void cmdToggle(void)
 {
-	// printf("cmdToggle\n");
+	printf("cmdToggle\n");
 	if(zb_isDeviceJoinedNwk())
 	{
 		//light_blink_start(1, 500, 0);
@@ -190,7 +190,7 @@ void cmdToggle(void)
 
 void cmdMoveOnOff(void)
 {
-	//printf("cmdMoveOnOff\n");
+	printf("cmdMoveOnOff\n");
 	if(zb_isDeviceJoinedNwk())
 	{
 		//static u8 lvl = 1;
@@ -232,10 +232,47 @@ void cmdMoveOnOff(void)
 		}
 	}
 }
+void cmdMove2Level(void)
+{
+    printf("cmdMove2Level\n");
+    if(zb_isDeviceJoinedNwk())
+    {
+        static u8 lvl = 1;
+        static bool dir = 1;
+
+        epInfo_t dstEpInfo;
+        TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+        //printf("cmdMoveOnOff fill addr\n");
+        /* fix for issue #21 - send report to binded only */
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT; /* send using data from binded table */
+        dstEpInfo.profileId = HA_PROFILE_ID;
+
+        moveToLvl_t move2Level;
+
+        move2Level.optPresent = 0;
+        move2Level.transitionTime = 0x0A;
+        move2Level.level = lvl;
+printf("level:%d\n", lvl);
+        zcl_level_move2levelCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, FALSE, &move2Level);
+
+        if (dir) {
+            lvl += 50;
+            if(lvl >= 250) {
+                dir = 0;
+            }
+        } else {
+            lvl -= 50;
+            if (lvl <= 1) {
+                dir = 1;
+            }
+        }
+    }
+}
 
 void cmdStopWithOnOff(void)
 {
-	//printf("cmdStop\n");
+	printf("cmdStop\n");
     if(zb_isDeviceJoinedNwk())  {
     	epInfo_t dstEpInfo;
         TL_SETSTRUCTCONTENT(dstEpInfo, 0);
@@ -269,34 +306,54 @@ s32 battVoltageCb(void *arg) {
 
 /*******************************************************************
  * @brief   Button click detect:
- *          SW1. keep press button1 3s === factory reset
- *          SW1. short press button1   === send report
- *          SW2. keep press button2 3s === send move (1st hold - up, 2nd hold - down)
- *          SW2. short press button2   === send toggle (on release)
+ *          NET. keep press button1 5s === factory reset
+ *          NET. short press button1   === send report
+ *          SW1. click button2 === send OnOff togle
+ *          SW1. keep press button2 3s === send Move (1st hold - up, 2nd hold - down)
+ *          SW1. release button2 after long press  === send Stop (on release)
  *
  */
 
 /**
  * @brief      Called on button long press
  *
- * @param[in]  btNum  The button number
+ * @param[in]  button  The button number
  */
-void buttonLongPress(u8 btNum) {
-    if(btNum == VK_NET) {
-    	printf("Button long pressed NET\n");
-        g_switchAppCtx.buttons[btNum].state = BUTTON_STATE_PRESSED_PROCESSED;
+void buttonLongPress(u8 button) {
+    printf("Long press button:%d\n", button);
+    if(button == VK_NET) {
+    	//printf("Button long pressed NET\n");
+        g_switchAppCtx.buttons[button].state = BUTTON_STATE_PRESSED_PROCESSED;
     	light_blink_stop();
     	light_blink_start(255, 300, 300);
         //g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
         zb_factoryReset();
         //not really sure it needed
         zb_resetDevice();
-    }else if(btNum == VK_SW1) {
-    	printf("Button long pressed SW1\n");
-        g_switchAppCtx.buttons[btNum].state = BUTTON_STATE_PRESSED_PROCESSED;
+    }else if(button == VK_SW1) {
+    	//printf("Button long pressed SW1\n");
+        g_switchAppCtx.buttons[button].state = BUTTON_STATE_PRESSED_PROCESSED;
     	light_blink_stop();
     	light_blink_start(255, 200, 200);
     	cmdMoveOnOff();
+    }
+}
+/**
+ * @brief      Called on button long press release
+ *
+ * @param[in]  button  The button
+ */
+void buttonLongRelease(u8 button) {
+    printf("Long press release button:%d\n", button);
+    g_switchAppCtx.buttons[button].state = BUTTON_STATE_IDLE;
+    g_switchAppCtx.buttons[button].count = 0;
+    if(button == VK_NET) {
+        //printf("Button long press NET release\n");
+        light_blink_stop();
+    }else if(button == VK_SW1) {
+        //printf("Button long pressed SW1 release\n");
+        cmdStopWithOnOff();
+        light_blink_stop();
     }
 }
 /**
@@ -306,40 +363,39 @@ void buttonLongPress(u8 btNum) {
  * @param[in]  count   The pressed count
  */
 void buttonClick(u8 button, u8 count) {
-    //if (count >= 1) { // at least one click 
-        printf("Button:%d clicked num:%d\n", button, count);
-        if(button == VK_NET) {
-            if (count == 1) {
-                printf("Button single click NET\n");
-                //light_blink_start(5,300,700);
-                cmdSendReport();
-            }
-        }else if(button == VK_SW1){
-            if (count == 1) {
-                printf("Button single click SW1\n");
-                //light_blink_start(1, 3000, 0);
-            }
+    printf("Button:%d clicked num:%d\n", button, count);
+    if(button == VK_NET) {
+        if (count == 1) {
+            //printf("Button single click NET\n");
+            light_blink_start(2,200,0);
+            cmdSendReport();
         }
-        light_blink_stop();
-    //}
+    }else if(button == VK_SW1){
+        if (count == 1) {
+            //printf("Button single click SW1\n");
+            light_blink_start(1, 300, 0);
+            cmdToggle();
+        } else if (count == 2) {
+            light_blink_start(2, 300, 100);
+            cmdMove2Level();
+        }
+    }
+    //light_blink_stop();
 }
 
-void buttonPressed(u8 btNum){
-    if(btNum == VK_NET){
-    	printf("Button pressed NET\n");
+void buttonPressed(u8 button) {
+    printf("Pressed button:%d\n", button);
+    if(button == VK_NET){
     	light_blink_start(5,300,700);
     	//cmdSendReport();
-    }else if(btNum == VK_SW1){
-    	printf("Button pressed SW1\n");
+    } else if(button == VK_SW1) {
     	light_blink_start(1, 3000, 0);
     }
 }
 
-void buttonClickCheck(u8 button) {
+void buttonReleaseCheck(u8 button) {
     g_switchAppCtx.buttons[button].state = BUTTON_STATE_IDLE;
-
     buttonClick(button, g_switchAppCtx.buttons[button].count);
-
     g_switchAppCtx.buttons[button].count = 0;
 }
 
@@ -349,56 +405,31 @@ void buttonClickCheck(u8 button) {
  * @param      kbEvt  The keyboard event
  */
 void keyScan_keyPressed(kb_data_t *kbEvt){
-    //u8 toNormal = 0;
-    u8 keyCode = kbEvt->keycode[0];
-    //static u8 lastKeyCode = 0xff;
+    u8 button = kbEvt->keycode[0];
 
-    //buttonPressed(keyCode);
-    
-    if (keyCode != 0xff) {
-        g_switchAppCtx.buttons[keyCode].press_time = clock_time();
-        g_switchAppCtx.buttons[keyCode].state = BUTTON_STATE_PRESSED;
-        g_switchAppCtx.buttons[keyCode].count++;
+    if (button != 0xff) {
+        g_switchAppCtx.buttons[button].press_time = clock_time();
+        g_switchAppCtx.buttons[button].state = BUTTON_STATE_PRESSED;
+        g_switchAppCtx.buttons[button].count++;
+        buttonPressed(button);
     }
 }
-
-//     if(keyCode == VK_NET){
-//         g_switchAppCtx.keyPressedTime = clock_time();
-//         g_switchAppCtx.state = APP_FACTORY_NEW_SET_CHECK;
-//     }
-//     if(keyCode == VK_SW1){
-//         g_switchAppCtx.keyPressedTime = clock_time();
-//         g_switchAppCtx.state = APP_STATE_HOLD_SW2;
-//     }
-// }
 
 /**
  * @brief      Process key releases
  *
  * @param[in]  keyCode  The key code
  */
-void keyScan_keyReleased(u8 keyCode) {
-    if (keyCode != 0xff) {
-        g_switchAppCtx.buttons[keyCode].release_time = clock_time();
-        g_switchAppCtx.buttons[keyCode].state = BUTTON_STATE_RELEASED;
+void keyScan_keyReleased(u8 button) {
+    if (button != 0xff) {
+        g_switchAppCtx.buttons[button].release_time = clock_time();
+        if (g_switchAppCtx.buttons[button].state == BUTTON_STATE_PRESSED_PROCESSED) { //Long press released
+            g_switchAppCtx.buttons[button].state = BUTTON_STATE_LONG_RELEASED;
+        } else {
+            g_switchAppCtx.buttons[button].state = BUTTON_STATE_RELEASED;
+        }
     }
 }
-// 	if((keyCode == VK_NET) && (g_switchAppCtx.state == APP_FACTORY_NEW_SET_CHECK))
-// 	{
-// 		light_blink_stop();
-// 	}
-// 	if((keyCode == VK_SW1) && (g_switchAppCtx.state == APP_STATE_HOLD_SW2))  {
-// 		cmdToggle();
-// 		light_blink_stop();
-// 	}
-
-//     if((keyCode == VK_SW1) && (g_switchAppCtx.state == APP_STATE_HOLD_PROCESSED_SW2))  {
-//     	cmdStopWithOnOff();
-//     	light_blink_stop();
-//     }
-
-//     g_switchAppCtx.state = APP_STATE_NORMAL;
-// }
 
 void app_key_handler(void){
     static u8 valid_keyCode = 0xff;
@@ -418,32 +449,25 @@ void app_key_handler(void){
             }
         }
         if (g_switchAppCtx.buttons[i].state == BUTTON_STATE_RELEASED) {
-            if (clock_time_exceed(g_switchAppCtx.buttons[i].press_time, BUTTON_RELEASE_TIME)){
-                buttonClickCheck(i);
+            if (clock_time_exceed(g_switchAppCtx.buttons[i].press_time, BUTTON_CLICK_CHECK_TIME)){
+                buttonReleaseCheck(i);
             }
+        }
+        if (g_switchAppCtx.buttons[i].state == BUTTON_STATE_LONG_RELEASED) {
+            buttonLongRelease(i);
         }
 
     }
-/*    if(g_switchAppCtx.state == APP_FACTORY_NEW_SET_CHECK){
-        if(clock_time_exceed(g_switchAppCtx.keyPressedTime, 5*1000*1000)){
-            buttonKeepPressed(VK_NET);
-        }
-    }
-    if(g_switchAppCtx.state == APP_STATE_HOLD_SW2){
-        if(clock_time_exceed(g_switchAppCtx.keyPressedTime, 3*1000*1000)){
-            buttonKeepPressed(VK_SW1);
-        }
-    }*/
     if(kb_scan_key(0, 1)){//if 1 keyboard update detected
         if(kb_event.cnt){ //number of keys currently pressed
-            printf("kb key pressed num:%d key code:0x%x\n", kb_event.cnt, kb_event.keycode[0]);
+            //printf("kb key pressed num:%d key code:0x%x\n", kb_event.cnt, kb_event.keycode[0]);
             g_switchAppCtx.keyPressed = 1;
             keyScan_keyPressed(&kb_event);
             if(kb_event.cnt == 1){
                 valid_keyCode = kb_event.keycode[0];
             }
         }else{
-            printf("key released key code:0x%x\n", valid_keyCode);
+            //printf("key released key code:0x%x\n", valid_keyCode);
             keyScan_keyReleased(valid_keyCode);
             valid_keyCode = 0xff;
             g_switchAppCtx.keyPressed = 0;

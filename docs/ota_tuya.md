@@ -1,15 +1,20 @@
 # OTA update over Tuya firmware
 Note: this method not work with all devices. It is works wit TS0041, but not work with TS0501B
 
+> This workflow uses the legacy TS0041 converters in `converters/legacy/`. They
+> depend on the zigbee2mqtt 1.x external-converter API and are not compatible
+> with current zigbee2mqtt 2.x releases. For devices already running this
+> firmware, use the `.mjs` converters in `converters/` instead.
+
 # How to update Tuya device (TS0041) with zigbee2mqtt
 
 ## Prepare for OTA
 1. Copy new converter for Tuya TS0041 to enable OTA operation.
-   - Copy `converters/ts0041.js` to your z2m data folder
+   - Copy `converters/legacy/ts0041.js` to your z2m data folder
    - Add converter to z2m configuration.yaml. In section `external_converters:` add line `  - ts0041.js`
-   - Repeat steps above to add converter for updated device, file `converters\Fixed_TS0041.js`
+   - Repeat steps above to add converter for updated device, file `converters/legacy/Fixed_TS0041.js`
 2. Copy OTA index file
-   - Copy Releases/TuyaOTA/TS0041/index.js to your z2m data folder
+   - Copy `Releases/TuyaOTA/TS0041/index.json` to your z2m data folder
    - Edit file configuration.yaml and add
 ```
 ota:

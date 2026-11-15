@@ -13,10 +13,11 @@ cmake . -B build
 
 ### Custom Toolchain and SDK
 ```bash
-cmake . -B build -DTOOLCHAIN_PREFIX=~/opt/tc32 -DSDK_PREFIX=~/opt/tl_zigbee_sdk
+cmake . -B build -DTOOLCHAIN_PREFIX=/opt/tc32 -DSDK_PREFIX=../telink_zigbee_sdk-3.7.2.0/tl_zigbee_sdk
 ```
 
 ## Perform Project Build
+Current target list: `bootloader`, `IASsensor`, `light`, `switch`.
 ```bash
-cmake --build build --target IASsensor.zigbee
+cmake --build build --target <target>
 ```

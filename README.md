@@ -13,8 +13,10 @@ Currently, implemented main code for following classes of devices:
 * More to come!
 
 After main code implemented, implementing new devices of same class usually much easier - only implementation specific hardware detail need to be added.  
-List of currently implemented devices [Supported](docs/devices.md)  
-List of work in progress devices [WIP](docs/devices-wip.md)
+List of currently implemented devices [Supported](docs/devices.md)<br>
+List of work in progress devices [WIP](docs/devices-wip.md)<br>
+Switch button behavior is documented in [devices.md](docs/devices.md#button-behavior).<br>
+zigbee2mqtt converters and latest setup notes are in [converters/README.md](converters/README.md).
 
 ## Is my device supported?
 Theoretically speaking, any device based on Telink zigbee chips can be supported. Practically, I worked only on TLSR8258 based devices.

@@ -52,10 +52,37 @@ All models use same PCB, different only populated components and mapping of keys
 ### How to join
 Long press on Net Key button
 
+### Button behavior
+
+ZBWS01A has two buttons: **Net Key** and **SW1** (the main button).
+
+| Action | Net Key | SW1 |
+|---|---|---|
+| Short click | Sends battery report; LED blinks once | Toggles bound lights; reports `single`; LED blinks once |
+| Double click | No command; LED blinks twice | Steps brightness by 50 and reverses at the ends; reports `double`; LED blinks twice |
+| Triple click | No command; LED blinks three times | Reports `triple` only; LED blinks three times |
+| Long press | After 5 s: factory reset, leaves the network; LED blinks 300 ms on/off while pressed | After 3 s: starts a brightness move (direction alternates); reports `hold`; LED blinks fast. Release stops the move and reports `release` |
+
+Click timing:
+
+- A click is confirmed 250 ms after release so double/triple clicks can be detected; wait for the confirmation blinks.
+- Presses shorter than 30 ms and presses within 50 ms after a release are ignored as bounce.
+- SW1 single/double/long-press commands are sent to bound devices. Without a binding, the light commands do nothing, but the action report is still sent to the coordinator.
+- Net Key multi-clicks are LED-only. Net Key long press is the factory reset.
+
+LED feedback:
+
+- Net Key press: 300 ms on / 300 ms off, starting immediately.
+- SW1 long press: 100 ms on / 100 ms off.
+- Click confirmation: one, two or three 250 ms on/off blinks, starting after the 250 ms detection window.
+- SW1 has no LED while pressed before the long-press threshold.
+
 ### Features and improvements
 - Binding
 - Short press on button send toggle command (switch binded light on/off)
 - Long press on button send move command, so light brightness a changed. Direction is switched on next press
+- Double click on button steps brightness; triple click reports the action
+- LED feedback for clicks and long presses
 - Short press on Net Key button send report with battery status
 - OTA updates
 - OTA update from Tuya firmware
@@ -66,7 +93,7 @@ Long press on Net Key button
 - [x] reporting
 - [x] OTA
 - [x] OTA update from Tuya firmware
-- [ ] Multiclick support
+- [x] Multiclick support
 
 ## Intruder Alarm System (IAS)
 | Name | Model | Photo | Zigbee Model | Zigbee Manufacturer | State | Links |

@@ -93,6 +93,9 @@ extern "C" {
 #define ZCL_OTA_SUPPORT								1
 #define ZCL_POWER_CFG_SUPPORT                       1
 #define ZCL_POLL_CTRL_SUPPORT						1
+//workaround for SDK bug
+//#define ZCL_MULTISTATE_INPUT_SUPPORT                1
+#define ZCL_MULTISTATE_INPUT                1
 
 #if TOUCHLINK_SUPPORT
 #define ZCL_ZLL_COMMISSIONING_SUPPORT				1

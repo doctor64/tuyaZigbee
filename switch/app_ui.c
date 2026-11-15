@@ -36,6 +36,9 @@
 #include "app_ui.h"
 #include "buttons.h"
 
+/* Detection timestamp of the most recently queued keyboard event. */
+extern u32 kb_event_time;
+
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -321,11 +324,16 @@ s32 battVoltageCb(void *arg) {
  */
 void buttonLongPress(u8 button) {
     printf("Long press button:%d\n", button);
+
+    if(button != VK_NET) {
+        // Other buttons show fast blink while the long press is active.
+        light_blink_stop();
+        light_blink_start(255, BUTTON_LED_LONG_ON_TIME, BUTTON_LED_LONG_OFF_TIME);
+    }
+
     if(button == VK_NET) {
     	//printf("Button long pressed NET\n");
         g_switchAppCtx.buttons[button].state = BUTTON_STATE_PRESSED_PROCESSED;
-    	light_blink_stop();
-    	light_blink_start(255, 300, 300);
         //g_switchAppCtx.state = APP_FACTORY_NEW_DOING;
         zb_factoryReset();
         //not really sure it needed
@@ -333,8 +341,7 @@ void buttonLongPress(u8 button) {
     }else if(button == VK_SW1) {
     	//printf("Button long pressed SW1\n");
         g_switchAppCtx.buttons[button].state = BUTTON_STATE_PRESSED_PROCESSED;
-    	light_blink_stop();
-    	light_blink_start(255, 200, 200);
+        reportAction(BUTTON_ACTION_PRESSED);
     	cmdMoveOnOff();
     }
 }
@@ -347,13 +354,14 @@ void buttonLongRelease(u8 button) {
     printf("Long press release button:%d\n", button);
     g_switchAppCtx.buttons[button].state = BUTTON_STATE_IDLE;
     g_switchAppCtx.buttons[button].count = 0;
-    if(button == VK_NET) {
-        //printf("Button long press NET release\n");
-        light_blink_stop();
-    }else if(button == VK_SW1) {
+
+    // Any button stops the long-press blink on release.
+    light_blink_stop();
+
+    if(button == VK_SW1) {
         //printf("Button long pressed SW1 release\n");
+        reportAction(BUTTON_ACTION_RELEASED);
         cmdStopWithOnOff();
-        light_blink_stop();
     }
 }
 /**
@@ -366,30 +374,39 @@ void buttonClick(u8 button, u8 count) {
     printf("Button:%d clicked num:%d\n", button, count);
     if(button == VK_NET) {
         if (count == 1) {
-            //printf("Button single click NET\n");
-            light_blink_start(2,200,0);
+            printf("Button single click NET\n");
             cmdSendReport();
         }
-    }else if(button == VK_SW1){
+        if (count == 2) {
+            printf("Button double click NET\n");
+        }
+     }else if(button == VK_SW1){
         if (count == 1) {
             //printf("Button single click SW1\n");
-            light_blink_start(1, 300, 0);
+            reportAction(BUTTON_ACTION_SINGLE);
             cmdToggle();
         } else if (count == 2) {
-            light_blink_start(2, 300, 100);
+            reportAction(BUTTON_ACTION_DOUBLE);
             cmdMove2Level();
+        } else if (count == 3) {
+            reportAction(BUTTON_ACTION_TRIPLE);
         }
+    }
+
+    if (count >= 1 && count <= 3) {
+        // Any button blinks once, twice or three times after click detection.
+        light_blink_stop();
+        light_blink_start(count, BUTTON_LED_CLICK_ON_TIME, BUTTON_LED_CLICK_OFF_TIME);
     }
     //light_blink_stop();
 }
 
 void buttonPressed(u8 button) {
     printf("Pressed button:%d\n", button);
-    if(button == VK_NET){
-    	light_blink_start(5,300,700);
-    	//cmdSendReport();
-    } else if(button == VK_SW1) {
-    	light_blink_start(1, 3000, 0);
+    light_blink_stop();
+    if(button == VK_NET) {
+        // NET starts blinking immediately while pressed.
+        light_blink_start(255, BUTTON_LED_NET_ON_TIME, BUTTON_LED_NET_OFF_TIME);
     }
 }
 
@@ -408,9 +425,24 @@ void keyScan_keyPressed(kb_data_t *kbEvt){
     u8 button = kbEvt->keycode[0];
 
     if (button != 0xff) {
-        g_switchAppCtx.buttons[button].press_time = clock_time();
-        g_switchAppCtx.buttons[button].state = BUTTON_STATE_PRESSED;
-        g_switchAppCtx.buttons[button].count++;
+        button_t *btn = &g_switchAppCtx.buttons[button];
+        u32 eventTime = kb_event_time ? kb_event_time : clock_time();
+
+        /* Ignore repeated press events while the key is already down. */
+        if (btn->state == BUTTON_STATE_PRESSED || btn->state == BUTTON_STATE_PRESSED_PROCESSED) {
+            return;
+        }
+
+        /* Ignore contact bounce immediately after a release. */
+        if ((btn->state == BUTTON_STATE_RELEASED) &&
+            ((u32)(eventTime - btn->release_time) <= BUTTON_DEBOUNCE_TIME)) {
+            printf("Ignored bounce press: button=%d sinceRelease=%d\n",
+                   button, (int)(u32)(eventTime - btn->release_time));
+            return;
+        }
+
+        btn->press_time = eventTime;
+        btn->state = BUTTON_STATE_PRESSED;
         buttonPressed(button);
     }
 }
@@ -422,12 +454,25 @@ void keyScan_keyPressed(kb_data_t *kbEvt){
  */
 void keyScan_keyReleased(u8 button) {
     if (button != 0xff) {
-        g_switchAppCtx.buttons[button].release_time = clock_time();
-        if (g_switchAppCtx.buttons[button].state == BUTTON_STATE_PRESSED_PROCESSED) { //Long press released
-            g_switchAppCtx.buttons[button].state = BUTTON_STATE_LONG_RELEASED;
-        } else {
-            g_switchAppCtx.buttons[button].state = BUTTON_STATE_RELEASED;
+        button_t *btn = &g_switchAppCtx.buttons[button];
+        u32 eventTime = kb_event_time ? kb_event_time : clock_time();
+
+        if (btn->state == BUTTON_STATE_PRESSED) {
+            if ((u32)(eventTime - btn->press_time) > BUTTON_MIN_PRESS_TIME) {
+                btn->count++;
+                btn->release_time = eventTime;
+                btn->state = BUTTON_STATE_RELEASED;
+            } else {
+                /* Too short: discard this as a bounce, keep any pending click. */
+                printf("Ignored short press: button=%d duration=%d\n",
+                       button, (int)(u32)(eventTime - btn->press_time));
+                btn->state = btn->count ? BUTTON_STATE_RELEASED : BUTTON_STATE_IDLE;
+            }
+        } else if (btn->state == BUTTON_STATE_PRESSED_PROCESSED) { //Long press released
+            btn->release_time = eventTime;
+            btn->state = BUTTON_STATE_LONG_RELEASED;
         }
+        /* Releases in other states are duplicates or bounce and are ignored. */
     }
 }
 
@@ -449,7 +494,8 @@ void app_key_handler(void){
             }
         }
         if (g_switchAppCtx.buttons[i].state == BUTTON_STATE_RELEASED) {
-            if (clock_time_exceed(g_switchAppCtx.buttons[i].press_time, BUTTON_CLICK_CHECK_TIME)){
+            /* Wait for a possible follow-up click before dispatching. */
+            if (clock_time_exceed(g_switchAppCtx.buttons[i].release_time, BUTTON_CLICK_CHECK_TIME)) {
                 buttonReleaseCheck(i);
             }
         }

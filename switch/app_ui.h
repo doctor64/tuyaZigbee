@@ -31,6 +31,13 @@
 /**********************************************************************
  * CONSTANT
  */
+// LED feedback timings, in milliseconds.
+#define BUTTON_LED_NET_ON_TIME         300
+#define BUTTON_LED_NET_OFF_TIME        300
+#define BUTTON_LED_CLICK_ON_TIME       250
+#define BUTTON_LED_CLICK_OFF_TIME      250
+#define BUTTON_LED_LONG_ON_TIME        100
+#define BUTTON_LED_LONG_OFF_TIME       100
 
 /**********************************************************************
  * TYPEDEFS
@@ -42,12 +49,12 @@ enum{
 	APP_STATE_HOLD_SW1,
 	APP_STATE_HOLD_PROCESSED_SW1
 };
-enum{
+/*enum{
 	BUTTON_RELEASED,
 	BUTTON_START_DEBOUNCE_PRESS,
 	BUTTON_START_DEBOUNCE_RELEASE,
 	BUTTON_PRESSED
-};
+};*/
 
 /**********************************************************************
  * FUNCTIONS

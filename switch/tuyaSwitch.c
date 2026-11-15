@@ -207,41 +207,56 @@ void led_init(void)
 	light_init();
 }
 
-void report_handler(void)
-{
-	if(zb_isDeviceJoinedNwk()){
-		if(zcl_reportingEntryActiveNumGet()){
-			u16 second = 1;//TODO: fix me
-
-			reportNoMinLimit();
-
-			//start report timer
-			reportAttrTimerStart(second);
-		}else{
+//void report_handler(void)
+//{
+//	if(zb_isDeviceJoinedNwk()){
+//		if(zcl_reportingEntryActiveNumGet()){
+//			u16 second = 1;//TODO: fix me
+//
+//			reportNoMinLimit();
+//
+//			//start report timer
+//			reportAttrTimerStart(second);
+//		}else{
 			//stop report timer
-			reportAttrTimerStop();
-		}
-	}
-}
+//			reportAttrTimerStop();
+//		}
+//	}
+//}
 
-void app_task(void)
-{
+//void app_task(void)
+//{
 	//get_battVoltage();
-	app_key_handler();
+//	app_key_handler();
 
-	if(bdb_isIdle()){
-		report_handler();
-#if PM_ENABLE
-		if((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt)){ //no key pressed and no led blink active
+//	if(bdb_isIdle()){
+//		report_handler();
+//#if PM_ENABLE
+//		if((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt)){ //no key pressed and no led blink active
 			//printf("Enter sleep\n");
 			//ev_timer_event_t *timerEvt = ev_timer_nearestGet();
 				//if(timerEvt){
 					//printf("Timer set for %d, cb %x\n", timerEvt->timeout, timerEvt->cb);
 				//}
-			drv_pm_lowPowerEnter();
-		}
+//			drv_pm_lowPowerEnter();
+//		}
+//#endif
+//	}
+//}
+void app_task(void)
+{
+    app_key_handler();
+
+    if (bdb_isIdle()) {
+        report_handler();
+
+#if PM_ENABLE
+        /* Stay awake during the click window and while an LED blink is active. */
+        if ((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt)) {
+            drv_pm_lowPowerEnter();
+        }
 #endif
-	}
+    }
 }
 
 static void tuyaSwitchSysException(void)

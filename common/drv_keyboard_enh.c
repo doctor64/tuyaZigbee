@@ -261,6 +261,10 @@ u32 kb_scan_row(int drv_ind, u8 *gpio){
 }
 
 u32 matrix_buff[4][ARRAY_SIZE(drive_pins)];
+// Detection timestamp for each queued matrix event (parallel to matrix_buff).
+static u32 matrix_time[4];
+// Detection timestamp of the event most recently popped from matrix_buff.
+u32 kb_event_time = 0;
 int	matrix_wptr, matrix_rptr;
 
 u32 kb_scan_key(int numlock_status, int read_key){
@@ -302,6 +306,8 @@ u32 kb_scan_key(int numlock_status, int read_key){
 			for(int k = 0; k < ARRAY_SIZE(drive_pins); k++){
 				*pd++ = pressed_matrix[k];
 			}
+			// Record the detection time, not the time the app processes the event.
+			matrix_time[matrix_wptr & 3] = clock_time();
 			matrix_wptr = (matrix_wptr + 1) & 7;
 			if( ((matrix_wptr - matrix_rptr) & 7) > 4 ){	//overwrite older data
 				matrix_rptr = (matrix_wptr - 4) & 7;
@@ -317,6 +323,8 @@ u32 kb_scan_key(int numlock_status, int read_key){
 			return 0;			//buffer empty, no data
 		}
 		pd = matrix_buff[matrix_rptr&3];
+		// Expose the detection time so app-level debounce ignores queue delays.
+		kb_event_time = matrix_time[matrix_rptr & 3];
 		matrix_rptr = (matrix_rptr + 1) & 7;
 
 		///////////////////////////////////////////////////////////////////

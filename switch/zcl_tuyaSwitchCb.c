@@ -37,6 +37,7 @@
 #include "app_ui.h"
 
 #include "zcl_sensorControl.h"
+#include "general/zcl_multistate_input.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -855,6 +856,64 @@ status_t tuyaSwitch_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void 
 	return status;
 }
 #endif	/* ZCL_POLL_CTRL */
+/*********************************************************************
+ * @fn      tuyaSwitch_multistateInputCb
+ *
+ * @brief   Handler for ZCL multistate input.
+ *
+ * @param   pAddrInfo
+ * @param   cmdId
+ * @param   cmdPayload
+ *
+ * @return  status_t
+ */
+status_t tuyaSwitch_multistateInputCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
+{
+//	if(cmdId == ZCL_CMD_BASIC_RESET_FAC_DEFAULT){
+		//Reset all the attributes of all its clusters to factory defaults
+		//zcl_nv_attr_reset();
+//	}
+
+	return ZCL_STA_SUCCESS;
+}
+
+/*********************************************************************
+ * @fn      reportAction
+ *
+ * @brief   Publish a Multistate Input action to the coordinator.
+ *
+ * @param   action - BUTTON_ACTION_* value
+ *
+ * @return  None
+ */
+void reportAction(u8 action)
+{
+//	if (!zb_isDeviceJoinedNwk()) {
+//		return;
+//	}
+
+	g_zcl_multistateInputAttrs.presentValue = action;
+	printf("reportAction: action=%d presentValue=%d\n", action, g_zcl_multistateInputAttrs.presentValue);
+
+	epInfo_t dstEpInfo;
+	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+	dstEpInfo.profileId = HA_PROFILE_ID;
+#if FIND_AND_BIND_SUPPORT
+	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+#else
+	dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+	dstEpInfo.dstEp = TUYA_SWITCH_ENDPOINT;
+	dstEpInfo.dstAddr.shortAddr = 0x0;
+#endif
+
+	zcl_sendReportCmd(TUYA_SWITCH_ENDPOINT, &dstEpInfo, TRUE,
+					  ZCL_FRAME_SERVER_CLIENT_DIR,
+					  ZCL_CLUSTER_GEN_MULTISTATE_INPUT_BASIC,
+					  ZCL_MULTISTATE_INPUT_ATTRID_PRESENT_VALUE,
+					  ZCL_DATA_TYPE_UINT16,
+					  (u8 *)&g_zcl_multistateInputAttrs.presentValue);
+}
+
 
 void tuyaSwitch_zclBatterySensorRate(void)
 {

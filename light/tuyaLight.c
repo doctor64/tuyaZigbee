@@ -217,22 +217,22 @@ void tuyaLightAttrsChk(void)
 	}
 }
 
-void report_handler(void)
-{
-	if(zb_isDeviceJoinedNwk()){
-		if(zcl_reportingEntryActiveNumGet()){
-			u16 second = 1;//TODO: fix me
-
-			reportNoMinLimit();
-
-			//start report timer
-			reportAttrTimerStart(second);
-		}else{
-			//stop report timer
-			reportAttrTimerStop();
-		}
-	}
-}
+// void report_handler(void)
+// {
+//	if(zb_isDeviceJoinedNwk()){
+//		if(zcl_reportingEntryActiveNumGet()){
+//			u16 second = 1;//TODO: fix me
+//
+//			reportNoMinLimit();
+//
+//			//start report timer
+//			reportAttrTimerStart(second);
+//		}else{
+//			//stop report timer
+//			reportAttrTimerStop();
+//		}
+//	}
+// }
 
 void app_task(void)
 {

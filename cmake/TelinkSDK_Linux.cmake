@@ -1,7 +1,7 @@
 # Download and extract Telink Zigbee SDK
-set(DOWNLOAD_URL_SDK "http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip")
-set(SDK_EXPECTED_SHA256 "0d0859e2412e3a52e9c3ba012bbf5d5b7c30554b8a96632659bd500ea18f7aa3")
-set(DOWNLOAD_PATH_SDK "${CMAKE_CURRENT_BINARY_DIR}/Zigbee_SDK.zip")
+set(DOWNLOAD_URL_SDK "https://github.com/telink-semi/telink_zigbee_sdk/archive/refs/tags/V3.7.2.0.tar.gz")
+set(SDK_EXPECTED_SHA256 "3c8dab1b3741409b9f1b01f83de0f16189c3c0256cf6a56f35c032a5e125c616")
+set(DOWNLOAD_PATH_SDK "${CMAKE_CURRENT_BINARY_DIR}/telink_zigbee_sdk-3.7.2.0.tar.gz")
 set(SDK_PREFIX_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/tl_zigbee_sdk")
 
 if(NOT EXISTS ${SDK_PREFIX_LOCATION})

@@ -4,6 +4,13 @@ build/*
 #cache dir
 .cache/*
 
+# Editor workspaces
+*.sublime-workspace
+*.sublime-project
+
+# Local firmware dumps
+tools/*.bin
+
 # Prerequisites
 *.d
 

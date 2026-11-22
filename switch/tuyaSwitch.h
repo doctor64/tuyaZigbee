@@ -26,6 +26,9 @@
 #ifndef _TUYA_SWITCH_H_
 #define _TUYA_SWITCH_H_
 
+#include "buttons.h"
+#include "types.h"
+#include "os/ev_timer.h"
 
 /**********************************************************************
  * CONSTANT
@@ -46,7 +49,7 @@ typedef struct{
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerBattEvt;
     u16 Vbat;		//current voltage
-	u32 keyPressedTime;
+	//u32 keyPressedTime;
 
 	u16 ledOnTime;
 	u16 ledOffTime;
@@ -56,7 +59,8 @@ typedef struct{
 	u8  state;
 
 	u8  keyPressed;
-	u8  btn1State;
+	//u8  btn1State;
+	button_t buttons[TOTAL_BUTTONS_NUM];
 
 	app_linkKey_info_t tcLinkKey;
 }app_ctx_t;
@@ -98,6 +102,15 @@ typedef struct{
 	u8  batteryPercentage;   //0x21
 }zcl_powerAttr_t;
 
+/**
+ *  @brief Defined for multistate Input
+ */
+typedef struct {
+	u16 numberOfStates;
+	u8  outOfService;
+	u16 presentValue;
+	u8  statusFlag;
+} zcl_multistateInput_t;
 
 /**
  *  @brief  Defined for poll control cluster attributes
@@ -131,6 +144,7 @@ extern const af_simple_descriptor_t tuyaSwitch_simpleDesc;
 extern zcl_basicAttr_t g_zcl_basicAttrs;
 extern zcl_identifyAttr_t g_zcl_identifyAttrs;
 extern zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs;
+extern zcl_multistateInput_t g_zcl_multistateInputAttrs;
 
 #define zcl_pollCtrlAttrGet()	&g_zcl_pollCtrlAttrs
 /**********************************************************************
@@ -146,6 +160,8 @@ status_t tuyaSwitch_sceneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cm
 status_t tuyaSwitch_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void tuyaSwitch_zclCheckInStart(void);
 void tuyaSwitch_zclBatterySensorRate(void);
+void reportAction(u8 action);
+status_t tuyaSwitch_multistateInputCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 
 void tuyaSwitch_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void tuyaSwitch_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);

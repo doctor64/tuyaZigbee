@@ -29,12 +29,15 @@
  * INCLUDES
  */
 #include "../common/comm_cfg.h"
+#include "app_cfg.h"
 
 #include "tl_common.h"
 #include "zcl_include.h"
+
 #include "tuyaSwitch.h"
 
 #include "zcl_sensorControl.h"
+#include "general/zcl_multistate_input.h"
 #include "timestamp.h"
 
 /**********************************************************************
@@ -62,6 +65,9 @@ const u16 tuyaSwitch_inClusterList[] =
 	ZCL_CLUSTER_GEN_POWER_CFG,
 #ifdef ZCL_POLL_CTRL
 	ZCL_CLUSTER_GEN_POLL_CONTROL,
+#endif
+#ifdef ZCL_MULTISTATE_INPUT
+	ZCL_CLUSTER_GEN_MULTISTATE_INPUT_BASIC,
 #endif
 };
 
@@ -103,7 +109,7 @@ const af_simple_descriptor_t tuyaSwitch_simpleDesc =
 {
 	HA_PROFILE_ID,                      	/* Application profile identifier */
 	HA_DEV_ONOFF_SWITCH,                	/* Application device identifier */
-	TUYA_SWITCH_ENDPOINT,                 /* Endpoint */
+	TUYA_SWITCH_ENDPOINT,                   /* Endpoint */
 	2,                                  	/* Application device version */
 	0,										/* Reserved */
 	TUYASWITCH_IN_CLUSTER_NUM,           	/* Application input cluster count */
@@ -218,6 +224,28 @@ const zclAttrInfo_t pollCtrl_attrTbl[] =
 #define	ZCL_POLLCTRL_ATTR_NUM			sizeof(pollCtrl_attrTbl) / sizeof(zclAttrInfo_t)
 #endif
 
+#ifdef ZCL_MULTISTATE_INPUT
+/* Multistate Input */
+zcl_multistateInput_t g_zcl_multistateInputAttrs =
+{
+	.numberOfStates 		= BUTTON_STATES_NUM,
+	.outOfService			= FALSE,
+	.presentValue			= BUTTON_ACTION_RELEASED,
+	.statusFlag				= 0,
+};
+
+const zclAttrInfo_t multistateInput_attrTbl[] =
+{
+	{ ZCL_MULTISTATE_INPUT_ATTRID_NUM_OF_STATES,	ZCL_DATA_TYPE_UINT16,	ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_multistateInputAttrs.numberOfStates},
+	{ ZCL_MULTISTATE_INPUT_ATTRID_OUT_OF_SERVICE,	ZCL_DATA_TYPE_BOOLEAN,	ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_multistateInputAttrs.outOfService},
+	{ ZCL_MULTISTATE_INPUT_ATTRID_PRESENT_VALUE,	ZCL_DATA_TYPE_UINT16,	ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_multistateInputAttrs.presentValue},
+	{ ZCL_MULTISTATE_INPUT_ATTRID_STATUS_FLAGS,		ZCL_DATA_TYPE_BITMAP8,	ACCESS_CONTROL_READ,                       	(u8*)&g_zcl_multistateInputAttrs.statusFlag},
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  					  (u8*)&zcl_attr_global_clusterRevision},
+};
+
+#define	ZCL_MULTISTATEINPUT_ATTR_NUM			sizeof(multistateInput_attrTbl) / sizeof(zclAttrInfo_t)
+#endif
 /**
  *  @brief Definition for simple switch ZCL specific cluster
  */
@@ -234,6 +262,9 @@ const zcl_specClusterInfo_t g_tuyaSwitchClusterList[] =
 #endif
 #ifdef ZCL_POLL_CTRL
 	{ZCL_CLUSTER_GEN_POLL_CONTROL,	MANUFACTURER_CODE_NONE,	ZCL_POLLCTRL_ATTR_NUM,	pollCtrl_attrTbl, 	zcl_pollCtrl_register, 	tuyaSwitch_pollCtrlCb},
+#endif
+#ifdef ZCL_MULTISTATE_INPUT
+	{ZCL_CLUSTER_GEN_MULTISTATE_INPUT_BASIC, MANUFACTURER_CODE_NONE, ZCL_MULTISTATEINPUT_ATTR_NUM, multistateInput_attrTbl, zcl_multistate_input_register, tuyaSwitch_multistateInputCb},
 #endif
 };
 

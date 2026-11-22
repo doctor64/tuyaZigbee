@@ -7,7 +7,7 @@ In data folder of zigbee2mqtt installation, edit file configuration.yaml and add
 ota:
   zigbee_ota_override_index_location: index.json
 ```
-Simply copy index.js and /images folder from OTA folder.  
+Simply copy `index.json` and the `/images` folder from the OTA folder.<br>
 If you want to add locally builded image see details on [zigbee2mqtt documentation](https://www.zigbee2mqtt.io/guide/usage/ota_updates.html#local-ota-index-and-firmware-files) how to create index file and section below.  
 Note - currently need to patch add.js: add line `    25700: 'DocLab',` to `const manufacturerNameLookup = {`
 

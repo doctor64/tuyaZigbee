@@ -31,6 +31,13 @@
 /**********************************************************************
  * CONSTANT
  */
+// LED feedback timings, in milliseconds.
+#define BUTTON_LED_NET_ON_TIME         300
+#define BUTTON_LED_NET_OFF_TIME        300
+#define BUTTON_LED_CLICK_ON_TIME       250
+#define BUTTON_LED_CLICK_OFF_TIME      250
+#define BUTTON_LED_LONG_ON_TIME        100
+#define BUTTON_LED_LONG_OFF_TIME       100
 
 /**********************************************************************
  * TYPEDEFS
@@ -39,15 +46,15 @@ enum{
 	APP_STATE_NORMAL,
 	APP_FACTORY_NEW_SET_CHECK,
 	APP_FACTORY_NEW_DOING,
-	APP_STATE_HOLD_SW2,
-	APP_STATE_HOLD_PROCESSED_SW2
+	APP_STATE_HOLD_SW1,
+	APP_STATE_HOLD_PROCESSED_SW1
 };
-enum{
+/*enum{
 	BUTTON_RELEASED,
 	BUTTON_START_DEBOUNCE_PRESS,
 	BUTTON_START_DEBOUNCE_RELEASE,
 	BUTTON_PRESSED
-};
+};*/
 
 /**********************************************************************
  * FUNCTIONS
@@ -63,6 +70,7 @@ void led_on(u32 pin);
 void led_off(u32 pin);
 
 void app_key_handler(void);
+bool buttonsClickPending(void);
 s32 battVoltageCb(void *arg);
 
 #endif	/* _APP_UI_H_ */

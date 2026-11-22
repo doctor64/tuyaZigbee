@@ -30,8 +30,17 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/platform/services/b85m/irq_handler.c
     ${SDK_PREFIX}/platform/tc32/div_mod.S
     ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_common.c
     ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/adc.c
     ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid13325e.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1060c8.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1360c8.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid134051.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid136085.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1360eb.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid14325e.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1460c8.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid011460c8.c
 
     ${SDK_PREFIX}/proj/common/list.c
     ${SDK_PREFIX}/proj/common/mempool.c
@@ -57,6 +66,7 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/os/ev_poll.c
     ${SDK_PREFIX}/proj/os/ev_queue.c
     ${SDK_PREFIX}/proj/os/ev_timer.c
+    ${SDK_PREFIX}/proj/os/ev_rtc.c
 
     # ${SDK_PREFIX}/apps/common/main.c
     ${SDK_PREFIX}/zigbee/common/zb_version.c

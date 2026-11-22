@@ -28,8 +28,17 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/platform/services/b85m/irq_handler.c
     ${SDK_PREFIX}/platform/tc32/div_mod.S
     ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_common.c
     ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/adc.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1060c8.c
     ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid13325e.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid134051.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid136085.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1360c8.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1360eb.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid14325e.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid1460c8.c
+    ${SDK_PREFIX}/platform/chip_${TELINK_PLATFORM}/flash/flash_mid011460c8.c
 
     ${SDK_PREFIX}/zigbee/bdb/bdb.c
     ${SDK_PREFIX}/zigbee/aps/aps_group.c
@@ -138,7 +147,8 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/drivers/drv_gpio.c
     ${SDK_PREFIX}/proj/drivers/drv_hw.c
     ${SDK_PREFIX}/proj/drivers/drv_i2c.c
-    ${SDK_PREFIX}/proj/drivers/drv_keyboard.c
+    #use enhanced keyboard driver
+    #${SDK_PREFIX}/proj/drivers/drv_keyboard.c
     ${SDK_PREFIX}/proj/drivers/drv_nv.c
     ${SDK_PREFIX}/proj/drivers/drv_pm.c
     ${SDK_PREFIX}/proj/drivers/drv_putchar.c
@@ -146,11 +156,14 @@ SET(ZIGBEE_SRC
     ${SDK_PREFIX}/proj/drivers/drv_spi.c
     ${SDK_PREFIX}/proj/drivers/drv_timer.c
     ${SDK_PREFIX}/proj/drivers/drv_uart.c
+    ${SDK_PREFIX}/proj/drivers/drv_security.c
     ${SDK_PREFIX}/proj/os/ev.c
     ${SDK_PREFIX}/proj/os/ev_buffer.c
     ${SDK_PREFIX}/proj/os/ev_poll.c
     ${SDK_PREFIX}/proj/os/ev_queue.c
     ${SDK_PREFIX}/proj/os/ev_timer.c
+    ${SDK_PREFIX}/proj/os/ev_rtc.c
+
 
     ${SDK_PREFIX}/apps/common/main.c
 
@@ -188,7 +201,7 @@ LINK_DIRECTORIES(
 
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T${SDK_PREFIX}/platform/boot/${TELINK_PLATFORM}/boot_${TELINK_PLATFORM}.link")
 
-file( GLOB SOURCES1 *.c *.cpp *.h *.S common/*.c common/*.h custom_zcl/*.c custom_zcl/*.h )
+file( GLOB SOURCES1 *.c *.cpp *.h *.S ../common/*.c common/*.h custom_zcl/*.c custom_zcl/*.h )
 
 SET (SOURCES  ${SOURCES1} ${ZIGBEE_SRC})
 

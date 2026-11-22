@@ -11,8 +11,19 @@ if(NOT EXISTS ${SDK_PREFIX_LOCATION})
       EXPECTED_HASH SHA256=${SDK_EXPECTED_SHA256})
   endif()
 
-  message(STATUS "Extracting SDK to ${SDK_PREFIX_LOCATION}")
+  message(STATUS "Extracting SDK to ${CMAKE_CURRENT_BINARY_DIR}")
   execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${DOWNLOAD_PATH_SDK} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+  # GitHub archives extract into a <repo>-<tag>/ directory, while SDK_PREFIX
+  # (cmake/Toolchain.cmake) expects tl_zigbee_sdk directly under build/.
+  if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/telink_zigbee_sdk-3.7.2.0/tl_zigbee_sdk")
+    message(STATUS "Moving SDK to ${SDK_PREFIX_LOCATION}")
+    file(RENAME "${CMAKE_CURRENT_BINARY_DIR}/telink_zigbee_sdk-3.7.2.0/tl_zigbee_sdk" "${SDK_PREFIX_LOCATION}")
+  endif()
+endif()
+
+if(NOT EXISTS ${SDK_PREFIX_LOCATION})
+  message(FATAL_ERROR "Telink Zigbee SDK not found at ${SDK_PREFIX_LOCATION}")
 endif()
 
 # Download and extract Telink toolchain

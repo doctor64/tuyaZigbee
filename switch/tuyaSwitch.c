@@ -251,8 +251,14 @@ void app_task(void)
         report_handler();
 
 #if PM_ENABLE
-        /* Stay awake during the click window and while an LED blink is active. */
-        if ((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt)) {
+        /*
+         * Stay awake during the click window, while a released button is waiting
+         * to be dispatched, and while an LED blink is active. clock_time() does
+         * not advance across deep sleep, so sleeping inside the click window
+         * would delay the command and its LED feedback.
+         */
+        if ((!g_switchAppCtx.keyPressed) && (!g_switchAppCtx.timerLedEvt) &&
+            (!buttonsClickPending())) {
             drv_pm_lowPowerEnter();
         }
 #endif

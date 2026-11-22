@@ -11,6 +11,14 @@
 
 #include "types.h"
 
+/*
+ * All BUTTON_*_TIME values below are in microseconds, while clock_time()
+ * counts S_TIMER_CLOCK_1US ticks per microsecond (16 on TLSR8258).
+ * Convert raw tick deltas before comparing them with these constants.
+ */
+#define BUTTON_US_TO_TICKS(us)      ((u32)(us) * S_TIMER_CLOCK_1US)
+#define BUTTON_TICKS_TO_US(ticks)   ((u32)(ticks) / S_TIMER_CLOCK_1US)
+
 #define BUTTON_NET_LONG_PRESS_TIME 5*1000*1000
 #define BUTTON_SW_LONG_PRESS_TIME  3*1000*1000
 #define BUTTON_CLICK_CHECK_TIME       250*1000

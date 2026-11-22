@@ -434,10 +434,11 @@ void keyScan_keyPressed(kb_data_t *kbEvt){
         }
 
         /* Ignore contact bounce immediately after a release. */
+        u32 sinceRelease = (u32)(eventTime - btn->release_time);
         if ((btn->state == BUTTON_STATE_RELEASED) &&
-            ((u32)(eventTime - btn->release_time) <= BUTTON_DEBOUNCE_TIME)) {
-            printf("Ignored bounce press: button=%d sinceRelease=%d\n",
-                   button, (int)(u32)(eventTime - btn->release_time));
+            (sinceRelease <= BUTTON_US_TO_TICKS(BUTTON_DEBOUNCE_TIME))) {
+            printf("Ignored bounce press: button=%d sinceRelease=%d us\n",
+                   button, (int)BUTTON_TICKS_TO_US(sinceRelease));
             return;
         }
 
@@ -458,14 +459,15 @@ void keyScan_keyReleased(u8 button) {
         u32 eventTime = kb_event_time ? kb_event_time : clock_time();
 
         if (btn->state == BUTTON_STATE_PRESSED) {
-            if ((u32)(eventTime - btn->press_time) > BUTTON_MIN_PRESS_TIME) {
+            u32 pressDuration = (u32)(eventTime - btn->press_time);
+            if (pressDuration > BUTTON_US_TO_TICKS(BUTTON_MIN_PRESS_TIME)) {
                 btn->count++;
                 btn->release_time = eventTime;
                 btn->state = BUTTON_STATE_RELEASED;
             } else {
                 /* Too short: discard this as a bounce, keep any pending click. */
-                printf("Ignored short press: button=%d duration=%d\n",
-                       button, (int)(u32)(eventTime - btn->press_time));
+                printf("Ignored short press: button=%d duration=%d us\n",
+                       button, (int)BUTTON_TICKS_TO_US(pressDuration));
                 btn->state = btn->count ? BUTTON_STATE_RELEASED : BUTTON_STATE_IDLE;
             }
         } else if (btn->state == BUTTON_STATE_PRESSED_PROCESSED) { //Long press released
@@ -474,6 +476,23 @@ void keyScan_keyReleased(u8 button) {
         }
         /* Releases in other states are duplicates or bounce and are ignored. */
     }
+}
+
+/**
+ * @brief      Check whether any button still waits for the multi-click window
+ *
+ * @return     TRUE while a released button has not been dispatched yet
+ */
+bool buttonsClickPending(void)
+{
+    for (u8 i = 0; i < TOTAL_BUTTONS_NUM; i++) {
+        if ((g_switchAppCtx.buttons[i].state == BUTTON_STATE_RELEASED) ||
+            (g_switchAppCtx.buttons[i].state == BUTTON_STATE_LONG_RELEASED)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 void app_key_handler(void){
